@@ -70,6 +70,9 @@ public class AddressBookParser {
 
         case ListCommand.COMMAND_WORD:
         case ListCommand.ALIAS:
+            if (!arguments.trim().isEmpty()) {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+            }
             return new ListCommand();
 
         case ExitCommand.COMMAND_WORD:

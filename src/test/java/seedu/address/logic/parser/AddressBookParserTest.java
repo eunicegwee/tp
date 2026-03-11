@@ -95,6 +95,11 @@ public class AddressBookParserTest {
     }
 
     @Test
+    public void parseCommand_list_withParameter_throwsParseException() {
+        assertThrows(ParseException.class, () -> parser.parseCommand("list extra"));
+    }
+
+    @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
         assertThrows(ParseException.class, String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE), ()
             -> parser.parseCommand(""));
