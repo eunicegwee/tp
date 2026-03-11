@@ -18,7 +18,9 @@ import seedu.address.model.person.Person;
  */
 public class AddCommand extends Command {
 
-    public static final String COMMAND_WORD = "add";
+    // Changed: use colon-prefixed command word for Vim-like commands and keep legacy alias
+    public static final String COMMAND_WORD = ":add";
+    public static final String ALIAS = "add";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book. "
             + "Parameters: "
