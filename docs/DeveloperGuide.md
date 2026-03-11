@@ -180,7 +180,7 @@ Step 2. The user executes `delete 5` command to delete the 5th person in the add
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …​` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `:add n/David …` to add a new person. The `:add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
@@ -190,7 +190,7 @@ Step 3. The user executes `add n/David …​` to add a new person. The `add` co
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user then decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
@@ -363,8 +363,8 @@ _{Explain here how the data archiving feature will be implemented}_
 
 | Step | Action | Outcome/System Response | Corresponding User Story (Reference) |
 |------|--------|-------------------------|--------------------------------------|
-| 1 | Developer adds a new contact and tags them simultaneously: `add n/Benny p/98765432 e/benny@biz.com t/Marketing t/Partner` | Message displayed: `New contact added: Benny.` The new contact appears in the list view. | US-03 (Add contact), US-04 (Assign tags when adding) |
-| 2 | Developer quickly adds another contact: `add n/Chloe p/88887777 e/chloe@rnd.com t/Engineer` | Message displayed: `New contact added: Chloe.` | US-03 (Add contact) |
+| 1 | Developer adds a new contact and tags them simultaneously: `:add n/Benny p/98765432 e/benny@biz.com t/Marketing t/Partner` | Message displayed: `New contact added: Benny.` The new contact appears in the list view. | US-03 (Add contact), US-04 (Assign tags when adding) |
+| 2 | Developer quickly adds another contact: `:add n/Chloe p/88887777 e/chloe@rnd.com t/Engineer` | Message displayed: `New contact added: Chloe.` | US-03 (Add contact) |
 | 3 | Developer filters the list to view only their marketing contacts: `filter t/Marketing` | The Contact List Panel is updated to show only contacts tagged 'Marketing' (e.g., Benny). Message displayed: `Filtered contacts by tag: Marketing.` | US-12 (Filter contacts by tag) |
 
 

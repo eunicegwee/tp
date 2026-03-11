@@ -20,7 +20,10 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 
 /**
- * Parses input arguments and creates a new AddCommand object
+ * Parses input arguments and creates a new AddCommand object.
+ *
+ * <p>The parser supports the new colon-prefixed command word (":add"). For backward
+ * compatibility the legacy alias ("add") is also accepted by the top-level parser.
  */
 public class AddCommandParser implements Parser<AddCommand> {
 
