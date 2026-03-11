@@ -18,7 +18,8 @@ public class ListCommand extends Command {
     public static final String ALIAS = "list";
 
     public static final String MESSAGE_SUCCESS = "Listed all persons";
-
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons in the address book.\n"
+            + "Example: " + COMMAND_WORD;
 
     @Override
     public CommandResult execute(Model model) {
@@ -26,4 +27,5 @@ public class ListCommand extends Command {
         model.updateFilteredPersonList(PREDICATE_SHOW_ALL_PERSONS);
         return new CommandResult(MESSAGE_SUCCESS);
     }
+
 }

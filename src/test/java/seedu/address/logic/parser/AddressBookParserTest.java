@@ -85,17 +85,15 @@ public class AddressBookParserTest {
     @Test
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
-        assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
     }
 
     @Test
     public void parseCommand_list_legacyAliasStillParses() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.ALIAS) instanceof ListCommand);
-        assertTrue(parser.parseCommand(ListCommand.ALIAS + " 3") instanceof ListCommand);
     }
 
     @Test
-    public void parseCommand_list_withParameter_throwsParseException() {
+    public void parseCommand_listWithArgs_throwsParseException() {
         assertThrows(ParseException.class, () -> parser.parseCommand("list extra"));
     }
 
