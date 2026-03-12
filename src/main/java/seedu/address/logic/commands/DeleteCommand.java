@@ -45,14 +45,12 @@ public class DeleteCommand extends Command {
         }
 
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
-        return new CommandResult(
-                String.format(MESSAGE_CONFIRM_DELETE, Messages.format(personToDelete)),
-                false, false,
-                () -> {
-                    model.deletePerson(personToDelete);
-                    return new CommandResult(
-                            String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
-                });
+        String previewMessage = String.format(MESSAGE_CONFIRM_DELETE, Messages.format(personToDelete));
+        return new CommandResult(previewMessage, false, false, () -> {
+            model.deletePerson(personToDelete);
+            return new CommandResult(
+                    String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
+        });
     }
 
     @Override
