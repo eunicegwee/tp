@@ -23,7 +23,16 @@ public class PersonListPanel extends UiPart<Region> {
     private ListView<Person> personListView;
 
     /**
-     * Creates a {@code PersonListPanel} with the given {@code ObservableList}.
+     * Creates a {@code PersonListPanel} with the given {@code ObservableList} of persons
+     * and links it to a {@code PersonDetailsPanel} to display selected person details.
+     * <p>
+     * This constructor sets up the list view with custom cells for each person and
+     * adds a listener so that whenever a person is selected, the {@code PersonDetailsPanel}
+     * is updated automatically. If the list is not empty, the first person is selected
+     * by default.
+     *
+     * @param personList the list of persons to display in this panel
+     * @param personDetailsPanel the details panel to update when a person is selected
      */
     public PersonListPanel(ObservableList<Person> personList, PersonDetailsPanel personDetailsPanel) {
         super(FXML);
