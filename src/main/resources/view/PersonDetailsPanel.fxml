@@ -5,27 +5,27 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.geometry.Insets?>
 
-<VBox xmlns:fx="http://javafx.com/fxml" spacing="8" style="-fx-background-color: #2b2b2b; -fx-padding: 10;">
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="8" stylesheets="@PersonDetails.css" styleClass="details-panel">
 
-    <Label text="Person Details" style="-fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: white;" />
+    <Label text="Person Details" styleClass="details-heading" />
 
     <HBox spacing="5">
-        <Label text="Name:" style="-fx-text-fill: #3a7bd5; -fx-font-weight: bold;" />
-        <Label fx:id="name" style="-fx-text-fill: white;" />
+        <Label text="Name:" styleClass="field-name" />
+        <Label fx:id="name" styleClass="field-value" />
     </HBox>
 
     <HBox spacing="5">
-        <Label text="Phone:" style="-fx-text-fill: #3a7bd5; -fx-font-weight: bold;" />
-        <Label fx:id="phone" style="-fx-text-fill: white;" />
+        <Label text="Phone:" styleClass="field-name" />
+        <Label fx:id="phone" styleClass="field-value" />
     </HBox>
 
     <HBox spacing="5">
-        <Label text="Email:" style="-fx-text-fill: #3a7bd5; -fx-font-weight: bold;" />
-        <Label fx:id="email" style="-fx-text-fill: white;" />
+        <Label text="Email:" styleClass="field-name" />
+        <Label fx:id="email" styleClass="field-value" />
     </HBox>
 
     <HBox spacing="5">
-        <Label text="Address:" style="-fx-text-fill: #3a7bd5; -fx-font-weight: bold;" />
-        <Label fx:id="address" style="-fx-text-fill: white;" />
+        <Label text="Address:" styleClass="field-name" />
+        <Label fx:id="address" styleClass="field-value" />
     </HBox>
 </VBox>

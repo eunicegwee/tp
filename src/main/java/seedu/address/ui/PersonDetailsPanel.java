@@ -13,10 +13,13 @@ public class PersonDetailsPanel extends UiPart<Region> {
 
     @FXML
     private Label name;
+
     @FXML
     private Label phone;
+
     @FXML
     private Label email;
+
     @FXML
     private Label address;
 
