@@ -51,7 +51,7 @@ public class LogicManager implements Logic {
         logger.info("----------------[USER COMMAND][" + commandText + "]");
 
         CommandResult commandResult;
-        String trimmedInput = commandText.trim().toLowerCase();
+        String trimmedInput = commandText.trim().toLowerCase(java.util.Locale.ROOT);
 
         if (pendingConfirmation != null) {
             Supplier<CommandResult> action = pendingConfirmation;
