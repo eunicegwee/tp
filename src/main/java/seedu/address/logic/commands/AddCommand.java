@@ -15,16 +15,10 @@ import seedu.address.model.person.Person;
 
 /**
  * Adds a person to the address book.
- *
- * <p>Note: This project supports a Vim-like colon prefix for commands. The canonical
- * command word for this class is {@code ":add"}. For backward compatibility the
- * legacy alias {@code "add"} is still accepted by the parser.
  */
 public class AddCommand extends Command {
 
-    // Changed: use colon-prefixed command word for Vim-like commands and keep legacy alias
-    public static final String COMMAND_WORD = ":add";
-    public static final String ALIAS = "add";
+    public static final String COMMAND_WORD = "add";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a person to the address book. "
             + "Parameters: "

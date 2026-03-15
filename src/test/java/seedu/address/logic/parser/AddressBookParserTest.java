@@ -40,9 +40,9 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_add_legacyAliasStillParses() throws Exception {
+    public void parseCommand_add_withColon() throws Exception {
         Person person = new PersonBuilder().build();
-        String addCommand = AddCommand.ALIAS + " " + PersonUtil.getPersonDetails(person);
+        String addCommand = ":add" + " " + PersonUtil.getPersonDetails(person);
         AddCommand command = (AddCommand) parser.parseCommand(addCommand);
         assertEquals(new AddCommand(person), command);
     }
@@ -93,6 +93,7 @@ public class AddressBookParserTest {
     public void parseCommand_list() throws Exception {
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD) instanceof ListCommand);
         assertTrue(parser.parseCommand(ListCommand.COMMAND_WORD + " 3") instanceof ListCommand);
+        assertTrue(parser.parseCommand(":list") instanceof ListCommand);
     }
 
     @Test

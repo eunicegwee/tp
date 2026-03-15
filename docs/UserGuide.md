@@ -29,7 +29,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 1. Type the command in the command box and press Enter to execute it. e.g. typing **`help`** and pressing Enter will open the help window.<br>
    Some example commands you can try:
 
-   * `:list` : Lists all contacts. (Legacy `list` without the colon is also accepted.)
+   * `list` : Lists all contacts.
 
    * `:add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book. (Legacy `add` is also accepted.)
 
@@ -61,7 +61,7 @@ AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized fo
 * Parameters can be in any order.<br>
   e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
 
-* Extraneous parameters for commands that do not take in parameters (such as `help`, `:list`, `exit` and `clear`) will be ignored.<br>
+* Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
 </box>
 
@@ -89,11 +89,11 @@ Examples:
 * `:add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `:add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
-### Listing all persons : `:list`
+### Listing all persons : `list`
 
-Shows a list of all persons in the address book. (Legacy `list` without colon is accepted.)
+Shows a list of all persons in the address book.
 
-Format: `:list`
+Format: `list`
 
 ### Editing a person : `edit`
 
@@ -141,7 +141,7 @@ Format: `delete INDEX`
 * The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-* `:list` followed by `delete 2` deletes the 2nd person in the address book.
+* `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
 ### Clearing all entries : `clear`
@@ -200,5 +200,5 @@ Action     | Format, Examples
 **Delete** | `delete INDEX`<br> e.g., `delete 3`
 **Edit**   | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
 **Find**   | `find KEYWORD [MORE_KEYWORDS]`<br> e.g., `find James Jake`
-**List**   | `:list` (legacy `list` accepted)
+**List**   | `list`
 **Help**   | `help`
