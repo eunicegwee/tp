@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" spacing="8" stylesheets="@PersonDetails.css" styleClass="details-panel">
+
+    <Label text="Person Details" styleClass="details-heading" />
+
+    <HBox spacing="5">
+        <Label text="Name:" styleClass="field-name" />
+        <Label fx:id="name" styleClass="field-value" />
+    </HBox>
+
+    <HBox spacing="5">
+        <Label text="Phone:" styleClass="field-name" />
+        <Label fx:id="phone" styleClass="field-value" />
+    </HBox>
+
+    <HBox spacing="5">
+        <Label text="Email:" styleClass="field-name" />
+        <Label fx:id="email" styleClass="field-value" />
+    </HBox>
+
+    <HBox spacing="5">
+        <Label text="Address:" styleClass="field-name" />
+        <Label fx:id="address" styleClass="field-value" />
+    </HBox>
+</VBox>

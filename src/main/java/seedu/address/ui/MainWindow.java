@@ -34,6 +34,7 @@ public class MainWindow extends UiPart<Stage> {
     private PersonListPanel personListPanel;
     private ResultDisplay resultDisplay;
     private HelpWindow helpWindow;
+    private PersonDetailsPanel personDetailsPanel;
 
     @FXML
     private StackPane commandBoxPlaceholder;
@@ -49,6 +50,9 @@ public class MainWindow extends UiPart<Stage> {
 
     @FXML
     private StackPane statusbarPlaceholder;
+
+    @FXML
+    private StackPane personDetailsPlaceholder;
 
     /**
      * Creates a {@code MainWindow} with the given {@code Stage} and {@code Logic}.
@@ -110,7 +114,13 @@ public class MainWindow extends UiPart<Stage> {
      * Fills up all the placeholders of this window.
      */
     void fillInnerParts() {
-        personListPanel = new PersonListPanel(logic.getFilteredPersonList());
+        personDetailsPanel = new PersonDetailsPanel();
+        personDetailsPlaceholder.getChildren().add(personDetailsPanel.getRoot());
+
+        personListPanel = new PersonListPanel(
+                logic.getFilteredPersonList(),
+                personDetailsPanel
+        );
         personListPanelPlaceholder.getChildren().add(personListPanel.getRoot());
 
         resultDisplay = new ResultDisplay();

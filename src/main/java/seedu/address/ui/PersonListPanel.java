@@ -17,16 +17,40 @@ public class PersonListPanel extends UiPart<Region> {
     private static final String FXML = "PersonListPanel.fxml";
     private final Logger logger = LogsCenter.getLogger(PersonListPanel.class);
 
+    private final PersonDetailsPanel personDetailsPanel;
+
     @FXML
     private ListView<Person> personListView;
 
     /**
-     * Creates a {@code PersonListPanel} with the given {@code ObservableList}.
+     * Creates a {@code PersonListPanel} with the given {@code ObservableList} of persons
+     * and links it to a {@code PersonDetailsPanel} to display selected person details.
+     * <p>
+     * This constructor sets up the list view with custom cells for each person and
+     * adds a listener so that whenever a person is selected, the {@code PersonDetailsPanel}
+     * is updated automatically. If the list is not empty, the first person is selected
+     * by default.
+     *
+     * @param personList the list of persons to display in this panel
+     * @param personDetailsPanel the details panel to update when a person is selected
      */
-    public PersonListPanel(ObservableList<Person> personList) {
+    public PersonListPanel(ObservableList<Person> personList, PersonDetailsPanel personDetailsPanel) {
         super(FXML);
+
+        this.personDetailsPanel = personDetailsPanel;
+
         personListView.setItems(personList);
         personListView.setCellFactory(listView -> new PersonListViewCell());
+
+        personListView.getSelectionModel()
+                .selectedItemProperty()
+                .addListener((observable, oldValue, newValue) -> {
+                    personDetailsPanel.display(newValue);
+                });
+
+        if (!personList.isEmpty()) {
+            personListView.getSelectionModel().selectFirst();
+        }
     }
 
     /**
