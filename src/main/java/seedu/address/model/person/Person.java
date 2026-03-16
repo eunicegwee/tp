@@ -34,15 +34,7 @@ public class Person {
         this.phone = phone;
         this.email = email;
         this.address = address;
-        this.addTags(tags);
-    }
-
-    private void addTags(Set<Tag> tags) {
         this.tags.addAll(tags);
-    }
-
-    private void removeTags(Set<Tag> tags) {
-        this.tags.removeAll(tags);
     }
 
     public Name getName() {
