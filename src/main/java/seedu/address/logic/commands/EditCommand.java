@@ -101,12 +101,20 @@ public class EditCommand extends Command {
         Phone updatedPhone = editPersonDescriptor.getPhone().orElse(personToEdit.getPhone());
         Email updatedEmail = editPersonDescriptor.getEmail().orElse(personToEdit.getEmail());
         Address updatedAddress = editPersonDescriptor.getAddress().orElse(personToEdit.getAddress());
-        Set<Tag> tagsToAdd = editPersonDescriptor.getTagsToAdd().orElse(Collections.emptySet());
-        Set<Tag> tagsToDelete = editPersonDescriptor.getTagsToRemove().orElse(Collections.emptySet());
         Set<Tag> updatedTags = new HashSet<>(personToEdit.getTags());
-        updatedTags.addAll(tagsToAdd);
-        updatedTags.removeAll(tagsToDelete);
-        // TODO: Handle tags
+
+        if (editPersonDescriptor.getTagsToRemove().isPresent()) {
+            Set<Tag> tagsToRemove = editPersonDescriptor.getTagsToRemove().get();
+            if (tagsToRemove.isEmpty()) {
+                updatedTags.clear();
+            } else {
+                updatedTags.removeAll(tagsToRemove);
+            }
+        }
+
+        if (editPersonDescriptor.getTagsToAdd().isPresent()) {
+            updatedTags.addAll(editPersonDescriptor.getTagsToAdd().get());
+        }
 
         return new Person(updatedName, updatedPhone, updatedEmail, updatedAddress, updatedTags);
     }

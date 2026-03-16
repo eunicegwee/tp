@@ -191,6 +191,45 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_deleteAllTags_success() {
+        Index indexLastPerson = INDEX_FIRST_PERSON;
+        Person personToEdit = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+        // Alice has "friends". Expecting no tags.
+        Person editedPerson = new PersonBuilder(personToEdit).withTags().build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTagsToRemove().build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    public void execute_replaceTags_success() {
+        Index indexLastPerson = INDEX_FIRST_PERSON;
+        Person personToEdit = model.getFilteredPersonList().get(indexLastPerson.getZeroBased());
+        // Alice has "friends". Clear then add "colleagues"
+        Person editedPerson = new PersonBuilder(personToEdit).withTags("colleagues").build();
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder()
+                .withTagsToRemove() // Clear tags
+                .withTags("colleagues") // Add new tag
+                .build();
+        EditCommand editCommand = new EditCommand(indexLastPerson, descriptor);
+
+        String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_PERSON_SUCCESS, Messages.format(editedPerson));
+
+        Model expectedModel = new ModelManager(new AddressBook(model.getAddressBook()), new UserPrefs());
+        expectedModel.setPerson(personToEdit, editedPerson);
+
+        assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
     public void execute_duplicatePersonUnfilteredList_failure() {
         Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder(firstPerson).build();
