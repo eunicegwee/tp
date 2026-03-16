@@ -53,6 +53,12 @@ public class PersonListPanel extends UiPart<Region> {
         }
     }
 
+    /**
+     * Selects the specified {@link Person} in the {@code personListView} and
+     * scrolls the list to ensure the selected person is visible to the user.
+     *
+     * @param person The {@link Person} to be selected and brought into view in the list.
+     */
     public void selectPerson(Person person) {
         personListView.getSelectionModel().select(person);
         personListView.scrollTo(person);

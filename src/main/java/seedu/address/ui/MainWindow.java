@@ -207,6 +207,15 @@ public class MainWindow extends UiPart<Stage> {
         }
     }
 
+    /**
+     * Handles the result of a View command by selecting and displaying the specified
+     * {@link Person} in the {@code personListPanel}. If the {@link CommandResult}
+     * contains a person to be viewed, the corresponding person in the list panel
+     * will be highlighted and shown to the user.
+     *
+     * @param commandResult The result returned after executing a command. May contain
+     *                      the {@link Person} to be viewed.
+     */
     public void handleViewCommandResult(CommandResult commandResult) {
         Person personToView = commandResult.getPersonToView();
         if (personToView != null) {

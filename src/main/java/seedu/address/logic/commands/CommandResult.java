@@ -5,8 +5,8 @@ import static java.util.Objects.requireNonNull;
 import java.util.Objects;
 import java.util.function.Supplier;
 
-import seedu.address.model.person.Person;
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.person.Person;
 
 /**
  * Represents the result of a command execution.
@@ -25,7 +25,7 @@ public class CommandResult {
     private final Supplier<CommandResult> confirmationAction;
 
     /** Person to display in the details panel. */
-    private final Person personToView;  // Store the person to view
+    private final Person personToView;
 
     /**
      * Constructs a {@code CommandResult} with the specified fields.
@@ -83,7 +83,9 @@ public class CommandResult {
         return confirmationAction;
     }
 
-    public Person getPersonToView() { return personToView; }
+    public Person getPersonToView() {
+        return personToView;
+    }
 
     @Override
     public boolean equals(Object other) {
