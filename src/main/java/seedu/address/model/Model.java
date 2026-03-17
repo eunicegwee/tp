@@ -97,4 +97,12 @@ public interface Model {
      * @return the {@code TagsRegistry} instance used by this model.
      */
     TagsRegistry getTagsRegistry();
+
+    void addTags(Person person);
+
+    void deleteTags(Person person);
+
+    void updateEditedTags(Person oldPerson, Person editedPerson);
+
+    void clearTagsRegistry();
 }
