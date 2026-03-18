@@ -172,11 +172,6 @@ public class AddCommandTest {
         }
 
         @Override
-        public TagsRegistry getTagsRegistry() {
-            throw new AssertionError("This method should not be called.");
-        }
-
-        @Override
         public void addTags(Person person) {
             throw new AssertionError("This method should not be called.");
         }
@@ -238,11 +233,6 @@ public class AddCommandTest {
             requireNonNull(person);
             personsAdded.add(person);
             addTags(person); // update the tag registry as AddCommand expects
-        }
-
-        @Override
-        public TagsRegistry getTagsRegistry() {
-            return tagsRegistry;
         }
 
         @Override

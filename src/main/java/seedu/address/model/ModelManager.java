@@ -152,11 +152,6 @@ public class ModelManager implements Model {
     //=========== Tag Registry Modifiers =============================================================
 
     @Override
-    public TagsRegistry getTagsRegistry() {
-        return tagsRegistry;
-    }
-
-    @Override
     public void addTags(Person person) {
         tagsRegistry.addPerson(person);
     }

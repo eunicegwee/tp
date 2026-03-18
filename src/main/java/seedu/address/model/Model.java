@@ -87,11 +87,6 @@ public interface Model {
     void updateFilteredPersonList(Predicate<Person> predicate);
 
     /**
-     * Returns the {@code TagsRegistry} associated with this model.
-     */
-    TagsRegistry getTagsRegistry();
-
-    /**
      * Adds a person and updates the TagsRegistry accordingly.
      */
     void addTags(Person person);
