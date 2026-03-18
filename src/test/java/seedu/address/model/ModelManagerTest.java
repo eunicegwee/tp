@@ -27,28 +27,11 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.tag.TagsRegistry;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 public class ModelManagerTest {
 
     private ModelManager modelManager = new ModelManager();
-    private Person aliceWithTags;
-    private Person bobWithTags;
-
-    @BeforeEach
-    void setUp() {
-        Set<Tag> aliceTags = new HashSet<>();
-        aliceTags.add(new Tag("friends"));
-        aliceTags.add(new Tag("colleagues"));
-
-        Set<Tag> bobTags = new HashSet<>();
-        bobTags.add(new Tag("family"));
-
-        aliceWithTags = new Person(new Name("Alice"), new Phone("12345678"), new Email("alice@example.com"),
-                new Address("123, Wonderland"), aliceTags);
-
-        bobWithTags = new Person(new Name("Bob"), new Phone("87654321"), new Email("bob@example.com"),
-                new Address("456, Wonderland"), bobTags);
-    }
 
     @Test
     public void constructor() {
@@ -159,5 +142,53 @@ public class ModelManagerTest {
     }
 
     //=========== Tag Registry Tests =============================================================
+    @Test
+    public void addTags_tagsAppearInRegistry() {
+        Person person = new PersonBuilder().withTags("friend").build();
 
+        modelManager.addTags(person);
+
+        String tags = modelManager.getFormattedTags();
+        assertTrue(tags.contains("friend"));
+    }
+
+    @Test
+    public void deleteTags_tagsRemovedFromRegistry() {
+        Person person = new PersonBuilder().withTags("friend").build();
+        modelManager.addTags(person);
+
+        modelManager.deleteTags(person);
+
+        String tags = modelManager.getFormattedTags();
+        assertFalse(tags.contains("friend"));
+    }
+
+    @Test
+    public void updateEditedTags_tagsUpdatedCorrectly() {
+        Person oldPerson = new PersonBuilder().withTags("friend").build();
+        Person editedPerson = new PersonBuilder().withTags("colleague").build();
+
+        modelManager.addTags(oldPerson);
+        modelManager.updateEditedTags(oldPerson, editedPerson);
+
+        String tags = modelManager.getFormattedTags();
+
+        assertFalse(tags.contains("friend"));
+        assertTrue(tags.contains("colleague"));
+    }
+
+    @Test
+    public void clearTagsRegistry_allTagsCleared() {
+        Person person = new PersonBuilder().withTags("friend").build();
+        modelManager.addTags(person);
+
+        modelManager.clearTagsRegistry();
+
+        assertEquals("", modelManager.getFormattedTags());
+    }
+
+    @Test
+    public void getFormattedTags_emptyRegistry_returnsEmptyString() {
+        assertEquals("", modelManager.getFormattedTags());
+    }
 }
