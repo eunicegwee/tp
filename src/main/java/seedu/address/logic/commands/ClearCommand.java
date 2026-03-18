@@ -22,6 +22,7 @@ public class ClearCommand extends Command {
         requireNonNull(model);
         return new CommandResult(MESSAGE_CONFIRM_CLEAR, false, false, () -> {
             model.setAddressBook(new AddressBook());
+            model.clearTagsRegistry();
             return new CommandResult(MESSAGE_SUCCESS);
         });
     }

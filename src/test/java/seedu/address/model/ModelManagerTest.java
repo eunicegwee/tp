@@ -16,7 +16,9 @@ import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.model.person.NameContainsKeywordsPredicate;
+import seedu.address.model.person.Person;
 import seedu.address.testutil.AddressBookBuilder;
+import seedu.address.testutil.PersonBuilder;
 
 public class ModelManagerTest {
 
@@ -128,5 +130,75 @@ public class ModelManagerTest {
         UserPrefs differentUserPrefs = new UserPrefs();
         differentUserPrefs.setAddressBookFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(addressBook, differentUserPrefs)));
+    }
+
+    //=========== Tag Registry Tests =============================================================
+    @Test
+    public void addTags_tagsAppearInRegistry() {
+        Person person = new PersonBuilder().withTags("friend").build();
+
+        modelManager.addTags(person);
+
+        String tags = modelManager.getFormattedTags();
+        assertTrue(tags.contains("friend"));
+    }
+
+    @Test
+    public void deleteTags_tagsRemovedFromRegistry() {
+        Person person = new PersonBuilder().withTags("friend").build();
+        modelManager.addTags(person);
+
+        modelManager.deleteTags(person);
+
+        String tags = modelManager.getFormattedTags();
+        assertFalse(tags.contains("friend"));
+    }
+
+    @Test
+    public void updateEditedTags_tagsUpdatedCorrectly() {
+        Person oldPerson = new PersonBuilder().withTags("friend").build();
+        Person editedPerson = new PersonBuilder().withTags("colleague").build();
+
+        modelManager.addTags(oldPerson);
+        modelManager.updateEditedTags(oldPerson, editedPerson);
+
+        String tags = modelManager.getFormattedTags();
+
+        assertFalse(tags.contains("friend"));
+        assertTrue(tags.contains("colleague"));
+    }
+
+    @Test
+    public void clearTagsRegistry_allTagsCleared() {
+        Person person = new PersonBuilder().withTags("friend").build();
+        modelManager.addTags(person);
+
+        modelManager.clearTagsRegistry();
+
+        assertEquals("", modelManager.getFormattedTags());
+    }
+
+    @Test
+    public void getFormattedTags_emptyRegistry_returnsEmptyString() {
+        assertEquals("", modelManager.getFormattedTags());
+    }
+
+    @Test
+    public void setAddressBook_resetsTagsRegistry() {
+        ModelManager model = new ModelManager();
+
+        Person personA = new PersonBuilder().withTags("friend").build();
+        model.addTags(personA);
+
+        AddressBook newBook = new AddressBook();
+        Person personB = new PersonBuilder().withTags("colleague").build();
+        newBook.addPerson(personB);
+
+        model.setAddressBook(newBook);
+
+        String tags = model.getFormattedTags();
+
+        assertFalse(tags.contains("friend"));
+        assertTrue(tags.contains("colleague"));
     }
 }

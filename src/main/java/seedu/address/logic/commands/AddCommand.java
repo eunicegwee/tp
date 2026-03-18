@@ -57,6 +57,9 @@ public class AddCommand extends Command {
         }
 
         model.addPerson(toAdd);
+
+        model.addTags(toAdd);
+
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }
 

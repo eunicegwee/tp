@@ -23,6 +23,7 @@ import seedu.address.model.Model;
 import seedu.address.model.ReadOnlyAddressBook;
 import seedu.address.model.ReadOnlyUserPrefs;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.TagsRegistry;
 import seedu.address.testutil.PersonBuilder;
 
 public class AddCommandTest {
@@ -169,6 +170,31 @@ public class AddCommandTest {
         public void updateFilteredPersonList(Predicate<Person> predicate) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void addTags(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void deleteTags(Person person) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void updateEditedTags(Person oldPerson, Person editedPerson) {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void clearTagsRegistry() {
+            throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public String getFormattedTags() {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
@@ -194,6 +220,7 @@ public class AddCommandTest {
      */
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
+        final TagsRegistry tagsRegistry = new TagsRegistry();
 
         @Override
         public boolean hasPerson(Person person) {
@@ -205,6 +232,11 @@ public class AddCommandTest {
         public void addPerson(Person person) {
             requireNonNull(person);
             personsAdded.add(person);
+        }
+
+        @Override
+        public void addTags(Person person) {
+            tagsRegistry.addPerson(person);
         }
 
         @Override

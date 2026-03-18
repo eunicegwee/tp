@@ -144,6 +144,21 @@ Examples:
 * `list` followed by `delete 2` deletes the 2nd person in the address book.
 * `find Betsy` followed by `delete 1` deletes the 1st person in the results of the `find` command.
 
+### Listing all tags: `tags`
+
+Displays all tags present in the address book in a formatted, comma-separated list.
+
+Format: `tags`
+
+* Lists all tags currently used by any person in the address book.
+* Tags are displayed in alphabetical order.
+* Each tag is shown only once, even if multiple persons have the same tag.
+* The output is case-sensitive in display (e.g. `Friends` and `friends` are treated as different tags).
+
+Examples:
+* `clear` followed by `add n/Alice ... t/friends t/work`, then `add n/Bob ... t/family`
+* `tags` will list out Tags: family, friends, work
+
 ### Clearing all entries : `clear`
 
 Clears all entries from the address book.

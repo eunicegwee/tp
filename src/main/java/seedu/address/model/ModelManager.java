@@ -12,6 +12,7 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
+import seedu.address.model.tag.TagsRegistry;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -20,6 +21,7 @@ public class ModelManager implements Model {
     private static final Logger logger = LogsCenter.getLogger(ModelManager.class);
 
     private final AddressBook addressBook;
+    private final TagsRegistry tagsRegistry;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
 
@@ -28,12 +30,14 @@ public class ModelManager implements Model {
      */
     public ModelManager(ReadOnlyAddressBook addressBook, ReadOnlyUserPrefs userPrefs) {
         requireAllNonNull(addressBook, userPrefs);
+        this.tagsRegistry = new TagsRegistry();
 
         logger.fine("Initializing with address book: " + addressBook + " and user prefs " + userPrefs);
 
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
+        this.tagsRegistry.initialize(addressBook.getPersonList());
     }
 
     public ModelManager() {
@@ -80,6 +84,8 @@ public class ModelManager implements Model {
     @Override
     public void setAddressBook(ReadOnlyAddressBook addressBook) {
         this.addressBook.resetData(addressBook);
+        this.tagsRegistry.clear();
+        this.tagsRegistry.initialize(this.addressBook.getPersonList());
     }
 
     @Override
@@ -145,4 +151,30 @@ public class ModelManager implements Model {
                 && filteredPersons.equals(otherModelManager.filteredPersons);
     }
 
+    //=========== Tag Registry Modifiers =============================================================
+
+    @Override
+    public void addTags(Person person) {
+        tagsRegistry.addPerson(person);
+    }
+
+    @Override
+    public void deleteTags(Person person) {
+        tagsRegistry.removePerson(person);
+    }
+
+    @Override
+    public void updateEditedTags(Person oldPerson, Person editedPerson) {
+        tagsRegistry.updatePerson(oldPerson, editedPerson);
+    }
+
+    @Override
+    public void clearTagsRegistry() {
+        tagsRegistry.clear();
+    }
+
+    @Override
+    public String getFormattedTags() {
+        return tagsRegistry.getFormattedTags();
+    }
 }
