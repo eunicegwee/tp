@@ -55,10 +55,6 @@ public class CommandResult {
         this(feedbackToUser, false, false);
     }
 
-    public CommandResult(String feedbackToUser, Person personToView) {
-        this(feedbackToUser, false, false, null, personToView);
-    }
-
     public static CommandResult createWithPerson(String feedbackToUser, Person personToView) {
         return new CommandResult(feedbackToUser, false, false, null, personToView);
     }

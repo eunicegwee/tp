@@ -216,7 +216,7 @@ public class MainWindow extends UiPart<Stage> {
      * @param commandResult The result returned after executing a command. May contain
      *                      the {@link Person} to be viewed.
      */
-    public void handleViewCommandResult(CommandResult commandResult) {
+    private void handleViewCommandResult(CommandResult commandResult) {
         Person personToView = commandResult.getPersonToView();
         if (personToView != null) {
             personListPanel.selectPerson(personToView);
