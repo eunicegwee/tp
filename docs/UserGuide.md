@@ -1,231 +1,260 @@
+# 0rb1t User guide
+
+**0rb1t** is a desktop application designed for developers who prefer keyboard-driven workflows.
+
+- It brings a **Vim-inspired interface** to contact and task management, so you never have to reach for the mouse.
+- Built for developers who feel at home in Vim: 0rb1t lets you navigate, edit, and manage with the keybindings you already know.
+
+The app is **written in OOP fashion**, based on a ~6 KLoC codebase with solid user and developer documentation.
+
+For detailed documentation, see the [**0rb1t Product Website**](https://ay2526s2-cs2103t-t15-4.github.io/tp/).
+
+This project is based on the AddressBook-Level3 project created by the [SE-EDU initiative](https://se-education.org/).
+
+![Ui.png](./images/Ui.png)
+
+
+# Table of Contents
+
+- [Command List](#command-list)
+    - [Adding Contacts](#adding-contacts)
+    - [Clearing the Address Book](#clearing-the-address-book)
+    - [Deleting Contacts](#deleting-contacts)
+    - [Editing Contacts](#editing-contacts)
+    - [Exiting 0rb1t](#exiting-0rb1t)
+    - [Finding Contacts](#finding-contacts)
+    - [Accessing help in 0rb1t](#accessing-help-in-0rb1t)
+    - [Listing Contacts](#listing-contacts)
+    - [Listing Tags](#listing-tags)
+    - [Viewing Contacts](#viewing-contacts)
+- [Storage](#storage)
+    - [Saving the data](#saving-the-data)
+    - [Editing the data file](#editing-the-data-file)
+- [Tips and Examples](#tips-and-examples)
+- [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq)
+- [Known Issues](#known-issues)
+- [Command Summary](#command-summary)
+
+## Quick Start
+
+Follow these steps to get 0rb1t running on your computer:
+
+1. **Ensure you have Java 17 or above installed.**
+    - **Mac users:** Make sure you have the exact JDK version required.
+2. **Download the latest `.jar` file** from [here](https://github.com/Jaepple/ip/releases/tag/A-Release).
+
+   *(Replace `#` with the actual download link.)*
+
+3. **Copy the `.jar` file** to the folder you want to use as the home folder for 0rb1t.
+4. **Open a terminal** and navigate to the folder containing the `.jar` file.
+5. **Run the application** using the following command:
+
+```
+java -jar 0rb1t.jar
+```
+
 ---
-  layout: default.md
-  title: "User Guide"
-  pageNav: 3
----
 
-# AB-3 User Guide
+## Command List
 
-AddressBook Level 3 (AB3) is a **desktop app for managing contacts, optimized for use via a  Line Interface** (CLI) while still having the benefits of a Graphical User Interface (GUI). If you can type fast, AB3 can get your contact management tasks done faster than traditional GUI apps.
+### Adding Contacts
 
-<!-- * Table of Contents -->
-<page-nav-print />
+To add a contact, simply type `:add` followed by the details of the contact you wish to add. The parameters required are:
 
---------------------------------------------------------------------------------------------------------------------
+- The person’s name, typed after `n/`.
+- The person’s phone number, typed after `p/`.
+- The person’s email, typed after `e/`.
+- The person’s house address, typed after `a/`.
+- Any tags you wish to identify the person with, typed after `t/`, and each additional tag after the first one separated by `t/`.
 
-## Quick start
+Note: All parameters are required except for tags. A person can have any number of tags (including 0).
 
-1. Ensure you have Java `17` or above installed in your Computer.<br>
-   **Mac users:** Ensure you have the precise JDK version prescribed [here](https://se-education.org/guides/tutorials/javaInstallationMac.html).
-
-1. Download the latest `.jar` file from [here](https://github.com/se-edu/addressbook-level3/releases).
-
-1. Copy the file to the folder you want to use as the _home folder_ for your AddressBook.
-
-1. Open a command terminal, `cd` into the folder you put the jar file in, and use the `java -jar addressbook.jar` command to run the application.<br>
-   A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.<br>
-   ![Ui](images/Ui.png)
-
-1. Type the command in the command box and press Enter to execute it. e.g. typing **`:help`** and pressing Enter will open the help window.<br>
-   Some example commands you can try:
-
-   * `:list` : Lists all contacts.
-
-   * `:add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
-
-   * `:delete 3` : Deletes the 3rd contact shown in the current list.
-
-   * `:clear` : Deletes all contacts.
-
-   * `:exit` : Exits the app.
-
-1. Refer to the [Features](#features) below for details of each command.
-
---------------------------------------------------------------------------------------------------------------------
-
-## Features
-
-<box type="info" seamless>
-
-**Notes about the command format:**<br>
-
-* Words in `UPPER_CASE` are the parameters to be supplied by the user.<br>
-  e.g. in `:add n/NAME`, `NAME` is a parameter which can be used as `:add n/John Doe`.
-
-* Items in square brackets are optional.<br>
-  e.g `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or as `n/John Doe`.
-
-* Items with `…`​ after them can be used multiple times including zero times.<br>
-  e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
-
-* Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/PHONE_NUMBER`, `p/PHONE_NUMBER n/NAME` is also acceptable.
-
-* All commands must start with a colon (`:`), similar to Vim's command mode.<br>
-  e.g. `:add`, `:delete`, `:list`.
-
-* Extraneous parameters for commands that do not take in parameters (such as `:help`, `:list`, `:exit` and `:clear`) will be ignored.<br>
-  e.g. if the command specifies `:help 123`, it will be interpreted as `:help`.
-</box>
-
-### Viewing help : `:help`
-
-Shows a message explaining how to access the help page.
-
-![help message](images/helpMessage.png)
-
-Format: `:help`
-
-
-### Adding a person: `:add`
-
-Adds a person to the address book.
-
-Format: `:add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
-
-<box type="tip" seamless>
-
-**Tip:** A person can have any number of tags (including 0)
-</box>
+Format: `:add n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]...`
 
 Examples:
-* `:add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
-* `:add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
-### Listing all persons : `:list`
+`:add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 
-Shows a list of all persons in the address book. Optionally filters by one or more tags (OR relationship).
+`:add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
-Format: `:list [t/TAG]…​`
+Expected: The new contact will be added to the address book, and it can be viewed at the bottom of the sidebar.
 
-* If no tags are specified, all persons are shown.
-* If one or more tags are specified, only persons with at least one of the given tags are shown.
-* Tag matching is case-insensitive.
+### Clearing the Address Book
 
-Examples:
-* `:list` lists all persons.
-* `:list t/friend` lists all persons tagged `friend`.
-* `:list t/friend t/colleague` lists all persons tagged `friend` or `colleague`.
+To clear the entire address book, type `:clear`. 0rb1t will ask you whether or not you wish to clear the entire address book (in case you mistyped). Typing `yes` will clear the address book, while typing anything else will cancel the command.
 
-### Editing a person : `:edit`
+Format: `:clear` + `yes`
 
-Edits an existing person in the address book.
+Example:
 
-Format: `:edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+`:clear`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-    specifying any tags after it.
+Are you sure you want to clear the entire address book?
+Type 'yes' to confirm. Any other input will be taken as no.
 
-Examples:
-*  `:edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `:edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+`yes`
 
-### Locating persons by name: `:find`
+Expected: The entire address book will be cleared, and the sidebar will become empty. 0rbit confirms that the new contact is added, and shows the details of the contact added.
 
-Finds persons whose names contain any of the given keywords.
+### Deleting Contacts
 
-Format: `:find KEYWORD [MORE_KEYWORDS]`
+To delete a contact, type `:delete` followed by the index of the contact you wish to delete. The index of each individual contact can be found at the sidebar.
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
+Format: `:delete <INDEX>` + `yes`
 
-Examples:
-* `:find John` returns `john` and `John Doe`
-* `:find alex david` returns `Alex Yeoh`, `David Li`<br>
-  ![result for 'find alex david'](images/findAlexDavidResult.png)
+Example:
 
-### Deleting a person : `:delete`
+`:delete 1`
 
-Deletes the specified person from the address book.
+Are you sure you want to delete this person?
+<Contact details>
+Type 'yes' to confirm. Any other input will be taken as no.
 
-Format: `:delete INDEX`
+`yes`
 
-* Deletes the person at the specified `INDEX`.
-* The index refers to the index number shown in the displayed person list.
-* The index **must be a positive integer** 1, 2, 3, …​
+Expected: The contact that corresponds to the index entered will be deleted from the address book. 0rb1t confirms that the chosen contact is deleted, and shows the details of the contact deleted.
+
+### Editing Contacts
+
+To edit the details of a contact, type `:edit` followed by the field you wish to edit and the new details. To refresh, the fields that can be edited are:
+
+- The person’s name, typed after `n/`.
+- The person’s phone number, typed after `p/`.
+- The person’s email, typed after `e/`.
+- The person’s house address, typed after `a/`.
+- Any tags you wish to identify the person with, typed after `t/`, and each additional tag after the first one separated by `t/`.
+
+Note: If you wish to leave some fields unchanged, you do not have to include them in the `:edit` command.
+
+Format: `:edit n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]...`
 
 Examples:
-* `:list` followed by `:delete 2` deletes the 2nd person in the address book.
-* `:find Betsy` followed by `:delete 1` deletes the 1st person in the results of the `:find` command.
 
-### Listing all tags: `:tags`
+`:edit 2 n/Adam Wong a/NUS PGP`
 
-Displays all tags present in the address book in a formatted, comma-separated list.
+`:edit 5 p/13572468 t/school t/friend`
 
-Format: `:tags`
+Expected:
 
-* Lists all tags currently used by any person in the address book.
-* Tags are displayed in alphabetical order.
-* Each tag is shown only once, even if multiple persons have the same tag.
-* The output is case-sensitive in display (e.g. `Friends` and `friends` are treated as different tags).
+0rb1t confirms the updating of details of the chosen contact, and shows the new details of the contact.
 
-Examples:
-* `:clear` followed by `:add n/Alice ... t/friends t/work`, then `:add n/Bob ... t/family`
-* `:tags` will list out Tags: family, friends, work
+### Exiting 0rb1t
 
-### Clearing all entries : `:clear`
-
-Clears all entries from the address book.
-
-Format: `:clear`
-
-### Exiting the program : `:exit`
-
-Exits the program.
+To exit the application, type `:exit` and the application will automatically close.
 
 Format: `:exit`
 
+Expected: 0rb1t will close. No goodbye message is shown.
+
+### Finding Contacts
+
+To find a particular contact by their name, type `:find` followed by the name of the contact. To search for multiple people, type each of their names one after another, separated by a space.
+
+Format: `:find <NAME>`
+
+Examples:
+
+`:find bernice`
+
+`:find david`
+
+Expected: 0rb1t will list all the corresponding contacts with the exact name in the sidebar. It will also show how many contacts it listed.
+
+### Accessing Help in 0rb1t
+
+To find help content for using this application, type `:help`.
+
+Format: `:help`
+
+Expected: 0rb1t will open a separate help window, showing the link to the User Guide of 0rb1t.
+
+### Listing Contacts
+
+To list all contacts stored in 0rb1t, type `:list` and all contacts will appear on the sidebar on the left. You can also use this command to filter contacts by 1 or more tags.
+
+Note: If no tags are specified, all contacts are shown. If one or more tags are specified, only persons with at least one of the given tags are shown. Tag-matching is case-insensitive.
+
+Format: `:list <TAG>`
+
+Examples:
+
+`:list`
+
+`:list t/friend`
+
+`:list t/friend t/colleague`
+
+Expected: 0rb1t will state that it listed all persons, and the entire contact list will be made available in the sidebar. If tags are added, all persons with the relevant tags will be made available in the sidebar.
+
+### Listing Tags
+
+To display all the tags that you have added in the address book, type `:tags` and all the tags you have added will be shown, with each tag separated by a comma.
+
+Note: Tags are displayed in alphabetical order, and each tag is shown only once even if multiple contacts have the same tag. Tags are also case-sensitive: “friend” and “Friend” are treated as different tags)
+
+Format: `:tags`
+
+Expected: 0rb1t will state all the tags that have been added to the address book.
+
+### Viewing Contacts
+
+To view the details of a contact, type `:view` followed by the index of the contact you wish to view.
+
+Format: `:view <INDEX>`
+
+Examples:
+
+`:view 2`
+
+`:view 10`
+
+Expected: 0rb1t will state which contact is being shown by stating the name of the contact. The corresponding contact will be highlighted in the sidebar, and the contact details can be viewed in the main window.
+
+## Storage
+
 ### Saving the data
 
-AddressBook data are saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
+All data in 0rb1t is saved in the hard disk automatically after any command that changes the data. There is no need to save manually.
 
 ### Editing the data file
 
-AddressBook data are saved automatically as a JSON file `[JAR file location]/data/addressbook.json`. Advanced users are welcome to update data directly by editing that data file.
+All data is saved automatically as a JSON file [JAR file location]/data/0rb1t.json. 
+Advanced users are welcome to update data directly by editing that data file.
 
-<box type="warning" seamless>
+Caution: If your changes to the data file makes its format invalid, 0rb1t will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.
+Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 
-**Caution:**
-If your changes to the data file makes its format invalid, AddressBook will discard all data and start with an empty data file at the next run.  Hence, it is recommended to take a backup of the file before editing it.<br>
-Furthermore, certain edits can cause the AddressBook to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
-</box>
+## Tips and Examples
 
-### Archiving data files `[coming in v2.0]`
+- Use `:find` to search for the right person before any other action to avoid changing/deleting the wrong contact.
 
-_Details coming soon ..._
+- Example:
+`:find adam`
+`:edit 1 p/12345678`
+`:delete 1`
 
---------------------------------------------------------------------------------------------------------------------
+## Frequently Asked Questions (FAQ)
 
-## FAQ
+**Q**: How do I transfer my data to another Computer?
 
-**Q**: How do I transfer my data to another Computer?<br>
-**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Install the app in the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
 
---------------------------------------------------------------------------------------------------------------------
+## Known Issues
 
-## Known issues
+1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
+2. **If you minimise the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
 
-1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimize the Help Window** and then run the `:help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimized, and no new Help Window will appear. The remedy is to manually restore the minimized Help Window.
+## Command Summary
 
---------------------------------------------------------------------------------------------------------------------
-
-## Command summary
-
-Action     | Format, Examples
------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**    | `:add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `:add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Clear**  | `:clear`
-**Delete** | `:delete INDEX`<br> e.g., `:delete 3`
-**Edit**   | `:edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g., `:edit 2 n/James Lee e/jameslee@example.com`
-**Find**   | `:find KEYWORD [MORE_KEYWORDS]`<br> e.g., `:find James Jake`
-**List**   | `:list`
-**Help**   | `:help`
+| Command       | Format                                             | Description                                                      | Example                                                                                              |
+|---------------|----------------------------------------------------|------------------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| Add           | `:add n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]...` | Adds a person to the address book.                               | `:add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 t/friends t/owesMoney` |
+| Clear         | `:clear`  + `yes`                                  | Clears the entire address book.                                  | `:clear`<br/>`...`<br/>`yes`                                                                         |
+| Delete        | `:delete <INDEX>` + `yes`                          | Deletes a person from the address book.                          | `:delete 2`<br/>`...`<br/>`yes`                                                                      |
+| Edit          | `:edit <INDEX>`                                    | Edits a person’s details in the address book.                    | `:edit 3`                                                                                            |
+| Exit          | `:exit`                                            | Exit 0rb1t.                                                      | `:exit`                                                                                              |
+| Find          | `:find <NAME>`                                     | Finds a person in the address book based on their name.          | `:find John`                                                                                         |
+| Help          | `:help`                                            | Opens the help page.                                             | `:help`                                                                                              |
+| List Contacts | `:list <TAG>`                                      | Lists all contacts stored in the address book.                   | `:list`<br/>`:list t/friend`                                                                         |
+| List Tags     | `:tags`                                            | Lists all the tags used in the address book.                     | `:tags`                                                                                              |
+| View          | `:view <INDEX>`                                    | Views a person’s details in the address book based on the index. | `:view 4`                                                                                            |
