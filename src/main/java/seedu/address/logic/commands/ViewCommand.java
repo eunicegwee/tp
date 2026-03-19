@@ -12,7 +12,7 @@ import seedu.address.model.person.Person;
  */
 public class ViewCommand extends Command {
 
-    public static final String COMMAND_WORD = "view";
+    public static final String COMMAND_WORD = ":view";
 
     public static final String MESSAGE_USAGE =
             COMMAND_WORD + ": Views the details of the contact identified "

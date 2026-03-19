@@ -45,7 +45,11 @@ public class AddressBookParser {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE));
         }
 
-        final String commandWord = matcher.group("commandWord").replaceFirst("^:", "");
+        final String commandWord = matcher.group("commandWord");
+        if (!commandWord.startsWith(":")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                    "Commands must start with a colon. E.g., :add, :delete, :list"));
+        }
         final String arguments = matcher.group("arguments");
 
         // Note to developers: Change the log level in config.json to enable lower level (i.e., FINE, FINER and lower)

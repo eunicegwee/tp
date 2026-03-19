@@ -57,13 +57,13 @@ public class LogicManagerTest {
 
     @Test
     public void execute_invalidCommandFormat_throwsParseException() {
-        String invalidCommand = "uicfhmowqewca";
+        String invalidCommand = ":uicfhmowqewca";
         assertParseException(invalidCommand, MESSAGE_UNKNOWN_COMMAND);
     }
 
     @Test
     public void execute_commandExecutionError_throwsCommandException() {
-        String deleteCommand = "delete 9";
+        String deleteCommand = ":delete 9";
         assertCommandException(deleteCommand, MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
@@ -92,7 +92,7 @@ public class LogicManagerTest {
         model.addPerson(amy);
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
-        CommandResult result = logic.execute("delete 1");
+        CommandResult result = logic.execute(":delete 1");
         assertTrue(result.isAwaitingConfirmation());
         // Model should be unchanged after preview
         assertEquals(expectedModel, model);
@@ -105,7 +105,7 @@ public class LogicManagerTest {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.deletePerson(amy);
 
-        logic.execute("delete 1");
+        logic.execute(":delete 1");
         CommandResult confirmResult = logic.execute("yes");
 
         assertEquals(String.format(DeleteCommand.MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(amy)),
@@ -119,7 +119,7 @@ public class LogicManagerTest {
         model.addPerson(amy);
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
-        logic.execute("delete 1");
+        logic.execute(":delete 1");
         CommandResult cancelResult = logic.execute("no");
 
         assertEquals(LogicManager.MESSAGE_COMMAND_CANCELLED, cancelResult.getFeedbackToUser());

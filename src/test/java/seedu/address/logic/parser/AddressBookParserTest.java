@@ -40,14 +40,6 @@ public class AddressBookParserTest {
     }
 
     @Test
-    public void parseCommand_add_withColon() throws Exception {
-        Person person = new PersonBuilder().build();
-        String addCommand = ":add" + " " + PersonUtil.getPersonDetails(person);
-        AddCommand command = (AddCommand) parser.parseCommand(addCommand);
-        assertEquals(new AddCommand(person), command);
-    }
-
-    @Test
     public void parseCommand_clear() throws Exception {
         assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
         assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
@@ -104,6 +96,15 @@ public class AddressBookParserTest {
 
     @Test
     public void parseCommand_unknownCommand_throwsParseException() {
-        assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand("unknownCommand"));
+        assertThrows(ParseException.class, MESSAGE_UNKNOWN_COMMAND, () -> parser.parseCommand(":unknownCommand"));
+    }
+
+    @Test
+    public void parseCommand_withoutColonPrefix_throwsParseException() {
+        String expectedMessage = String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                "Commands must start with a colon. E.g., :add, :delete, :list");
+        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("add n/John"));
+        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("delete 1"));
+        assertThrows(ParseException.class, expectedMessage, () -> parser.parseCommand("list"));
     }
 }

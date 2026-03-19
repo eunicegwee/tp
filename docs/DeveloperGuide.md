@@ -50,7 +50,7 @@ The bulk of the app's work is done by the following four components:
 
 **How the architecture components interact with each other**
 
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `delete 1`.
+The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `:delete 1`.
 
 <puml src="diagrams/ArchitectureSequenceDiagram.puml" width="574" />
 
@@ -90,7 +90,7 @@ Here's a (partial) class diagram of the `Logic` component:
 
 <puml src="diagrams/LogicClassDiagram.puml" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("delete 1")` API call as an example.
+The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute(":delete 1")` API call as an example.
 
 <puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
 
@@ -176,7 +176,7 @@ Step 1. The user launches the application for the first time. The `VersionedAddr
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `:delete 5` command to delete the 5th person in the address book. The `:delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `:delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
@@ -224,11 +224,11 @@ The `redo` command does the opposite — it calls `Model#redoAddressBook()`,
 
 </box>
 
-Step 5. The user then decides to execute the command `list`. Commands that do not modify the address book, such as `list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
+Step 5. The user then decides to execute the command `:list`. Commands that do not modify the address book, such as `:list`, will usually not call `Model#commitAddressBook()`, `Model#undoAddressBook()` or `Model#redoAddressBook()`. Thus, the `addressBookStateList` remains unchanged.
 
 <puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
 
-Step 6. The user executes `clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `add n/David …​` command. This is the behavior that most modern desktop applications follow.
+Step 6. The user executes `:clear`, which calls `Model#commitAddressBook()`. Since the `currentStatePointer` is not pointing at the end of the `addressBookStateList`, all address book states after the `currentStatePointer` will be purged. Reason: It no longer makes sense to redo the `:add n/David …​` command. This is the behavior that most modern desktop applications follow.
 
 <puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
 
@@ -246,7 +246,7 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 * **Alternative 2:** Individual command knows how to undo/redo by
   itself.
-  * Pros: Will use less memory (e.g. for `delete`, just save the person being deleted).
+  * Pros: Will use less memory (e.g. for `:delete`, just save the person being deleted).
   * Cons: We must ensure that the implementation of each individual command are correct.
 
 _{more aspects and alternatives to be added}_
@@ -339,10 +339,10 @@ _{Explain here how the data archiving feature will be implemented}_
 
 | Step | Action | Outcome/System Response | Corresponding User Story (Reference) |
 |------|--------|-------------------------|--------------------------------------|
-| 1 | Developer searches for the contact by name: `find n/Alice` | The Contact List Panel displays multiple entries for "Alice" along with their distinguishing tags and emails. | US-07 (Search by name), US-09 (Additional identifiers in search) |
-| 2 | Developer reviews the list and uses the index to select the correct "Alice": `select 3` | The Browser Panel displays the full details for Alice (index 3). | US-13 (View full details) |
-| 3 | Developer executes the edit command to add a new tag for the project: `edit 3 t/new-project` | The system updates the contact. Message displayed: `Updated contact: Alice. New tag 'new-project' added.` | US-16 (Add tags to an existing contact), US-22 (Edit contact details) |
-| 4 | Developer views the list to confirm the change: `list` | The Contact List Panel shows Alice (index 3) with the new tag displayed. | US-06 (List all contacts) |
+| 1 | Developer searches for the contact by name: `:find n/Alice` | The Contact List Panel displays multiple entries for "Alice" along with their distinguishing tags and emails. | US-07 (Search by name), US-09 (Additional identifiers in search) |
+| 2 | Developer reviews the list and uses the index to select the correct "Alice": `:view 3` | The Browser Panel displays the full details for Alice (index 3). | US-13 (View full details) |
+| 3 | Developer executes the edit command to add a new tag for the project: `:edit 3 t/new-project` | The system updates the contact. Message displayed: `Updated contact: Alice. New tag 'new-project' added.` | US-16 (Add tags to an existing contact), US-22 (Edit contact details) |
+| 4 | Developer views the list to confirm the change: `:list` | The Contact List Panel shows Alice (index 3) with the new tag displayed. | US-06 (List all contacts) |
 
 
 #### Use Case 2: Safely Deleting an Outdated Contact
@@ -351,10 +351,10 @@ _{Explain here how the data archiving feature will be implemented}_
 
 | Step | Action | Outcome/System Response | Corresponding User Story (Reference) |
 |------|--------|-------------------------|--------------------------------------|
-| 1 | Developer issues the delete command using the currently displayed index: `delete 7` | The Result Display area shows a preview of contact 7 (Name, Phone, Email, Tags). Message displayed: `Contact to be deleted: \[Kai Jie, p/92345678, e/kj@work.com, t/FormerColleague\]. Are you sure you want to delete?` (MVP simplifies confirmation in the UI). | US-24 (Preview contact before deletion) |
+| 1 | Developer issues the delete command using the currently displayed index: `:delete 7` | The Result Display area shows a preview of contact 7 (Name, Phone, Email, Tags). Message displayed: `Contact to be deleted: \[Kai Jie, p/92345678, e/kj@work.com, t/FormerColleague\]. Are you sure you want to delete?` (MVP simplifies confirmation in the UI). | US-24 (Preview contact before deletion) |
 | 2 | Developer verifies the preview details (Name, Phone) are correct for Kai Jie. | N/A (verification step) | US-13 (View full details, implicitly used for verification) |
-| 3 | Developer confirms the deletion (assume a future confirmation mechanism is added, or MVP immediate action): `delete 7 confirm` | The contact is removed from the list. Message displayed: `Deleted contact: Kai Jie.` The Contact List Panel updates. | US-24 (Preview/Safer deletion) |
-| 4 | Developer immediately realizes they deleted the wrong person and attempts to recover: `undo` | The system restores the deleted contact. Message displayed: `Restored contact: \[Deleted Contact Name\]`. | US-25 (Undo last action) |
+| 3 | Developer confirms the deletion (assume a future confirmation mechanism is added, or MVP immediate action): `:delete 7 confirm` | The contact is removed from the list. Message displayed: `Deleted contact: Kai Jie.` The Contact List Panel updates. | US-24 (Preview/Safer deletion) |
+| 4 | Developer immediately realizes they deleted the wrong person and attempts to recover: `:undo` | The system restores the deleted contact. Message displayed: `Restored contact: \[Deleted Contact Name\]`. | US-25 (Undo last action) |
 
 
 #### Use Case 3: Initial Setup and Categorization
@@ -365,7 +365,7 @@ _{Explain here how the data archiving feature will be implemented}_
 |------|--------|-------------------------|--------------------------------------|
 | 1 | Developer adds a new contact and tags them simultaneously: `:add n/Benny p/98765432 e/benny@biz.com t/Marketing t/Partner` | Message displayed: `New contact added: Benny.` The new contact appears in the list view. | US-03 (Add contact), US-04 (Assign tags when adding) |
 | 2 | Developer quickly adds another contact: `:add n/Chloe p/88887777 e/chloe@rnd.com t/Engineer` | Message displayed: `New contact added: Chloe.` | US-03 (Add contact) |
-| 3 | Developer filters the list to view only their marketing contacts: `filter t/Marketing` | The Contact List Panel is updated to show only contacts tagged 'Marketing' (e.g., Benny). Message displayed: `Filtered contacts by tag: Marketing.` | US-12 (Filter contacts by tag) |
+| 3 | Developer filters the list to view only their marketing contacts: `:filter t/Marketing` | The Contact List Panel is updated to show only contacts tagged 'Marketing' (e.g., Benny). Message displayed: `Filtered contacts by tag: Marketing.` | US-12 (Filter contacts by tag) |
 
 
 ### Non-Functional Requirements (NFRs)
@@ -374,7 +374,7 @@ _{Explain here how the data archiving feature will be implemented}_
 
 | Requirement ID | Requirement | Description | Rationale |
 |---------------:|-------------|-------------|-----------|
-| P-01 | Search Speed | The application must return search results (e.g., using `find n/NAME`) in less than 0.5 seconds for a contact list size of up to 500 entries. | Ensure a fast, keyboard-driven workflow, matching the "Vim-ify the experience" value proposition.
+| P-01 | Search Speed | The application must return search results (e.g., using `:find n/NAME`) in less than 0.5 seconds for a contact list size of up to 500 entries. | Ensure a fast, keyboard-driven workflow, matching the "Vim-ify the experience" value proposition.
 | P-02 | Startup Time | The application must fully load and be ready to accept commands within 1.0 second. | Maintain user flow efficiency, especially for a CLI tool used throughout the day.
 | P-03 | CRUD Operation Speed | Basic operations (Add, Delete, Edit) must complete in less than 0.1 seconds after command execution. | Core contact management should be instantaneous.
 
@@ -384,7 +384,7 @@ _{Explain here how the data archiving feature will be implemented}_
 |---------------:|-------------|-------------|-----------|
 | U-01 | Vim-like UI Consistency | The CLI interface must maintain visual consistency across all command outputs (US-11). It should leverage color coding (US-05) to clearly distinguish fields (Name, Phone, Email, Tags). | Meet the core value proposition: "Vim-ify the experience." |
 | U-02 | Error Clarity | All error messages must be clear, concise, and explicitly suggest the correct command format or parameter requirement. | Enhance developer experience by providing immediate, actionable feedback. |
-| U-03 | Help Accessibility | A command (`help`) must immediately display a comprehensive guide of all available commands and their formats (US-02). | Essential for initial usability and quick command lookup. |
+| U-03 | Help Accessibility | A command (`:help`) must immediately display a comprehensive guide of all available commands and their formats (US-02). | Essential for initial usability and quick command lookup. |
 
 #### 3. Scalability Requirements (S)
 
@@ -398,8 +398,8 @@ _{Explain here how the data archiving feature will be implemented}_
 | Requirement ID | Requirement | Description | Rationale |
 |---------------:|-------------|-------------|-----------|
 | R-01 | Data Persistence | All contact data must be automatically saved/persisted upon successful execution of any modifying command (Add, Edit, Delete, Clear). | Prevent data loss in case of unexpected shutdown. |
-| R-02 | Input Validation | The system must strictly enforce parameter validation rules (e.g., 8-digit phone, valid email format) as defined in the MVP specification for the `add` command. | Ensure data integrity (US-03, US-39, US-40). |
-| R-03 | Safe Clear/Delete | The system must require a distinct confirmation step before executing the `clear` command (US-27) or any action that deletes data (US-24). | Prevent accidental loss of a large amount of data. |
+| R-02 | Input Validation | The system must strictly enforce parameter validation rules (e.g., 8-digit phone, valid email format) as defined in the MVP specification for the `:add` command. | Ensure data integrity (US-03, US-39, US-40). |
+| R-03 | Safe Clear/Delete | The system must require a distinct confirmation step before executing the `:clear` command (US-27) or any action that deletes data (US-24). | Prevent accidental loss of a large amount of data. |
 
 
 ### Glossary
@@ -410,7 +410,7 @@ _{Explain here how the data archiving feature will be implemented}_
 | CLI           | Command Line Interface. The environment in which 0rb1t operates, taking text-based commands.                                                                                                                                  |
 | Persona       | A concrete representation of the target user, used internally for design reference. (e.g., Brandon)                                                                                                                           |
 | MVP           | Minimum Viable Product. The version of the product containing only the essential features (Add, List, View, Delete, Clear) required to satisfy initial user needs.                                                            |
-| Index         | The sequential, positive integer displayed next to a contact entry in the Contact List Panel, used to reference the contact for commands like `select` or `delete`.                                                           |
+| Index         | The sequential, positive integer displayed next to a contact entry in the Contact List Panel, used to reference the contact for commands like `:view` or `:delete`.                                                           |
 | Tag           | A label or keyword assigned to a contact for categorization (e.g., "Developer", "Marketing", "Friend").                                                                                                                       |
 | Browser Panel | The dedicated UI area in the CLI that displays the full, organized details of a single, currently selected contact.                                                                                                           |
 | US-xx         | A specific User Story ID used to track product requirements.                                                                                                                                                                  |
