@@ -9,7 +9,7 @@ import seedu.address.model.Model;
  */
 public class TagsCommand extends Command {
 
-    public static final String COMMAND_WORD = "tags";
+    public static final String COMMAND_WORD = ":tags";
 
     public static final String MESSAGE_USAGE =
             COMMAND_WORD + ": Lists all tags in the address book.\n"
