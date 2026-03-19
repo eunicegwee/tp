@@ -19,7 +19,8 @@ public class ClearCommandTest {
         Model model = new ModelManager();
         Model expectedModel = new ModelManager();
 
-        CommandResult expectedResult = new CommandResult(ClearCommand.MESSAGE_CONFIRM_CLEAR, false, false, () -> null);
+        CommandResult expectedResult = new CommandResult(ClearCommand.MESSAGE_CONFIRM_CLEAR, false,
+                false, () -> null, null);
         assertCommandSuccess(new ClearCommand(), model, expectedResult, expectedModel);
     }
 
@@ -28,7 +29,8 @@ public class ClearCommandTest {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         Model expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-        CommandResult expectedResult = new CommandResult(ClearCommand.MESSAGE_CONFIRM_CLEAR, false, false, () -> null);
+        CommandResult expectedResult = new CommandResult(ClearCommand.MESSAGE_CONFIRM_CLEAR, false,
+                false, () -> null, null);
         assertCommandSuccess(new ClearCommand(), model, expectedResult, expectedModel);
     }
 

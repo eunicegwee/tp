@@ -35,7 +35,8 @@ public class CommandResultTest {
         assertFalse(commandResult.equals(new CommandResult("feedback", false, true)));
 
         // different awaitingConfirmation value -> returns false
-        assertFalse(commandResult.equals(new CommandResult("feedback", false, false, () -> new CommandResult("ok"))));
+        assertFalse(commandResult.equals(new CommandResult("feedback", false, false, () ->
+                new CommandResult("ok"), null)));
     }
 
     @Test
@@ -56,7 +57,8 @@ public class CommandResultTest {
 
         // different awaitingConfirmation value -> returns different hashcode
         assertNotEquals(commandResult.hashCode(),
-                new CommandResult("feedback", false, false, () -> new CommandResult("ok")).hashCode());
+                new CommandResult("feedback", false, false, () ->
+                        new CommandResult("ok"), null).hashCode());
     }
 
     @Test
@@ -65,7 +67,9 @@ public class CommandResultTest {
         String expected = CommandResult.class.getCanonicalName() + "{feedbackToUser="
                 + commandResult.getFeedbackToUser() + ", showHelp=" + commandResult.isShowHelp()
                 + ", exit=" + commandResult.isExit()
-                + ", awaitingConfirmation=" + commandResult.isAwaitingConfirmation() + "}";
+                + ", awaitingConfirmation=" + commandResult.isAwaitingConfirmation()
+                + ", personToView=" + commandResult.getPersonToView()
+                + "}";
         assertEquals(expected, commandResult.toString());
     }
 }

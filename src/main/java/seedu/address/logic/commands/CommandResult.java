@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 import seedu.address.commons.util.ToStringBuilder;
+import seedu.address.model.person.Person;
 
 /**
  * Represents the result of a command execution.
@@ -23,15 +24,19 @@ public class CommandResult {
     /** Action to execute when the user confirms. Null if no confirmation is needed. */
     private final Supplier<CommandResult> confirmationAction;
 
+    /** Person to display in the details panel. */
+    private final Person personToView;
+
     /**
      * Constructs a {@code CommandResult} with the specified fields.
      */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit,
-            Supplier<CommandResult> confirmationAction) {
+            Supplier<CommandResult> confirmationAction, Person personToView) {
         this.feedbackToUser = requireNonNull(feedbackToUser);
         this.showHelp = showHelp;
         this.exit = exit;
         this.confirmationAction = confirmationAction;
+        this.personToView = personToView;
     }
 
     /**
@@ -39,7 +44,7 @@ public class CommandResult {
      * and no confirmation action.
      */
     public CommandResult(String feedbackToUser, boolean showHelp, boolean exit) {
-        this(feedbackToUser, showHelp, exit, null);
+        this(feedbackToUser, showHelp, exit, null, null);
     }
 
     /**
@@ -48,6 +53,10 @@ public class CommandResult {
      */
     public CommandResult(String feedbackToUser) {
         this(feedbackToUser, false, false);
+    }
+
+    public static CommandResult createWithPerson(String feedbackToUser, Person personToView) {
+        return new CommandResult(feedbackToUser, false, false, null, personToView);
     }
 
     public String getFeedbackToUser() {
@@ -70,6 +79,10 @@ public class CommandResult {
         return confirmationAction;
     }
 
+    public Person getPersonToView() {
+        return personToView;
+    }
+
     @Override
     public boolean equals(Object other) {
         if (other == this) {
@@ -85,12 +98,13 @@ public class CommandResult {
         return feedbackToUser.equals(otherCommandResult.feedbackToUser)
                 && showHelp == otherCommandResult.showHelp
                 && exit == otherCommandResult.exit
-                && isAwaitingConfirmation() == otherCommandResult.isAwaitingConfirmation();
+                && isAwaitingConfirmation() == otherCommandResult.isAwaitingConfirmation()
+                && Objects.equals(personToView, otherCommandResult.personToView);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(feedbackToUser, showHelp, exit, isAwaitingConfirmation());
+        return Objects.hash(feedbackToUser, showHelp, exit, isAwaitingConfirmation(), personToView);
     }
 
     @Override
@@ -100,6 +114,7 @@ public class CommandResult {
                 .add("showHelp", showHelp)
                 .add("exit", exit)
                 .add("awaitingConfirmation", isAwaitingConfirmation())
+                .add("personToView", personToView)
                 .toString();
     }
 

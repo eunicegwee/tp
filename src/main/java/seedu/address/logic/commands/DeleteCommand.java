@@ -50,9 +50,10 @@ public class DeleteCommand extends Command {
         String previewMessage = String.format(MESSAGE_CONFIRM_DELETE, Messages.format(personToDelete));
         return new CommandResult(previewMessage, false, false, () -> {
             model.deletePerson(personToDelete);
+            model.deleteTags(personToDelete);
             return new CommandResult(
                     String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
-        });
+        }, null);
     }
 
     @Override

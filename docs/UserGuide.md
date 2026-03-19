@@ -94,9 +94,18 @@ Examples:
 
 ### Listing all persons : `:list`
 
-Shows a list of all persons in the address book.
+Shows a list of all persons in the address book. Optionally filters by one or more tags (OR relationship).
 
-Format: `:list`
+Format: `:list [t/TAG]…​`
+
+* If no tags are specified, all persons are shown.
+* If one or more tags are specified, only persons with at least one of the given tags are shown.
+* Tag matching is case-insensitive.
+
+Examples:
+* `:list` lists all persons.
+* `:list t/friend` lists all persons tagged `friend`.
+* `:list t/friend t/colleague` lists all persons tagged `friend` or `colleague`.
 
 ### Editing a person : `:edit`
 
@@ -146,6 +155,21 @@ Format: `:delete INDEX`
 Examples:
 * `:list` followed by `:delete 2` deletes the 2nd person in the address book.
 * `:find Betsy` followed by `:delete 1` deletes the 1st person in the results of the `:find` command.
+
+### Listing all tags: `:tags`
+
+Displays all tags present in the address book in a formatted, comma-separated list.
+
+Format: `:tags`
+
+* Lists all tags currently used by any person in the address book.
+* Tags are displayed in alphabetical order.
+* Each tag is shown only once, even if multiple persons have the same tag.
+* The output is case-sensitive in display (e.g. `Friends` and `friends` are treated as different tags).
+
+Examples:
+* `:clear` followed by `:add n/Alice ... t/friends t/work`, then `:add n/Bob ... t/family`
+* `:tags` will list out Tags: family, friends, work
 
 ### Clearing all entries : `:clear`
 

@@ -16,6 +16,7 @@ import seedu.address.logic.Logic;
 import seedu.address.logic.commands.CommandResult;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Person;
 
 /**
  * The Main Window. Provides the basic application layout containing
@@ -188,6 +189,8 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("Result: " + commandResult.getFeedbackToUser());
             resultDisplay.setFeedbackToUser(commandResult.getFeedbackToUser());
 
+            handleViewCommandResult(commandResult);
+
             if (commandResult.isShowHelp()) {
                 handleHelp();
             }
@@ -201,6 +204,22 @@ public class MainWindow extends UiPart<Stage> {
             logger.info("An error occurred while executing command: " + commandText);
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
+        }
+    }
+
+    /**
+     * Handles the result of a View command by selecting and displaying the specified
+     * {@link Person} in the {@code personListPanel}. If the {@link CommandResult}
+     * contains a person to be viewed, the corresponding person in the list panel
+     * will be highlighted and shown to the user.
+     *
+     * @param commandResult The result returned after executing a command. May contain
+     *                      the {@link Person} to be viewed.
+     */
+    private void handleViewCommandResult(CommandResult commandResult) {
+        Person personToView = commandResult.getPersonToView();
+        if (personToView != null) {
+            personListPanel.selectPerson(personToView);
         }
     }
 }

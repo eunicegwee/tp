@@ -38,7 +38,8 @@ public class DeleteCommandTest {
         // Model should remain unchanged (no deletion yet)
         ModelManager expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
 
-        CommandResult expectedResult = new CommandResult(expectedMessage, false, false, () -> null);
+        CommandResult expectedResult = new CommandResult(expectedMessage, false, false, () -> null,
+                null);
         assertCommandSuccess(deleteCommand, model, expectedResult, expectedModel);
     }
 
@@ -87,7 +88,7 @@ public class DeleteCommandTest {
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         showPersonAtIndex(expectedModel, INDEX_FIRST_PERSON);
 
-        CommandResult expectedResult = new CommandResult(expectedMessage, false, false, () -> null);
+        CommandResult expectedResult = new CommandResult(expectedMessage, false, false, () -> null, null);
         assertCommandSuccess(deleteCommand, model, expectedResult, expectedModel);
     }
 
