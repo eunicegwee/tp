@@ -26,8 +26,10 @@ public class ListCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons. "
             + "Optionally filters by tags, emails, phone numbers, and/or addresses.\n"
             + "Multiple keywords for the same field use OR logic. Different fields are combined with AND logic.\n"
-            + "Parameters: [" + PREFIX_TAG + "TAG]... [" + PREFIX_EMAIL + "EMAIL]... [" + PREFIX_PHONE + "PHONE]... [" + PREFIX_ADDRESS + "ADDRESS]...\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_EMAIL + "gmail " + PREFIX_PHONE + "9123 " + PREFIX_ADDRESS + "clementi";
+            + "Parameters: [" + PREFIX_TAG + "TAG]... [" + PREFIX_EMAIL + "EMAIL]... "
+            + "[" + PREFIX_PHONE + "PHONE]... [" + PREFIX_ADDRESS + "ADDRESS]...\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_EMAIL + "gmail "
+            + PREFIX_PHONE + "9123 " + PREFIX_ADDRESS + "clementi";
 
     private final Predicate<Person> predicate;
 

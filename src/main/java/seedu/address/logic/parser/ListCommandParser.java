@@ -33,7 +33,8 @@ public class ListCommandParser implements Parser<ListCommand> {
             return new ListCommand();
         }
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG, PREFIX_EMAIL, PREFIX_PHONE, PREFIX_ADDRESS);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args,
+                PREFIX_TAG, PREFIX_EMAIL, PREFIX_PHONE, PREFIX_ADDRESS);
         List<String> tagValues = argMultimap.getAllValues(PREFIX_TAG);
         List<String> emailValues = argMultimap.getAllValues(PREFIX_EMAIL);
         List<String> phoneValues = argMultimap.getAllValues(PREFIX_PHONE);
@@ -60,6 +61,7 @@ public class ListCommandParser implements Parser<ListCommand> {
                 ? null
                 : new AddressContainsKeywordPredicate(addressValues);
 
-        return new ListCommand(new ListCommandPredicate(tagPredicate, emailPredicate, phonePredicate, addressPredicate));
+        return new ListCommand(new ListCommandPredicate(tagPredicate, emailPredicate,
+                phonePredicate, addressPredicate));
     }
 }

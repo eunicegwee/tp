@@ -171,7 +171,8 @@ public class ListCommandTest {
                 new PhoneContainsKeywordPredicate(Collections.singletonList("94351253"));
         AddressContainsKeywordPredicate addressPredicate =
                 new AddressContainsKeywordPredicate(Collections.singletonList("jurong"));
-        ListCommandPredicate predicate = new ListCommandPredicate(tagPredicate, emailPredicate, phonePredicate, addressPredicate);
+        ListCommandPredicate predicate = new ListCommandPredicate(
+                tagPredicate, emailPredicate, phonePredicate, addressPredicate);
         ListCommand command = new ListCommand(predicate);
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);

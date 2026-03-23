@@ -14,6 +14,9 @@ public class ListCommandPredicate implements Predicate<Person> {
     private final PhoneContainsKeywordPredicate phonePredicate;
     private final AddressContainsKeywordPredicate addressPredicate;
 
+    /**
+     * Creates a ListCommandPredicate checking for all the given predicates.
+     */
     public ListCommandPredicate(TagContainsKeywordPredicate tagPredicate,
                                 EmailContainsKeywordPredicate emailPredicate,
                                 PhoneContainsKeywordPredicate phonePredicate,
