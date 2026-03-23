@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
@@ -9,6 +10,7 @@ import java.util.List;
 
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.AddressContainsKeywordPredicate;
 import seedu.address.model.person.EmailContainsKeywordPredicate;
 import seedu.address.model.person.ListCommandPredicate;
 import seedu.address.model.person.PhoneContainsKeywordPredicate;
@@ -31,12 +33,13 @@ public class ListCommandParser implements Parser<ListCommand> {
             return new ListCommand();
         }
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG, PREFIX_EMAIL, PREFIX_PHONE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG, PREFIX_EMAIL, PREFIX_PHONE, PREFIX_ADDRESS);
         List<String> tagValues = argMultimap.getAllValues(PREFIX_TAG);
         List<String> emailValues = argMultimap.getAllValues(PREFIX_EMAIL);
         List<String> phoneValues = argMultimap.getAllValues(PREFIX_PHONE);
+        List<String> addressValues = argMultimap.getAllValues(PREFIX_ADDRESS);
 
-        if ((tagValues.isEmpty() && emailValues.isEmpty() && phoneValues.isEmpty())
+        if ((tagValues.isEmpty() && emailValues.isEmpty() && phoneValues.isEmpty() && addressValues.isEmpty())
                 || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         }
@@ -53,6 +56,10 @@ public class ListCommandParser implements Parser<ListCommand> {
                 ? null
                 : new PhoneContainsKeywordPredicate(phoneValues);
 
-        return new ListCommand(new ListCommandPredicate(tagPredicate, emailPredicate, phonePredicate));
+        AddressContainsKeywordPredicate addressPredicate = addressValues.isEmpty()
+                ? null
+                : new AddressContainsKeywordPredicate(addressValues);
+
+        return new ListCommand(new ListCommandPredicate(tagPredicate, emailPredicate, phonePredicate, addressPredicate));
     }
 }
