@@ -2,6 +2,7 @@ package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.List;
@@ -10,6 +11,7 @@ import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.EmailContainsKeywordPredicate;
 import seedu.address.model.person.ListCommandPredicate;
+import seedu.address.model.person.PhoneContainsKeywordPredicate;
 import seedu.address.model.person.TagContainsKeywordPredicate;
 
 /**
@@ -29,11 +31,13 @@ public class ListCommandParser implements Parser<ListCommand> {
             return new ListCommand();
         }
 
-        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG, PREFIX_EMAIL);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_TAG, PREFIX_EMAIL, PREFIX_PHONE);
         List<String> tagValues = argMultimap.getAllValues(PREFIX_TAG);
         List<String> emailValues = argMultimap.getAllValues(PREFIX_EMAIL);
+        List<String> phoneValues = argMultimap.getAllValues(PREFIX_PHONE);
 
-        if ((tagValues.isEmpty() && emailValues.isEmpty()) || !argMultimap.getPreamble().isEmpty()) {
+        if ((tagValues.isEmpty() && emailValues.isEmpty() && phoneValues.isEmpty())
+                || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         }
 
@@ -45,6 +49,10 @@ public class ListCommandParser implements Parser<ListCommand> {
                 ? null
                 : new EmailContainsKeywordPredicate(emailValues);
 
-        return new ListCommand(new ListCommandPredicate(tagPredicate, emailPredicate));
+        PhoneContainsKeywordPredicate phonePredicate = phoneValues.isEmpty()
+                ? null
+                : new PhoneContainsKeywordPredicate(phoneValues);
+
+        return new ListCommand(new ListCommandPredicate(tagPredicate, emailPredicate, phonePredicate));
     }
 }

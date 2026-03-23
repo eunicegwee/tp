@@ -6,22 +6,27 @@ import java.util.function.Predicate;
 import seedu.address.commons.util.ToStringBuilder;
 
 /**
- * Tests that a {@code Person} matches any of the given keywords for tags and emails.
+ * Tests that a {@code Person} matches any of the given keywords for tags, emails, and phone numbers.
  */
 public class ListCommandPredicate implements Predicate<Person> {
     private final TagContainsKeywordPredicate tagPredicate;
     private final EmailContainsKeywordPredicate emailPredicate;
+    private final PhoneContainsKeywordPredicate phonePredicate;
 
-    public ListCommandPredicate(TagContainsKeywordPredicate tagPredicate, EmailContainsKeywordPredicate emailPredicate) {
+    public ListCommandPredicate(TagContainsKeywordPredicate tagPredicate,
+                                EmailContainsKeywordPredicate emailPredicate,
+                                PhoneContainsKeywordPredicate phonePredicate) {
         this.tagPredicate = tagPredicate;
         this.emailPredicate = emailPredicate;
+        this.phonePredicate = phonePredicate;
     }
 
     @Override
     public boolean test(Person person) {
         boolean tagMatch = tagPredicate == null || tagPredicate.test(person);
         boolean emailMatch = emailPredicate == null || emailPredicate.test(person);
-        return tagMatch && emailMatch;
+        boolean phoneMatch = phonePredicate == null || phonePredicate.test(person);
+        return tagMatch && emailMatch && phoneMatch;
     }
 
     @Override
@@ -36,7 +41,8 @@ public class ListCommandPredicate implements Predicate<Person> {
 
         ListCommandPredicate otherPredicate = (ListCommandPredicate) other;
         return Objects.equals(tagPredicate, otherPredicate.tagPredicate)
-                && Objects.equals(emailPredicate, otherPredicate.emailPredicate);
+                && Objects.equals(emailPredicate, otherPredicate.emailPredicate)
+                && Objects.equals(phonePredicate, otherPredicate.phonePredicate);
     }
 
     @Override
@@ -44,7 +50,7 @@ public class ListCommandPredicate implements Predicate<Person> {
         return new ToStringBuilder(this)
                 .add("tagPredicate", tagPredicate)
                 .add("emailPredicate", emailPredicate)
+                .add("phonePredicate", phonePredicate)
                 .toString();
     }
 }
-

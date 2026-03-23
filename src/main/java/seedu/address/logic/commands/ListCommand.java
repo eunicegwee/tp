@@ -2,6 +2,7 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 
@@ -22,10 +23,10 @@ public class ListCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Listed all persons";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons. "
-            + "Optionally filters by one or more tags (OR relationship) and/or one or more email keywords (OR relationship).\n"
-            + "Multiple types of parameters (tags, emails) are combined with AND relationship.\n"
-            + "Parameters: [" + PREFIX_TAG + "TAG]... [" + PREFIX_EMAIL + "EMAIL]...\n"
-            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_EMAIL + "gmail";
+            + "Optionally filters by one or more tags, one or more email keywords, and/or one or more phone numbers (OR relationship within same type).\n"
+            + "Multiple types of parameters (tags, emails, phones) are combined with AND relationship.\n"
+            + "Parameters: [" + PREFIX_TAG + "TAG]... [" + PREFIX_EMAIL + "EMAIL]... [" + PREFIX_PHONE + "PHONE]...\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_TAG + "friend " + PREFIX_EMAIL + "gmail " + PREFIX_PHONE + "9123";
 
     private final Predicate<Person> predicate;
 
