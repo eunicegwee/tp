@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.control.Label?>
-<?import javafx.geometry.Insets?>
+<?import javafx.scene.layout.FlowPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
 
 <VBox xmlns:fx="http://javafx.com/fxml" spacing="8" stylesheets="@PersonDetails.css" styleClass="details-panel">
 
@@ -28,4 +28,9 @@
         <Label text="Address:" styleClass="field-name" />
         <Label fx:id="address" styleClass="field-value" />
     </HBox>
+
+    <VBox spacing="6">
+        <Label text="Notes:" styleClass="field-name" />
+        <FlowPane fx:id="notes" hgap="8" vgap="8" />
+    </VBox>
 </VBox>

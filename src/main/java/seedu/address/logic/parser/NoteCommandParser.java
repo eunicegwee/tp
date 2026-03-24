@@ -22,10 +22,8 @@ public class NoteCommandParser implements Parser<NoteCommand> {
                     MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
         }
 
-        // Split into index + note
         String[] splitArgs = trimmedArgs.split("\\s+", 2);
 
-        // Parse index using ParserUtil
         Index index;
         try {
             index = ParserUtil.parseIndex(splitArgs[0]);
@@ -34,7 +32,6 @@ public class NoteCommandParser implements Parser<NoteCommand> {
                     MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE), pe);
         }
 
-        // Validate note exists
         if (splitArgs.length < 2 || splitArgs[1].isBlank()) {
             throw new ParseException(String.format(
                     MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
