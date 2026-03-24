@@ -14,7 +14,7 @@ public class PersonComparator implements Comparator<Person> {
      * Represents the field to sort by.
      */
     public enum SortField {
-        NAME, PHONE, FAVORITE
+        NAME, PHONE, FAVOURITE
     }
 
     /**
@@ -77,9 +77,15 @@ public class PersonComparator implements Comparator<Person> {
                 result = p1.getName().fullName.compareToIgnoreCase(p2.getName().fullName);
                 break;
             case PHONE:
-                result = p1.getPhone().value.compareTo(p2.getPhone().value);
+                String p1Phone = p1.getPhone().value;
+                String p2Phone = p2.getPhone().value;
+                if (p1Phone.length() != p2Phone.length()) {
+                    result = Integer.compare(p1Phone.length(), p2Phone.length());
+                } else {
+                    result = p1Phone.compareTo(p2Phone);
+                }
                 break;
-            case FAVORITE:
+            case FAVOURITE:
                 result = Boolean.compare(p1.isFavourite(), p2.isFavourite());
                 break;
             default:
@@ -114,4 +120,3 @@ public class PersonComparator implements Comparator<Person> {
         return new ToStringBuilder(this).add("criteria", criteriaList).toString();
     }
 }
-

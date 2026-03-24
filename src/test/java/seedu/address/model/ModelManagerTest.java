@@ -201,4 +201,67 @@ public class ModelManagerTest {
         assertFalse(tags.contains("friend"));
         assertTrue(tags.contains("colleague"));
     }
+
+    @Test
+    public void updateSortedPersonList_nullComparator_resetsSorting() {
+        modelManager.addPerson(ALICE);
+        modelManager.addPerson(BENSON);
+
+        // Sort by name descending
+        modelManager.updateSortedPersonList((p1, p2) -> p2.getName().fullName.compareTo(p1.getName().fullName));
+        assertEquals(Arrays.asList(BENSON, ALICE), modelManager.getFilteredPersonList());
+
+        // Reset sorting
+        modelManager.updateSortedPersonList(null);
+        assertEquals(Arrays.asList(ALICE, BENSON), modelManager.getFilteredPersonList());
+    }
+
+    @Test
+    public void updateSortedPersonList_validComparator_sortsList() {
+        modelManager.addPerson(ALICE);
+        modelManager.addPerson(BENSON);
+
+        // Sort by name descending
+        modelManager.updateSortedPersonList((p1, p2) -> p2.getName().fullName.compareTo(p1.getName().fullName));
+        assertEquals(Arrays.asList(BENSON, ALICE), modelManager.getFilteredPersonList());
+    }
+
+    @Test
+    public void updateSortedPersonList_withFilter_sortsFilteredList() {
+        modelManager.addPerson(ALICE);
+        modelManager.addPerson(BENSON);
+        modelManager.addPerson(seedu.address.testutil.TypicalPersons.CARL);
+        modelManager.addPerson(seedu.address.testutil.TypicalPersons.DANIEL);
+
+        // Filter by name containing "a" (Alice, Carl, Daniel)
+        modelManager.updateFilteredPersonList(p -> p.getName().fullName.toLowerCase().contains("a"));
+
+        // Sort by name descending (Daniel, Carl, Alice)
+        modelManager.updateSortedPersonList((p1, p2) -> p2.getName().fullName.compareTo(p1.getName().fullName));
+
+        assertEquals(Arrays.asList(
+                seedu.address.testutil.TypicalPersons.DANIEL,
+                seedu.address.testutil.TypicalPersons.CARL,
+                ALICE),
+                modelManager.getFilteredPersonList());
+    }
+
+    @Test
+    public void updateSortedPersonList_filteredList_resetsSortKeepsFilter() {
+        modelManager.addPerson(ALICE);
+        modelManager.addPerson(BENSON);
+        modelManager.addPerson(seedu.address.testutil.TypicalPersons.CARL);
+
+        // Filter only ALICE and BENSON
+        modelManager.updateFilteredPersonList(p ->
+                p.getName().fullName.startsWith("A") || p.getName().fullName.startsWith("B"));
+
+        // Sort descending: Benson, Alice
+        modelManager.updateSortedPersonList((p1, p2) -> p2.getName().fullName.compareTo(p1.getName().fullName));
+        assertEquals(Arrays.asList(BENSON, ALICE), modelManager.getFilteredPersonList());
+
+        // Reset sort: Alice, Benson (Insertion order if added in that order)
+        modelManager.updateSortedPersonList(null);
+        assertEquals(Arrays.asList(ALICE, BENSON), modelManager.getFilteredPersonList());
+    }
 }

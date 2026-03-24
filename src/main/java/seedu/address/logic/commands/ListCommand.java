@@ -71,13 +71,7 @@ public class ListCommand extends Command {
         if (comparator != null) {
             model.updateSortedPersonList(comparator);
         } else {
-            // If no comparator is provided, we might want to reset sorting or keep it.
-            // Requirement doesn't specify. Assuming "list" without sort resets sort?
-            // "list" without sort usually just shows the list.
-            // If I type ":list", I expect to see the list. If it was sorted, maybe it stays sorted?
-            // But if I type ":list s/+n", it sorts.
-            // If I type ":list" alone, usually it resets the filter to show all.
-            // So it should probably reset the sort too, to get back to default order (insertion order maybe?).
+            // A null comparator indicates that sorting should be reset to the default order.
             model.updateSortedPersonList(null);
         }
 

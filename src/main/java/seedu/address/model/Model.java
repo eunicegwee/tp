@@ -82,7 +82,7 @@ public interface Model {
 
     /**
      * Updates the comparator of the sorted person list to sort by the given {@code comparator}.
-     * @throws NullPointerException if {@code comparator} is null.
+     * If {@code comparator} is null, the sort order is reset to the default order.
      */
     void updateSortedPersonList(Comparator<Person> comparator);
 

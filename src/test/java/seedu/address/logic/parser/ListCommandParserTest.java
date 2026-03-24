@@ -201,7 +201,7 @@ public class ListCommandParserTest {
     @Test
     public void parse_validSortFavorites_returnsListCommand() {
         List<SortCriteria> criteria = Collections.singletonList(
-                new SortCriteria(SortField.FAVORITE, SortOrder.DESCENDING));
+                new SortCriteria(SortField.FAVOURITE, SortOrder.DESCENDING));
         PersonComparator comparator = new PersonComparator(criteria);
         ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
                 null, null, null, null, null), comparator);
@@ -211,7 +211,7 @@ public class ListCommandParserTest {
     @Test
     public void parse_validSortFavoritesPriority_returnsListCommand() {
         List<SortCriteria> criteria = Arrays.asList(
-                new SortCriteria(SortField.FAVORITE, SortOrder.DESCENDING),
+                new SortCriteria(SortField.FAVOURITE, SortOrder.DESCENDING),
                 new SortCriteria(SortField.NAME, SortOrder.ASCENDING));
         PersonComparator comparator = new PersonComparator(criteria);
         ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
