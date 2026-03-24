@@ -44,4 +44,16 @@ public class ViewCommand extends Command {
                 personToView
         );
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+        if (!(other instanceof ViewCommand)) {
+            return false;
+        }
+        ViewCommand otherCommand = (ViewCommand) other;
+        return targetIndex.equals(otherCommand.targetIndex);
+    }
 }
