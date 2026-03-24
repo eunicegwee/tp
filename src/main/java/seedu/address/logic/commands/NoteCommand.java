@@ -11,6 +11,9 @@ import seedu.address.model.Model;
 import seedu.address.model.person.NoteList;
 import seedu.address.model.person.Person;
 
+/**
+ * Appends a note to a person identified by their displayed index in the address book.
+ */
 public class NoteCommand extends Command {
 
     public static final String COMMAND_WORD = ":note";
@@ -26,11 +29,20 @@ public class NoteCommand extends Command {
     private final Index index;
     private final String note;
 
+    /**
+     * Creates a {@code NoteCommand} to append the given {@code note}
+     * to the person at the specified {@code index}.
+     */
     public NoteCommand(Index index, String note) {
         this.index = index;
         this.note = note;
     }
 
+    /**
+     * Appends the note to the selected person and updates the model.
+     *
+     * @throws CommandException if the given index is invalid
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);

@@ -1,8 +1,8 @@
 package seedu.address.ui;
 
 import javafx.beans.binding.Bindings;
-import javafx.geometry.Pos;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
@@ -84,9 +84,10 @@ public class PersonDetailsPanel extends UiPart<Region> {
         noteLabel.getStyleClass().add("note-box");
         noteLabel.setWrapText(true);
         noteLabel.setAlignment(Pos.CENTER);
-        noteLabel.prefWidthProperty().bind(Bindings.createDoubleBinding(
-                () -> Math.max(160, Math.min(320, notes.getWidth() - 12)),
-                notes.widthProperty()));
+        noteLabel.prefWidthProperty().bind(
+                Bindings.createDoubleBinding((
+                        ) -> Math.max(160, Math.min(320, notes.getWidth() - 12)),
+                        notes.widthProperty()));
         return noteLabel;
     }
 }
