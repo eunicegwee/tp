@@ -31,7 +31,7 @@ class JsonAdaptedPerson {
     private final String email;
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
-    private final List<JsonAdaptedNote> notes = new ArrayList<>();
+    private final List<String> notes = new ArrayList<>();
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -40,7 +40,7 @@ class JsonAdaptedPerson {
     public JsonAdaptedPerson(@JsonProperty("name") String name, @JsonProperty("phone") String phone,
             @JsonProperty("email") String email, @JsonProperty("address") String address,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
-            @JsonProperty("notes") List<JsonAdaptedNote> notes) {
+            @JsonProperty("notes") List<String> notes) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -65,7 +65,7 @@ class JsonAdaptedPerson {
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
         notes.addAll(source.getNoteList().stream()
-                .map(JsonAdaptedNote::new)
+                .map(Note::toString)
                 .collect(Collectors.toList()));
     }
 
@@ -115,8 +115,8 @@ class JsonAdaptedPerson {
         final Set<Tag> modelTags = new HashSet<>(personTags);
 
         final List<Note> modelNotes = new ArrayList<>();
-        for (JsonAdaptedNote note : notes) {
-            modelNotes.add(note.toModelType());
+        for (String note : notes) {
+            modelNotes.add(new Note(note));
         }
         final NoteList modelNoteList = new NoteList(modelNotes);
 
