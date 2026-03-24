@@ -26,19 +26,37 @@ public class Person {
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final NoteList noteList;
+    private final boolean isFavourite;
+
+    /**
+     * Every field must be present and not null.
+     * Initializes with an empty NoteList and non-favourite state by default.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+        this(name, phone, email, address, tags, new NoteList(), false);
+    }
+
+    /**
+     * Every field must be present and not null.
+     * Initializes with a non-favourite state by default.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, NoteList noteList) {
+        this(name, phone, email, address, tags, noteList, false);
+    }
 
     /**
      * Every field must be present and not null.
      * Initializes with an empty NoteList by default.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        this(name, phone, email, address, tags, new NoteList());
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, boolean isFavourite) {
+        this(name, phone, email, address, tags, new NoteList(), isFavourite);
     }
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, NoteList noteList) {
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+            NoteList noteList, boolean isFavourite) {
         requireAllNonNull(name, phone, email, address, tags, noteList);
         this.name = name;
         this.phone = phone;
@@ -46,6 +64,7 @@ public class Person {
         this.address = address;
         this.tags.addAll(tags);
         this.noteList = noteList;
+        this.isFavourite = isFavourite;
     }
 
     public Name getName() {
@@ -62,6 +81,14 @@ public class Person {
 
     public Address getAddress() {
         return address;
+    }
+
+    public boolean isFavourite() {
+        return isFavourite;
+    }
+
+    public Person withFavourite(boolean isFavourite) {
+        return new Person(name, phone, email, address, tags, noteList, isFavourite);
     }
 
     /**
@@ -99,7 +126,6 @@ public class Person {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof Person)) {
             return false;
         }
@@ -110,13 +136,13 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
-                && noteList.equals(otherPerson.noteList);
+                && noteList.equals(otherPerson.noteList)
+                && isFavourite == otherPerson.isFavourite();
     }
 
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, noteList);
+        return Objects.hash(name, phone, email, address, tags, noteList, isFavourite);
     }
 
     @Override
@@ -128,10 +154,11 @@ public class Person {
                 .add("address", address)
                 .add("tags", tags)
                 .add("notes", noteList)
+                .add("isFavourite", isFavourite)
                 .toString();
     }
 
     public NoteList appendNote(String note) {
-        return this.noteList.append(note);
+        return noteList.append(note);
     }
 }

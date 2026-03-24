@@ -63,7 +63,8 @@ public class NoteCommand extends Command {
                 personToEdit.getEmail(),
                 personToEdit.getAddress(),
                 personToEdit.getTags(),
-                updatedNotes
+                updatedNotes,
+                personToEdit.isFavourite()
         );
 
         model.setPerson(personToEdit, editedPerson);

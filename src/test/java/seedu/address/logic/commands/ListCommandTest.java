@@ -21,7 +21,13 @@ import org.junit.jupiter.api.Test;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.AddressContainsKeywordPredicate;
+import seedu.address.model.person.EmailContainsKeywordPredicate;
+import seedu.address.model.person.ListCommandPredicate;
+import seedu.address.model.person.NameContainsSubstringPredicate;
+import seedu.address.model.person.PhoneContainsKeywordPredicate;
 import seedu.address.model.person.TagContainsKeywordPredicate;
+
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for ListCommand.
@@ -93,6 +99,107 @@ public class ListCommandTest {
         expectedModel.updateFilteredPersonList(predicate);
         assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.singletonList(BENSON), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_emailFilter_showsMatchingPersons() {
+        // "johnd" matches BENSON's email
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        EmailContainsKeywordPredicate emailPredicate =
+                new EmailContainsKeywordPredicate(Collections.singletonList("johnd"));
+        ListCommandPredicate predicate = new ListCommandPredicate(
+                null, emailPredicate, null, null, null);
+        ListCommand command = new ListCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(BENSON), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_tagAndEmailFilter_showsIntersection() {
+        // "friends" matches ALICE, BENSON, DANIEL
+        // "example.com" matches everyone
+        // Intersection should be ALICE, BENSON, DANIEL
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 3);
+        TagContainsKeywordPredicate tagPredicate =
+                new TagContainsKeywordPredicate(Collections.singletonList("friends"));
+        EmailContainsKeywordPredicate emailPredicate =
+                new EmailContainsKeywordPredicate(Collections.singletonList("example.com"));
+        ListCommandPredicate predicate = new ListCommandPredicate(
+                tagPredicate, emailPredicate, null, null, null);
+        ListCommand command = new ListCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(ALICE, BENSON, DANIEL), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_phoneFilter_showsMatchingPersons() {
+        // "94351253" matches ALICE's phone
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        PhoneContainsKeywordPredicate phonePredicate =
+                new PhoneContainsKeywordPredicate(Collections.singletonList("94351253"));
+        ListCommandPredicate predicate = new ListCommandPredicate(
+                null, null, phonePredicate, null, null);
+        ListCommand command = new ListCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(ALICE), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_addressFilter_showsMatchingPersons() {
+        // "jurong" matches ALICE's address
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        AddressContainsKeywordPredicate addressPredicate =
+                new AddressContainsKeywordPredicate(Collections.singletonList("jurong"));
+        ListCommandPredicate predicate = new ListCommandPredicate(
+                null, null, null, addressPredicate, null);
+        ListCommand command = new ListCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(ALICE), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_nameFilter_showsMatchingPersons() {
+        // "Alice" matches ALICE's name
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        NameContainsSubstringPredicate namePredicate =
+                new NameContainsSubstringPredicate(Collections.singletonList("Alice"));
+        ListCommandPredicate predicate = new ListCommandPredicate(
+                null, null, null, null, namePredicate);
+        ListCommand command = new ListCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(ALICE), model.getFilteredPersonList());
+    }
+
+    @Test
+    public void execute_allFilters_showsIntersection() {
+        // "friends" matches ALICE, BENSON, DANIEL
+        // "example.com" matches everyone
+        // "94351253" matches ALICE
+        // "jurong" matches ALICE
+        // "Alice" matches ALICE
+        // Intersection should be ALICE
+        String expectedMessage = String.format(MESSAGE_PERSONS_LISTED_OVERVIEW, 1);
+        TagContainsKeywordPredicate tagPredicate =
+                new TagContainsKeywordPredicate(Collections.singletonList("friends"));
+        EmailContainsKeywordPredicate emailPredicate =
+                new EmailContainsKeywordPredicate(Collections.singletonList("example.com"));
+        PhoneContainsKeywordPredicate phonePredicate =
+                new PhoneContainsKeywordPredicate(Collections.singletonList("94351253"));
+        AddressContainsKeywordPredicate addressPredicate =
+                new AddressContainsKeywordPredicate(Collections.singletonList("jurong"));
+        NameContainsSubstringPredicate namePredicate =
+                new NameContainsSubstringPredicate(Collections.singletonList("Alice"));
+        ListCommandPredicate predicate = new ListCommandPredicate(
+                tagPredicate, emailPredicate, phonePredicate, addressPredicate, namePredicate);
+        ListCommand command = new ListCommand(predicate);
+        expectedModel.updateFilteredPersonList(predicate);
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(Arrays.asList(ALICE), model.getFilteredPersonList());
     }
 
     @Test
