@@ -10,6 +10,11 @@ import java.util.Collections;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.ListCommand;
+import seedu.address.model.person.AddressContainsKeywordPredicate;
+import seedu.address.model.person.EmailContainsKeywordPredicate;
+import seedu.address.model.person.ListCommandPredicate;
+import seedu.address.model.person.NameContainsSubstringPredicate;
+import seedu.address.model.person.PhoneContainsKeywordPredicate;
 import seedu.address.model.person.TagContainsKeywordPredicate;
 
 public class ListCommandParserTest {
@@ -31,15 +36,129 @@ public class ListCommandParserTest {
 
     @Test
     public void parse_validSingleTag_returnsListCommand() {
-        ListCommand expectedCommand =
-                new ListCommand(new TagContainsKeywordPredicate(Collections.singletonList("friends")));
+        TagContainsKeywordPredicate tagPredicate =
+                new TagContainsKeywordPredicate(Collections.singletonList("friends"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                tagPredicate, null, null, null, null));
         assertParseSuccess(parser, " t/friends", expectedCommand);
     }
 
     @Test
     public void parse_validMultipleTags_returnsListCommand() {
-        ListCommand expectedCommand =
-                new ListCommand(new TagContainsKeywordPredicate(Arrays.asList("friends", "owesMoney")));
+        TagContainsKeywordPredicate tagPredicate =
+                new TagContainsKeywordPredicate(Arrays.asList("friends", "owesMoney"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                tagPredicate, null, null, null, null));
         assertParseSuccess(parser, " t/friends t/owesMoney", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSingleEmail_returnsListCommand() {
+        EmailContainsKeywordPredicate emailPredicate =
+                new EmailContainsKeywordPredicate(Collections.singletonList("gmail"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, emailPredicate, null, null, null));
+        assertParseSuccess(parser, " e/gmail", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSinglePhone_returnsListCommand() {
+        PhoneContainsKeywordPredicate phonePredicate =
+                new PhoneContainsKeywordPredicate(Collections.singletonList("9123"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, phonePredicate, null, null));
+        assertParseSuccess(parser, " p/9123", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSingleAddress_returnsListCommand() {
+        AddressContainsKeywordPredicate addressPredicate =
+                new AddressContainsKeywordPredicate(Collections.singletonList("clementi"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, null, addressPredicate, null));
+        assertParseSuccess(parser, " a/clementi", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSingleName_returnsListCommand() {
+        NameContainsSubstringPredicate namePredicate =
+                new NameContainsSubstringPredicate(Collections.singletonList("Alice"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, null, null, namePredicate));
+        assertParseSuccess(parser, " n/Alice", expectedCommand);
+    }
+
+    @Test
+    public void parse_validTagAndEmail_returnsListCommand() {
+        TagContainsKeywordPredicate tagPredicate =
+                new TagContainsKeywordPredicate(Collections.singletonList("friends"));
+        EmailContainsKeywordPredicate emailPredicate =
+                new EmailContainsKeywordPredicate(Collections.singletonList("gmail"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                tagPredicate, emailPredicate, null, null, null));
+        assertParseSuccess(parser, " t/friends e/gmail", expectedCommand);
+    }
+
+    @Test
+    public void parse_validAllFilters_returnsListCommand() {
+        TagContainsKeywordPredicate tagPredicate =
+                new TagContainsKeywordPredicate(Collections.singletonList("friends"));
+        EmailContainsKeywordPredicate emailPredicate =
+                new EmailContainsKeywordPredicate(Collections.singletonList("gmail"));
+        PhoneContainsKeywordPredicate phonePredicate =
+                new PhoneContainsKeywordPredicate(Collections.singletonList("9123"));
+        AddressContainsKeywordPredicate addressPredicate =
+                new AddressContainsKeywordPredicate(Collections.singletonList("clementi"));
+        NameContainsSubstringPredicate namePredicate =
+                new NameContainsSubstringPredicate(Collections.singletonList("Alice"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                tagPredicate, emailPredicate, phonePredicate, addressPredicate, namePredicate));
+        assertParseSuccess(parser, " t/friends e/gmail p/9123 a/clementi n/Alice", expectedCommand);
+    }
+
+    @Test
+    public void parse_emptyPrefixArgs_throwsParseException() {
+        // empty n/
+        assertParseFailure(parser, " n/",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+
+        // empty e/
+        assertParseFailure(parser, " e/",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+
+        // empty p/
+        assertParseFailure(parser, " p/",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+
+        // empty a/
+        assertParseFailure(parser, " a/",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+
+        // empty t/
+        assertParseFailure(parser, " t/",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+
+        // all empty
+        assertParseFailure(parser, " n/ e/ p/ a/ t/",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_mixedEmptyAndValidArgs_success() {
+        // mixed n/
+        NameContainsSubstringPredicate namePredicate =
+                new NameContainsSubstringPredicate(Collections.singletonList("Alice"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, null, null, namePredicate));
+        assertParseSuccess(parser, " n/Alice n/", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSubstringName_returnsListCommand() {
+        NameContainsSubstringPredicate namePredicate =
+                new NameContainsSubstringPredicate(Collections.singletonList("Ali"));
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, null, null, namePredicate));
+        assertParseSuccess(parser, " n/Ali", expectedCommand);
     }
 }
