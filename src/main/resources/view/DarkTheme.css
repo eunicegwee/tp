@@ -165,6 +165,14 @@
      -fx-border-top-width: 1px;
 }
 
+.pane-title {
+    -fx-font-family: "Consolas", "Cascadia Mono", "Courier New", monospace;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #c6c6a8;
+    -fx-padding: 0 0 8 0;
+}
+
 .status-bar {
     -fx-background-color: derive(#1d1d1d, 30%);
 }
