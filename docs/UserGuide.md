@@ -218,7 +218,7 @@ All data in 0rb1t is saved in the hard disk automatically after any command that
 
 ### Editing the data file
 
-All data is saved automatically as a JSON file [JAR file location]/data/0rb1t.json. 
+All data is saved automatically as a JSON file [JAR file location]/data/0rb1t.json.
 Advanced users are welcome to update data directly by editing that data file.
 
 Caution: If your changes to the data file makes its format invalid, 0rb1t will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.
