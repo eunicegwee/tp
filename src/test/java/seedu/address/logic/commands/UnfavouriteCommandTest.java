@@ -32,30 +32,6 @@ public class UnfavouriteCommandTest {
     public void execute_validIndexUnfilteredList_success() {
         Person personToUnfavourite = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
 
-        if (!personToUnfavourite.isFavourite()) {
-            int favouriteIndex = -1;
-            for (int i = 0; i < model.getFilteredPersonList().size(); i++) {
-                if (model.getFilteredPersonList().get(i).isFavourite()) {
-                    favouriteIndex = i;
-                    break;
-                }
-            }
-            personToUnfavourite = model.getFilteredPersonList().get(favouriteIndex);
-            UnfavouriteCommand unfavouriteCommand = new UnfavouriteCommand(Index.fromZeroBased(favouriteIndex));
-
-            Person unfavouritedPerson = personToUnfavourite.withFavourite(false);
-
-            Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
-            expectedModel.setPerson(personToUnfavourite, unfavouritedPerson);
-
-            CommandResult expectedCommandResult = CommandResult.createWithPerson(
-                    String.format(UnfavouriteCommand.MESSAGE_UNFAVOURITE_PERSON_SUCCESS, unfavouritedPerson.getName()),
-                    unfavouritedPerson);
-
-            assertCommandSuccess(unfavouriteCommand, model, expectedCommandResult, expectedModel);
-            return;
-        }
-
         UnfavouriteCommand unfavouriteCommand = new UnfavouriteCommand(INDEX_FIRST_PERSON);
         Person unfavouritedPerson = personToUnfavourite.withFavourite(false);
 
@@ -92,7 +68,7 @@ public class UnfavouriteCommandTest {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         UnfavouriteCommand unfavouriteCommand = new UnfavouriteCommand(outOfBoundIndex);
 
-        assertCommandFailure(unfavouriteCommand, model, "Invalid person index");
+        assertCommandFailure(unfavouriteCommand, model, "The person index provided is invalid");
     }
 
     @Test
@@ -125,7 +101,7 @@ public class UnfavouriteCommandTest {
 
         UnfavouriteCommand unfavouriteCommand = new UnfavouriteCommand(INDEX_SECOND_PERSON);
 
-        assertCommandFailure(unfavouriteCommand, model, "Invalid person index");
+        assertCommandFailure(unfavouriteCommand, model, "The person index provided is invalid");
     }
 
     @Test

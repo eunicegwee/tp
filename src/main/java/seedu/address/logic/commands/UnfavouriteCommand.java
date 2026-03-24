@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.List;
 
 import seedu.address.commons.core.index.Index;
+import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
 import seedu.address.model.person.Person;
@@ -17,8 +18,8 @@ public class UnfavouriteCommand extends Command {
     public static final String COMMAND_WORD = ":unfavourite";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Removes the pinned status from the contact identified by the index number used in the displayed "
-            + "contact list.\n"
+            + ": Removes the favourite status from the contact identified by the index number used in"
+            + " the displayed contact list \n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
@@ -40,7 +41,7 @@ public class UnfavouriteCommand extends Command {
         List<Person> lastShownList = model.getFilteredPersonList();
 
         if (targetIndex.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException("Invalid person index");
+            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
         Person personToUnfavourite = lastShownList.get(targetIndex.getZeroBased());

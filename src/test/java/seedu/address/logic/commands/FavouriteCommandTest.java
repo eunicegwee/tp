@@ -54,7 +54,7 @@ public class FavouriteCommandTest {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         FavouriteCommand favouriteCommand = new FavouriteCommand(outOfBoundIndex);
 
-        assertCommandFailure(favouriteCommand, model, "Invalid person index");
+        assertCommandFailure(favouriteCommand, model, "The person index provided is invalid");
     }
 
     @Test
@@ -83,7 +83,7 @@ public class FavouriteCommandTest {
 
         FavouriteCommand favouriteCommand = new FavouriteCommand(INDEX_SECOND_PERSON);
 
-        assertCommandFailure(favouriteCommand, model, "Invalid person index");
+        assertCommandFailure(favouriteCommand, model, "The person index provided is invalid");
     }
 
     @Test

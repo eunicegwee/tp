@@ -93,7 +93,7 @@ public class PersonBuilder {
     }
 
     /**
-     * Sets the {@code isFavourite} of the {@Code Person} that we are building.
+     * Sets the {@code isFavourite} of the {@code Person} that we are building.
      */
     public PersonBuilder withFavourite(boolean isFavourite) {
         this.isFavourite = isFavourite;
