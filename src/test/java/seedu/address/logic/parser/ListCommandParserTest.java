@@ -6,6 +6,7 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
@@ -14,6 +15,10 @@ import seedu.address.model.person.AddressContainsKeywordPredicate;
 import seedu.address.model.person.EmailContainsKeywordPredicate;
 import seedu.address.model.person.ListCommandPredicate;
 import seedu.address.model.person.NameContainsSubstringPredicate;
+import seedu.address.model.person.PersonComparator;
+import seedu.address.model.person.PersonComparator.SortCriteria;
+import seedu.address.model.person.PersonComparator.SortField;
+import seedu.address.model.person.PersonComparator.SortOrder;
 import seedu.address.model.person.PhoneContainsKeywordPredicate;
 import seedu.address.model.person.TagContainsKeywordPredicate;
 
@@ -160,5 +165,71 @@ public class ListCommandParserTest {
         ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
                 null, null, null, null, namePredicate));
         assertParseSuccess(parser, " n/Ali", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSortNameAscending_returnsListCommand() {
+        List<SortCriteria> criteria = Collections.singletonList(
+                new SortCriteria(SortField.NAME, SortOrder.ASCENDING));
+        PersonComparator comparator = new PersonComparator(criteria);
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, null, null, null), comparator);
+        assertParseSuccess(parser, " s/+n", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSortPhoneDescending_returnsListCommand() {
+        List<SortCriteria> criteria = Collections.singletonList(
+                new SortCriteria(SortField.PHONE, SortOrder.DESCENDING));
+        PersonComparator comparator = new PersonComparator(criteria);
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, null, null, null), comparator);
+        assertParseSuccess(parser, " s/-p", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSortMultiple_returnsListCommand() {
+        List<SortCriteria> criteria = Arrays.asList(
+                new SortCriteria(SortField.NAME, SortOrder.ASCENDING),
+                new SortCriteria(SortField.PHONE, SortOrder.DESCENDING));
+        PersonComparator comparator = new PersonComparator(criteria);
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, null, null, null), comparator);
+        assertParseSuccess(parser, " s/+n s/-p", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSortFavorites_returnsListCommand() {
+        List<SortCriteria> criteria = Collections.singletonList(
+                new SortCriteria(SortField.FAVORITE, SortOrder.DESCENDING));
+        PersonComparator comparator = new PersonComparator(criteria);
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, null, null, null), comparator);
+        assertParseSuccess(parser, " s/*", expectedCommand);
+    }
+
+    @Test
+    public void parse_validSortFavoritesPriority_returnsListCommand() {
+        List<SortCriteria> criteria = Arrays.asList(
+                new SortCriteria(SortField.FAVORITE, SortOrder.DESCENDING),
+                new SortCriteria(SortField.NAME, SortOrder.ASCENDING));
+        PersonComparator comparator = new PersonComparator(criteria);
+        ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
+                null, null, null, null, null), comparator);
+        // User inputs name first, then favorites. Parser should reorder.
+        assertParseSuccess(parser, " s/+n s/*", expectedCommand);
+    }
+
+    @Test
+    public void parse_invalidSort_throwsParseException() {
+        assertParseFailure(parser, " s/invalid",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " s/+invalid",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " s/n",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE)); // missing order
+
+        assertParseFailure(parser, " s/+*",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE)); // invalid format for favorites
     }
 }
