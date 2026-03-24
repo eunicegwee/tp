@@ -80,7 +80,12 @@ public class ListCommand extends Command {
             // So it should probably reset the sort too, to get back to default order (insertion order maybe?).
             model.updateSortedPersonList(null);
         }
-        return new CommandResult(MESSAGE_SUCCESS);
+
+        if (predicate.equals(PREDICATE_SHOW_ALL_PERSONS)) {
+            return new CommandResult(MESSAGE_SUCCESS);
+        }
+        return new CommandResult(
+                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
     }
 
     @Override
@@ -99,7 +104,7 @@ public class ListCommand extends Command {
         boolean predicateEquals = predicate.equals(otherListCommand.predicate);
         boolean comparatorEquals = (comparator == null && otherListCommand.comparator == null)
                 || (comparator != null && comparator.equals(otherListCommand.comparator));
-        
+
         return predicateEquals && comparatorEquals;
     }
 }
