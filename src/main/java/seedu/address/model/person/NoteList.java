@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Represents an append-only collection of notes.
@@ -79,5 +80,10 @@ public class NoteList {
 
         NoteList otherNotes = (NoteList) other;
         return notes.equals(otherNotes.notes);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(notes);
     }
 }

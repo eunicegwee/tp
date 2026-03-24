@@ -116,7 +116,11 @@ class JsonAdaptedPerson {
 
         final List<Note> modelNotes = new ArrayList<>();
         for (String note : notes) {
-            modelNotes.add(new Note(note));
+            try {
+                modelNotes.add(new Note(note));
+            } catch (IllegalArgumentException | NullPointerException e) {
+                throw new IllegalValueException(Note.MESSAGE_CONSTRAINTS);
+            }
         }
         final NoteList modelNoteList = new NoteList(modelNotes);
 
