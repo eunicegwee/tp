@@ -50,9 +50,10 @@ public class ListCommandParser implements Parser<ListCommand> {
         addressValues.removeIf(String::isBlank);
         nameValues.removeIf(String::isBlank);
 
-        if ((tagValues.isEmpty() && emailValues.isEmpty() && phoneValues.isEmpty()
-                && addressValues.isEmpty() && nameValues.isEmpty())
-                || !argMultimap.getPreamble().isEmpty()) {
+        boolean noFilters = tagValues.isEmpty() && emailValues.isEmpty() && phoneValues.isEmpty()
+                && addressValues.isEmpty() && nameValues.isEmpty();
+
+        if (noFilters || !argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
         }
 
