@@ -4,6 +4,7 @@ import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Collections;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -24,31 +25,45 @@ public class Person {
     // Data fields
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
+    private final NoteList noteList;
     private final boolean isFavourite;
+
     /**
      * Every field must be present and not null.
+     * Initializes with an empty NoteList and non-favourite state by default.
      */
-    // Keep original constructor to not break code, set isFavourite to false by default.
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
-        requireAllNonNull(name, phone, email, address, tags);
-        this.name = name;
-        this.phone = phone;
-        this.email = email;
-        this.address = address;
-        this.tags.addAll(tags);
-        this.isFavourite = false;
+        this(name, phone, email, address, tags, new NoteList(), false);
+    }
+
+    /**
+     * Every field must be present and not null.
+     * Initializes with a non-favourite state by default.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, NoteList noteList) {
+        this(name, phone, email, address, tags, noteList, false);
+    }
+
+    /**
+     * Every field must be present and not null.
+     * Initializes with an empty NoteList by default.
+     */
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, boolean isFavourite) {
+        this(name, phone, email, address, tags, new NoteList(), isFavourite);
     }
 
     /**
      * Every field must be present and not null.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, boolean isFavourite) {
-        requireAllNonNull(name, phone, email, address, tags);
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags,
+            NoteList noteList, boolean isFavourite) {
+        requireAllNonNull(name, phone, email, address, tags, noteList);
         this.name = name;
         this.phone = phone;
         this.email = email;
         this.address = address;
         this.tags.addAll(tags);
+        this.noteList = noteList;
         this.isFavourite = isFavourite;
     }
 
@@ -73,7 +88,7 @@ public class Person {
     }
 
     public Person withFavourite(boolean isFavourite) {
-        return new Person(name, phone, email, address, tags, isFavourite);
+        return new Person(name, phone, email, address, tags, noteList, isFavourite);
     }
 
     /**
@@ -82,6 +97,10 @@ public class Person {
      */
     public Set<Tag> getTags() {
         return Collections.unmodifiableSet(tags);
+    }
+
+    public List<Note> getNoteList() {
+        return noteList.getAll();
     }
 
     /**
@@ -107,7 +126,6 @@ public class Person {
             return true;
         }
 
-        // instanceof handles nulls
         if (!(other instanceof Person)) {
             return false;
         }
@@ -118,13 +136,13 @@ public class Person {
                 && email.equals(otherPerson.email)
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
+                && noteList.equals(otherPerson.noteList)
                 && isFavourite == otherPerson.isFavourite();
     }
 
     @Override
     public int hashCode() {
-        // use this method for custom fields hashing instead of implementing your own
-        return Objects.hash(name, phone, email, address, tags, isFavourite);
+        return Objects.hash(name, phone, email, address, tags, noteList, isFavourite);
     }
 
     @Override
@@ -135,8 +153,12 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
+                .add("notes", noteList)
                 .add("isFavourite", isFavourite)
                 .toString();
     }
 
+    public NoteList appendNote(String note) {
+        return noteList.append(note);
+    }
 }

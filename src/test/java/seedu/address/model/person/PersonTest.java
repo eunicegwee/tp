@@ -25,6 +25,23 @@ public class PersonTest {
     }
 
     @Test
+    public void getNoteList_modifyList_throwsUnsupportedOperationException() {
+        Person person = new PersonBuilder().build();
+        assertThrows(UnsupportedOperationException.class, () -> person.getNoteList().add(new Note("New note")));
+    }
+
+    @Test
+    public void appendNote_returnsUpdatedNoteListWithoutMutatingOriginalPersonNotes() {
+        Person person = new PersonBuilder().build();
+
+        NoteList updatedNotes = person.appendNote("Met at conference");
+
+        assertTrue(person.getNoteList().isEmpty());
+        assertEquals(1, updatedNotes.getAll().size());
+        assertEquals(new Note("Met at conference"), updatedNotes.getAll().get(0));
+    }
+
+    @Test
     public void isSamePerson() {
         // same object -> returns true
         assertTrue(ALICE.isSamePerson(ALICE));
@@ -88,13 +105,18 @@ public class PersonTest {
         // different tags -> returns false
         editedAlice = new PersonBuilder(ALICE).withTags(VALID_TAG_HUSBAND).build();
         assertFalse(ALICE.equals(editedAlice));
+
+        // different notes -> returns false
+        editedAlice = new Person(ALICE.getName(), ALICE.getPhone(), ALICE.getEmail(), ALICE.getAddress(),
+                ALICE.getTags(), ALICE.appendNote("met at conference"));
+        assertFalse(ALICE.equals(editedAlice));
     }
 
     @Test
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags()
-                + ", isFavourite=false}";
+                + ", notes=" + ALICE.getNoteList() + ", isFavourite=false}";
         assertEquals(expected, ALICE.toString());
     }
 }

@@ -1,8 +1,12 @@
 package seedu.address.ui;
 
+import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Region;
+import seedu.address.model.person.Note;
 import seedu.address.model.person.Person;
 
 /**
@@ -28,11 +32,16 @@ public class PersonDetailsPanel extends UiPart<Region> {
     @FXML
     private Label address;
 
+    @FXML
+    private FlowPane notes;
+
     /**
      * Creates a {@code PersonDetailsPanel} and loads the associated FXML layout.
      */
     public PersonDetailsPanel() {
         super(FXML);
+        notes.prefWrapLengthProperty().bind(getRoot().widthProperty().subtract(24));
+        notes.prefWidthProperty().bind(getRoot().widthProperty().subtract(24));
     }
 
     /**
@@ -51,6 +60,11 @@ public class PersonDetailsPanel extends UiPart<Region> {
         phone.setText(person.getPhone().value);
         email.setText(person.getEmail().value);
         address.setText(person.getAddress().value);
+        notes.getChildren().clear();
+        person.getNoteList().stream()
+                .map(Note::toString)
+                .map(this::createNoteLabel)
+                .forEach(noteLabel -> notes.getChildren().add(noteLabel));
     }
 
     /**
@@ -62,5 +76,18 @@ public class PersonDetailsPanel extends UiPart<Region> {
         phone.setText("");
         email.setText("");
         address.setText("");
+        notes.getChildren().clear();
+    }
+
+    private Label createNoteLabel(String note) {
+        Label noteLabel = new Label(note);
+        noteLabel.getStyleClass().add("note-box");
+        noteLabel.setWrapText(true);
+        noteLabel.setAlignment(Pos.CENTER);
+        noteLabel.prefWidthProperty().bind(
+                Bindings.createDoubleBinding((
+                        ) -> Math.max(160, Math.min(320, notes.getWidth() - 12)),
+                        notes.widthProperty()));
+        return noteLabel;
     }
 }

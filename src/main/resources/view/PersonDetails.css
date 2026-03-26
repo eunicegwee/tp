@@ -27,3 +27,13 @@
 .field-value {
     -fx-text-fill: #dcdccc;
 }
+
+.note-box {
+    -fx-background-color: #1c1c1c;
+    -fx-background-radius: 2;
+    -fx-padding: 7 10 7 10;
+    -fx-text-fill: white;
+    -fx-font-family: "Consolas", "Courier New", monospace;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
