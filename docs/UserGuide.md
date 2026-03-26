@@ -59,7 +59,7 @@ java -jar 0rb1t.jar
 
 To navigate previously used commands, use the `UP` and `DOWN` arrow keys in the command box. `UP` to recall older commands, `DOWN` to recall newer commands.
 
-Note: Navigating past the newest command clears the command box. Up to 64 commands are stored.
+Note: Navigating past the most recent command clears the command box. Up to 64 commands are stored.
 
 Format: `UP` or `DOWN`
 
@@ -136,7 +136,7 @@ Type 'yes' to confirm. Any other input will be taken as no.
 
 `yes`
 
-Expected: The contact corresponding to the entered index will be deleted from 0rb1t. 0rb1t confirms that the chosen contact is deleted, and shows the details of the contact deleted.
+Expected: The contact corresponding to the entered index will be deleted from 0rb1t. 0rb1t confirms that the chosen contact has been deleted, and shows the details of the contact deleted.
 
 ### Editing Contacts
 
@@ -260,7 +260,7 @@ Expected: The list of contacts will be sorted based on the paramter and in the o
 
 To display all the tags that you have added in 0rb1t, type `:tags` and all the tags you have added will be shown, with each tag separated by a comma.
 
-Note: Tags are displayed in alphabetical order, and each tag is shown only once even if multiple contacts have the same tag. Tags are case-sensitive: “friend” and “Friend” are treated as different tags.
+Note: Tags are displayed in alphabetical order, and each tag is shown only once even if multiple contacts have the same tag. Tags are case-sensitive; for example, “friend” and “Friend” are treated as two distinct tags.
 
 Format: `:tags`
 
