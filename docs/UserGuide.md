@@ -130,16 +130,19 @@ To edit the details of a contact, type `:edit` followed by the field you wish to
 - The person’s email, typed after `e/`.
 - The person’s house address, typed after `a/`.
 - Any tags you wish to identify the person with, typed after `t/`, and each additional tag after the first one separated by `t/`.
+- Any tags you wish to remove from the person, typed after `dt/`, and each additional tag to be removed separated by `dt/`.
 
 Note: If you wish to leave some fields unchanged, you do not have to include them in the `:edit` command.
 
-Format: `:edit <INDEX> n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]...`
+Format: `:edit <INDEX> n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG] [dt/TAG] ...`
 
 Examples:
 
 `:edit 2 n/Adam Wong a/NUS PGP`
 
 `:edit 5 p/13572468 t/school t/friend`
+
+`:edit 1 e/jane_doe@example.com dt/school`
 
 Expected: 0rb1t confirms the updating of the details of the chosen contact, and shows the new details of the contact.
 
@@ -156,6 +159,8 @@ Expected: 0rb1t will close. No goodbye message is shown.
 ### Finding Contacts
 
 To find a particular contact by their name, type `:find` followed by the name of the contact. To search for multiple people, type each of their names one after another, separated by a space.
+
+Note: Currently, this command can accept multiple arguments (names) and 0rb1t will list all the contacts with **either** of the names.
 
 Format: `:find <NAME>`
 
@@ -207,7 +212,7 @@ If tags are added, all persons with the relevant tags will be made available in 
 
 To display all the tags that you have added in the address book, type `:tags` and all the tags you have added will be shown, with each tag separated by a comma.
 
-Note: Tags are displayed in alphabetical order, and each tag is shown only once even if multiple contacts have the same tag. Tags are also case-sensitive: “friend” and “Friend” are treated as different tags.
+Note: Tags are displayed in alphabetical order, and each tag is shown only once even if multiple contacts have the same tag. Tags are case-sensitive: “friend” and “Friend” are treated as different tags.
 
 Format: `:tags`
 
