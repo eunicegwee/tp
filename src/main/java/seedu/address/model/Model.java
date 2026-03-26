@@ -1,6 +1,7 @@
 package seedu.address.model;
 
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -78,6 +79,12 @@ public interface Model {
 
     /** Returns an unmodifiable view of the filtered person list */
     ObservableList<Person> getFilteredPersonList();
+
+    /**
+     * Updates the comparator of the sorted person list to sort by the given {@code comparator}.
+     * If {@code comparator} is null, the sort order is reset to the default order.
+     */
+    void updateSortedPersonList(Comparator<Person> comparator);
 
     /**
      * Updates the filter of the filtered person list to filter by the given {@code predicate}.
