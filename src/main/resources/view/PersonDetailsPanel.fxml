@@ -10,34 +10,35 @@
 
     <Label text="Person Details" styleClass="details-heading" />
 
-<ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" stylesheets="@PersonDetails.css"
-            styleClass="details-scroll-pane" xmlns:fx="http://javafx.com/fxml">
-    <content>
-        <VBox spacing="8" styleClass="details-panel">
-            <HBox spacing="5">
-                <Label text="Name:" styleClass="field-name" />
-                <Label fx:id="name" styleClass="field-value" />
-            </HBox>
+    <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" stylesheets="@PersonDetails.css"
+                styleClass="details-scroll-pane" xmlns:fx="http://javafx.com/fxml">
+        <content>
+            <VBox spacing="8" styleClass="details-panel">
+                <HBox spacing="5">
+                    <Label text="Name:" styleClass="field-name" />
+                    <Label fx:id="name" styleClass="field-value" />
+                </HBox>
 
-            <HBox spacing="5">
-                <Label text="Phone:" styleClass="field-name" />
-                <Label fx:id="phone" styleClass="field-value" />
-            </HBox>
+                <HBox spacing="5">
+                    <Label text="Phone:" styleClass="field-name" />
+                    <Label fx:id="phone" styleClass="field-value" />
+                </HBox>
 
-            <HBox spacing="5">
-                <Label text="Email:" styleClass="field-name" />
-                <Label fx:id="email" styleClass="field-value" />
-            </HBox>
+                <HBox spacing="5">
+                    <Label text="Email:" styleClass="field-name" />
+                    <Label fx:id="email" styleClass="field-value" />
+                </HBox>
 
-            <HBox spacing="5">
-                <Label text="Address:" styleClass="field-name" />
-                <Label fx:id="address" styleClass="field-value" />
-            </HBox>
+                <HBox spacing="5">
+                    <Label text="Address:" styleClass="field-name" />
+                    <Label fx:id="address" styleClass="field-value" />
+                </HBox>
 
-            <VBox spacing="6">
-                <Label text="Notes:" styleClass="field-name" />
-                <FlowPane fx:id="notes" hgap="8" vgap="8" />
+                <VBox spacing="6">
+                    <Label text="Notes:" styleClass="field-name" />
+                    <FlowPane fx:id="notes" hgap="8" vgap="8" />
+                </VBox>
             </VBox>
-        </VBox>
-    </content>
-</ScrollPane>
+        </content>
+    </ScrollPane>
+</VBox>
