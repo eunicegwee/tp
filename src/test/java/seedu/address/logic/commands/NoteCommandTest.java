@@ -33,7 +33,7 @@ public class NoteCommandTest {
                 personToEdit.getEmail(),
                 personToEdit.getAddress(),
                 personToEdit.getTags(),
-                new NoteList(personToEdit.getNoteList()).append(noteContent),
+                new NoteList(personToEdit.getListOfNotes()).append(noteContent),
                 personToEdit.isFavourite()
         );
 
@@ -66,7 +66,7 @@ public class NoteCommandTest {
                 personToEdit.getEmail(),
                 personToEdit.getAddress(),
                 personToEdit.getTags(),
-                new NoteList(personToEdit.getNoteList()).append(noteContent),
+                new NoteList(personToEdit.getListOfNotes()).append(noteContent),
                 personToEdit.isFavourite()
         );
 

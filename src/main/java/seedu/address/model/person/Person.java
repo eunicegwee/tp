@@ -99,7 +99,7 @@ public class Person {
         return Collections.unmodifiableSet(tags);
     }
 
-    public List<Note> getNoteList() {
+    public List<Note> getListOfNotes() {
         return noteList.getAll();
     }
 

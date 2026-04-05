@@ -67,7 +67,7 @@ class JsonAdaptedPerson {
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
-        notes.addAll(source.getNoteList().stream()
+        notes.addAll(source.getListOfNotes().stream()
                 .map(Note::toString)
                 .collect(Collectors.toList()));
         isFavourite = source.isFavourite();

@@ -61,7 +61,7 @@ public class PersonDetailsPanel extends UiPart<Region> {
         email.setText(person.getEmail().value);
         address.setText(person.getAddress().value);
         notes.getChildren().clear();
-        person.getNoteList().stream()
+        person.getListOfNotes().stream()
                 .map(Note::toString)
                 .map(this::createNoteLabel)
                 .forEach(noteLabel -> notes.getChildren().add(noteLabel));
