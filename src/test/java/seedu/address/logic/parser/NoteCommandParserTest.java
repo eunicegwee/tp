@@ -8,6 +8,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.logic.commands.NoteCommand;
+import seedu.address.model.person.Note;
 
 public class NoteCommandParserTest {
 
@@ -31,6 +32,12 @@ public class NoteCommandParserTest {
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
         assertParseFailure(parser, "1    ",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, NoteCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_noteTooLong_throwsParseException() {
+        String tooLongNote = "a".repeat(Note.MAX_LENGTH + 1);
+        assertParseFailure(parser, "1 " + tooLongNote, Note.MESSAGE_CONSTRAINTS);
     }
 
     @Test

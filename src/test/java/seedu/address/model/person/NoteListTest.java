@@ -45,16 +45,6 @@ public class NoteListTest {
     }
 
     @Test
-    public void clear_nonEmptyList_returnsEmptyListAndKeepsOriginalUnchanged() {
-        NoteList original = new NoteList(List.of(new Note("Existing")));
-
-        NoteList cleared = original.clear();
-
-        assertFalse(original.isEmpty());
-        assertTrue(cleared.isEmpty());
-    }
-
-    @Test
     public void getAll_modifyReturnedList_throwsUnsupportedOperationException() {
         NoteList noteList = new NoteList(List.of(new Note("Existing")));
 

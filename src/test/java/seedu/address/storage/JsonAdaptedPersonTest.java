@@ -37,6 +37,7 @@ public class JsonAdaptedPersonTest {
             .collect(Collectors.toList());
     private static final List<String> VALID_NOTES = new ArrayList<>();
     private static final List<String> INVALID_NOTES = List.of(" ");
+    private static final List<String> TOO_LONG_NOTES = List.of("a".repeat(Note.MAX_LENGTH + 1));
 
     @Test
     public void toModelType_validPersonDetails_returnsPerson() throws Exception {
@@ -148,6 +149,14 @@ public class JsonAdaptedPersonTest {
         JsonAdaptedPerson person =
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                         VALID_TAGS, INVALID_NOTES, false);
+        assertThrows(IllegalValueException.class, Note.MESSAGE_CONSTRAINTS, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_tooLongNotes_throwsIllegalValueException() {
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        VALID_TAGS, TOO_LONG_NOTES, false);
         assertThrows(IllegalValueException.class, Note.MESSAGE_CONSTRAINTS, person::toModelType);
     }
 

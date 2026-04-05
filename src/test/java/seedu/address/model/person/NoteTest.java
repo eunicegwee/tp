@@ -20,6 +20,20 @@ public class NoteTest {
     }
 
     @Test
+    public void constructor_tooLongNote_throwsIllegalArgumentException() {
+        String tooLongNote = "a".repeat(Note.MAX_LENGTH + 1);
+        assertThrows(IllegalArgumentException.class, () -> new Note(tooLongNote));
+    }
+
+    @Test
+    public void isValidNote() {
+        assertFalse(Note.isValidNote(""));
+        assertFalse(Note.isValidNote("   "));
+        assertTrue(Note.isValidNote("a".repeat(Note.MAX_LENGTH)));
+        assertFalse(Note.isValidNote("a".repeat(Note.MAX_LENGTH + 1)));
+    }
+
+    @Test
     public void equals() {
         Note note = new Note("Follow up tomorrow");
 
