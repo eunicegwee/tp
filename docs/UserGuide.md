@@ -198,15 +198,15 @@ To find a particular contact, type `:list` followed by the field you wish to use
 - The contact’s email, typed after `e/`.
 - The contact’s house address, typed after `a/`.
 
-Note: Multiple filters can be combined with `and`, and multiple values for a field can be used with `or`.
+Note: Different fields are combined with AND logic. Multiple values for the same field use OR logic.
 
 Format: `:list <FIELD_PREFIX + KEYWORD>`
 
 Examples:
 
-`:list n/John and p/12345678`
+`:list n/John p/12345678`
 
-`:list n/Bernice or n/Sally`
+`:list n/Bernice n/Sally`
 
 Expected: 0rb1t will display a list of contacts in the sidebar whose details match the search criteria.
 
@@ -243,8 +243,6 @@ Typing `s/*` ensures favourites are always at the top. The fields you can sort b
 
 - The contact’s name, typed after `n/`.
 - The contact’s phone number, typed after `p/`.
-- The contact’s email, typed after `e/`.
-- The contact’s house address, typed after `a/`.
 
 Format: `:list s/<FIELD_PREFIX + SIGN>`
 
@@ -288,7 +286,7 @@ All data in 0rb1t is saved to the hard disk automatically after any command that
 
 ### Editing the data file
 
-All data is saved automatically as a JSON file [JAR file location]/data/0rb1t.json.
+All data is saved automatically as a JSON file [JAR file location]/data/addressbook.json.
 Advanced users are welcome to update data directly by editing that data file.
 
 Caution: If your changes to the data file make its format invalid, 0rb1t will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.
@@ -325,7 +323,7 @@ Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., i
 | Delete         | `:delete <INDEX>` + `yes`                          | Deletes a contact from 0rb1t.                          | `:delete 2`<br/>`...`<br/>`yes`                                                                      |
 | Edit           | `:edit <INDEX> ...`                                | Edits a contact’s details in 0rb1t.                    | `:edit 3`                                                                                            |
 | Exit           | `:exit`                                            | Exits 0rb1t.                                           | `:exit`                                                                                              |
-| Favourite      | `:favourite` or `:unfavourite`                     | Favourites/unfavourites a contact.                     | `:favourite 5`<br/>`unfavourite 8`                                                                   |
+| Favourite      | `:favourite` or `:unfavourite`                     | Favourites/unfavourites a contact.                     | `:favourite 5`<br/>`:unfavourite 8`                                                                   |
 | Find           | `:find <NAME>`                                     | Finds a contact in 0rb1t based on their name.          | `:find John`                                                                                         |
 | Help           | `:help`                                            | Opens the help page.                                   | `:help`                                                                                              |
 | List Contacts  | `:list` or `:list <TAG>`                           | Lists all contacts stored in 0rb1t.                    | `:list`<br/>`:list t/friend`                                                                         |
