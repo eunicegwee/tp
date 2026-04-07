@@ -57,15 +57,15 @@ public class CommandHistoryTest {
     @Test
     public void navigation_multipleCommands_correctOrder() {
         history.add(":list");
-        history.add(":find Alice");
+        history.add(":list n/Alice");
         history.add(":delete 1");
 
         assertEquals(":delete 1", history.getPrevious());
-        assertEquals(":find Alice", history.getPrevious());
+        assertEquals(":list n/Alice", history.getPrevious());
         assertEquals(":list", history.getPrevious());
         assertNull(history.getPrevious());
 
-        assertEquals(":find Alice", history.getNext());
+        assertEquals(":list n/Alice", history.getNext());
         assertEquals(":delete 1", history.getNext());
         assertEquals("", history.getNext());
         assertNull(history.getNext());
@@ -74,8 +74,8 @@ public class CommandHistoryTest {
     @Test
     public void add_resetsIndexToEnd() {
         history.add(":list");
-        history.add(":find Alice");
-        history.getPrevious(); // :find Alice
+        history.add(":list n/Alice");
+        history.getPrevious(); // :list n/Alice
         history.getPrevious(); // :list
 
         history.add(":help");
