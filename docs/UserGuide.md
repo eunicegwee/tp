@@ -296,10 +296,10 @@ Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., i
 
 ## Tips and Examples
 
-- Use `:find` to search for the right contact before any other action to avoid changing/deleting the wrong contact.
+- Use `:list n/<NAME>` to narrow down the right contact before any other action to avoid changing/deleting the wrong contact.
 
 - Example:
-`:find adam`
+`:list n/adam`
 `:edit 1 p/12345678`
 `:delete 1`
 
@@ -326,7 +326,6 @@ Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., i
 | Edit           | `:edit <INDEX> ...`                                | Edits a contact’s details in 0rb1t.                    | `:edit 3`                                                                                            |
 | Exit           | `:exit`                                            | Exits 0rb1t.                                           | `:exit`                                                                                              |
 | Favourite      | `:favourite` or `:unfavourite`                     | Favourites/unfavourites a contact.                     | `:favourite 5`<br/>`unfavourite 8`                                                                   |
-| Find           | `:find <NAME>`                                     | Finds a contact in 0rb1t based on their name.          | `:find John`                                                                                         |
 | Help           | `:help`                                            | Opens the help page.                                   | `:help`                                                                                              |
 | List Contacts  | `:list` or `:list <TAG>`                           | Lists all contacts stored in 0rb1t.                    | `:list`<br/>`:list t/friend`                                                                         |
 | Sorting        | `list s/<FIELD_PREFIX + SIGN>`                     | Sorts all contacts based on the field and the order.   | `:list s/+n`                                                                                         |

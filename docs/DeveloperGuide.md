@@ -339,7 +339,7 @@ _{Explain here how the data archiving feature will be implemented}_
 
 | Step | Action | Outcome/System Response | Corresponding User Story (Reference) |
 |------|--------|-------------------------|--------------------------------------|
-| 1 | Developer searches for the contact by name: `:find n/Alice` | The Contact List Panel displays multiple entries for "Alice" along with their distinguishing tags and emails. | US-07 (Search by name), US-09 (Additional identifiers in search) |
+| 1 | Developer searches for the contact by name: `:list n/Alice` | The Contact List Panel displays multiple entries for "Alice" along with their distinguishing tags and emails. | US-07 (Search by name), US-09 (Additional identifiers in search) |
 | 2 | Developer reviews the list and uses the index to select the correct "Alice": `:view 3` | The Browser Panel displays the full details for Alice (index 3). | US-13 (View full details) |
 | 3 | Developer executes the edit command to add a new tag for the project: `:edit 3 t/new-project` | The system updates the contact. Message displayed: `Updated contact: Alice. New tag 'new-project' added.` | US-16 (Add tags to an existing contact), US-22 (Edit contact details) |
 | 4 | Developer views the list to confirm the change: `:list` | The Contact List Panel shows Alice (index 3) with the new tag displayed. | US-06 (List all contacts) |
@@ -374,7 +374,7 @@ _{Explain here how the data archiving feature will be implemented}_
 
 | Requirement ID | Requirement | Description | Rationale |
 |---------------:|-------------|-------------|-----------|
-| P-01 | Search Speed | The application must return search results (e.g., using `:find n/NAME`) in less than 0.5 seconds for a contact list size of up to 500 entries. | Ensure a fast, keyboard-driven workflow, matching the "Vim-ify the experience" value proposition.
+| P-01 | Search Speed | The application must return search results (e.g., using `:list n/NAME`) in less than 0.5 seconds for a contact list size of up to 500 entries. | Ensure a fast, keyboard-driven workflow, matching the "Vim-ify the experience" value proposition.
 | P-02 | Startup Time | The application must fully load and be ready to accept commands within 1.0 second. | Maintain user flow efficiency, especially for a CLI tool used throughout the day.
 | P-03 | CRUD Operation Speed | Basic operations (Add, Delete, Edit) must complete in less than 0.1 seconds after command execution. | Core contact management should be instantaneous.
 
