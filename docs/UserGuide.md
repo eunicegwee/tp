@@ -151,6 +151,7 @@ then the field prefixes of the fields you wish to change, and then the new detai
 - Any tags you wish to remove from the contact, typed after `dt/`, and each additional tag to be removed separated by `dt/`.
 
 Note: If you wish to leave some fields unchanged, you do not have to include them in the `:edit` command.
+Note: Every prefix must be followed by a non-empty value. For example, `t/` and `dt/` must be followed by a tag.
 
 Format: `:edit <INDEX> n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG] [dt/TAG] ...`
 
@@ -323,7 +324,7 @@ Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., i
 | Add Note       | `:note <INDEX> note`                               | Adds a note to the contact.                            | `:note 2 This is an important contact.`                                                              |
 | Clear          | `:clear` + `yes`                                   | Clears the entire 0rb1t.                               | `:clear`<br/>`...`<br/>`yes`                                                                         |
 | Delete         | `:delete <INDEX>` + `yes`                          | Deletes a contact from 0rb1t.                          | `:delete 2`<br/>`...`<br/>`yes`                                                                      |
-| Edit           | `:edit <INDEX> ...`                                | Edits a contact’s details in 0rb1t.                    | `:edit 3`                                                                                            |
+| Edit           | `:edit <INDEX> ...`                                | Edits a contact’s details in 0rb1t.                    | `:edit 3 p/91234567`                                                                                 |
 | Exit           | `:exit`                                            | Exits 0rb1t.                                           | `:exit`                                                                                              |
 | Favourite      | `:favourite` or `:unfavourite`                     | Favourites/unfavourites a contact.                     | `:favourite 5`<br/>`unfavourite 8`                                                                   |
 | Find           | `:find <NAME>`                                     | Finds a contact in 0rb1t based on their name.          | `:find John`                                                                                         |
