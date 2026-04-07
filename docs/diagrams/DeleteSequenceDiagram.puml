@@ -72,6 +72,9 @@ LogicManager -> PreviewResult : getConfirmationAction()
 PreviewResult --> LogicManager : a
 LogicManager -> LogicManager : pendingConfirmation = a
 
+
+[<-- LogicManager : preview shown
+deactivate LogicManager
 ' --- Second call: confirmation ---
 [-> LogicManager : execute("yes")
 activate LogicManager
