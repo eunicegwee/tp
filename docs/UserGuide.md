@@ -34,6 +34,7 @@ This project is based on the AddressBook-Level3 project created by the [SE-EDU 
 - [Tips and Examples](#tips-and-examples)
 - [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq)
 - [Known Issues](#known-issues)
+- [Coming Soon](#coming-soon)
 - [Command Summary](#command-summary)
 
 ## Quick Start
@@ -91,7 +92,13 @@ Expected: The new contact will be added to 0rb1t, and it can be viewed at the si
 
 To add a note to a contact, type `:note` followed by the index of the contact and the note you wish to add.
 
-Note: Notes are appended (not overwritten) to the existing ones.
+Notes uses an append-only model, meaning each new note is added to the end of the existing list and individual notes cannot be deleted unless the contact itself is deleted.
+
+Notes follow these constraints:
+- Each contact can have up to 20 notes.
+- Each note can be at most 200 characters long.
+- Formatting-related special characters, such as escape sequences (\n, \t), quotation marks, backslashes, and markup like HTML or Markdown, are not interpreted.
+- notes are displayed exactly as entered.
 
 Format: `:note <INDEX> note`
 
@@ -130,8 +137,9 @@ Example:
 
 `:delete 1`
 
-Are you sure you want to delete this contact?
-<Contact details>
+*A confirmation prompt is displayed:*\
+Are you sure you want to delete this contact?\
+\<Contact details\>\
 Type 'yes' to confirm. Any other input will be taken as no.
 
 `yes`
@@ -311,6 +319,15 @@ Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., i
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimise the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
+
+## Coming Soon
+
+The following enhancements are planned for future releases:
+
+- Editing and deleting individual notes.
+- Searching based on notes.
+- Text autocomplete for commands, tags, and common field prefixes.
+- Batch operations to apply a command to multiple contacts, e.g.`:delete 3 4 8` deletes contacts indexed 3, 4 and 8.
 
 ## Command Summary
 
