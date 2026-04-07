@@ -290,46 +290,32 @@ _{Explain here how the data archiving feature will be implemented}_
 | US-05 | Medium   | new user                                   | visually distinguish fields (e.g., name, phone, email, tags) using different colours | visually distinguish fields (e.g., name, phone, email, tags) using different colours |
 | US-06 | High     | user                                       | list all contacts           | I can review everyone I've added                 |
 | US-07 | High     | user                                       | search by name             | I can quickly find someone's contact details                 |
-| US-08 | Low      | user                                       | copy contact information easily | I can paste it into other apps like Telegram or email                 |
-| US-09 | Medium   | user with multiple contacts sharing the same name | see additional identifiers (e.g., tags or email preview) in search results | I can differentiate them easily                 |
-| US-10 | Medium   | user                                       | search using both name and tag together | I can narrow down results more precisely                 |
-| US-11 | High     | user                                       | rely on consistent UI behaviour | the app feels predictable and efficient                 |
-| US-12 | Medium   | user                                       | filter contacts by tag     | I can view only people in a specific role or project                 |
-| US-13 | High     | user                                       | view full details of a selected contact | I can verify I have the correct person                 |
-| US-14 | Medium   | user                                       | sort search results meaningfully | similar names do not confuse me                 |
-| US-15 | Medium   | user                                       | mark certain contacts as favorites | I can access frequently contacted people faster                 |
-| US-16 | Medium   | user                                       | add tags to an existing contact | I can update their roles over time                 |
-| US-17 | High     | user                                       | edit a specific tag without deleting other tags | I do not accidentally lose information                 |
-| US-18 | Medium   | user                                       | remove a single tag from a contact | I can keep tags accurate                 |
-| US-19 | Medium   | user                                       | view all existing tags in the system | I know what categories I have created                 |
-| US-20 | Low      | user                                       | bulk-edit tags for multiple contacts | I save time when projects change                 |
-| US-21 | High     | user                                       | avoid accidental deletion of all tags when editing one tag | my data remains intact                 |
-| US-22 | High     | user                                       | edit a contact's details   | I can update outdated information                 |
-| US-23 | Medium   | user                                       | delete a contact by specifying something more meaningful than index (e.g., name + tag) | I do not delete the wrong person                 |
-| US-24 | High     | user                                       | preview the contact before confirming deletion | I avoid mistakes                 |
-| US-25 | Medium   | user                                       | undo my last action        | I can recover from accidental deletions                 |
-| US-26 | Low      | user                                       | archive contacts instead of permanently deleting them | I can restore them later if needed                 |
-| US-27 | High     | user                                       | receive confirmation before clearing the entire list | I do not lose data impulsively                 |
-| US-28 | Medium   | user                                       | back up my contact list    | I do not permanently lose information                 |
-| US-29 | Medium   | user                                       | restore from a backup      | I can recover after accidental clearing                 |
-| US-30 | Medium   | user with over 100 contacts                | rely on powerful search instead of scrolling | I can find people efficiently                 |
-| US-31 | Low      | user                                       | paginate or limit displayed results | large lists are manageable                 |
-| US-32 | Medium   | user                                       | group contacts by tag      | I can view teams separately                 |
-| US-33 | Low      | user managing multiple teams               | create logical groupings   | work and personal contacts do not mix                 |
-| US-34 | Low      | user                                       | quickly clear completed or irrelevant contacts | the list remains relevant                 |
-| US-35 | Medium   | user                                       | use the app for both professional and personal contacts | everything is centralized                 |
-| US-36 | Medium   | user                                       | tag contacts as "family" or "friends" | I can separate them logically                 |
-| US-37 | Low      | user                                       | search by location (e.g., 'Bishan') | I can find someone nearby                 |
-| US-38 | Medium   | user                                       | store address information   | I can plan gatherings easily                 |
-| US-39 | High     | user                                       | quickly retrieve a phone number | I can call someone immediately                 |
-| US-40 | High     | user                                       | quickly retrieve an email address | I can send messages efficiently                 |
-| US-41 | Medium   | frequent user                              | use keyboard shortcuts     | I can work faster                 |
-| US-42 | Medium   | frequent user                              | autocomplete contact names when typing | I reduce typing effort                 |
-| US-43 | Low      | frequent user                              | pin important contacts     | I do not need to search repeatedly                 |
-| US-44 | Low      | frequent user                              | view recently accessed contacts | I can quickly reconnect with them                 |
-| US-45 | Medium   | frequent user                              | search partial matches     | I do not need exact spelling                 |
-| US-46 | Medium   | user managing projects                     | group contacts by project  | I can easily manage and view team members for a specific project    |
-| US-47 | Medium   | user                                       | tag contacts by the programming language they use | I can search for a person who knows a specific language (e.g. Java) immediately |
+| US-08 | Medium   | user with multiple contacts sharing the same name | see additional identifiers (e.g., tags or email preview) in search results | I can differentiate them easily                 |
+| US-09 | Medium   | user                                       | search using both name and tag together | I can narrow down results more precisely                 |
+| US-10 | High     | user                                       | rely on consistent UI behaviour | the app feels predictable and efficient                 |
+| US-11 | Medium   | user                                       | filter contacts by tag     | I can view only people in a specific role or project                 |
+| US-12 | High     | user                                       | view full details of a selected contact | I can verify I have the correct person                 |
+| US-13 | Medium   | user                                       | sort search results meaningfully | similar names do not confuse me                 |
+| US-14 | Medium   | user                                       | mark certain contacts as favorites | I can access frequently contacted people faster                 |
+| US-15 | Medium   | user                                       | add tags to an existing contact | I can update their roles over time                 |
+| US-16 | High     | user                                       | edit a specific tag without deleting other tags | I do not accidentally lose information                 |
+| US-17 | Medium   | user                                       | remove a single tag from a contact | I can keep tags accurate                 |
+| US-18 | Medium   | user                                       | view all existing tags in the system | I know what categories I have created                 |
+| US-19 | High     | user                                       | avoid accidental deletion of all tags when editing one tag | my data remains intact                 |
+| US-20 | High     | user                                       | edit a contact's details   | I can update outdated information                 |
+| US-21 | High     | user                                       | preview the contact before confirming deletion | I avoid mistakes                 |
+| US-22 [Proposed] | Medium   | user                            | undo my last action        | I can recover from accidental deletions                 |
+| US-23 | High     | user                                       | receive confirmation before clearing the entire list | I do not lose data impulsively                 |
+| US-24 | Medium   | user with over 100 contacts                | rely on powerful search instead of scrolling | I can find people efficiently                 |
+| US-25 | Medium   | user                                       | use the app for both professional and personal contacts | everything is centralized                 |
+| US-26 | Medium   | user                                       | tag contacts as "family" or "friends" | I can separate them logically                 |
+| US-27 | Low      | user                                       | search by location (e.g., 'Bishan') | I can find someone nearby                 |
+| US-28 | Medium   | user                                       | store address information   | I can plan gatherings easily                 |
+| US-29 | High     | user                                       | quickly retrieve a phone number | I can call someone immediately                 |
+| US-30 | High     | user                                       | quickly retrieve an email address | I can send messages efficiently                 |
+| US-31 | Medium   | frequent user                              | use keyboard shortcuts     | I can work faster                 |
+| US-32 | Medium   | frequent user                              | search partial matches     | I do not need exact spelling                 |
+| US-33 | Medium   | user                                       | tag contacts by the programming language they use | I can search for a person who knows a specific language (e.g. Java) immediately |
 
 ### Use cases
 
@@ -339,9 +325,9 @@ _{Explain here how the data archiving feature will be implemented}_
 
 | Step | Action | Outcome/System Response | Corresponding User Story (Reference) |
 |------|--------|-------------------------|--------------------------------------|
-| 1 | Developer searches for the contact by name: `:find n/Alice` | The Contact List Panel displays multiple entries for "Alice" along with their distinguishing tags and emails. | US-07 (Search by name), US-09 (Additional identifiers in search) |
-| 2 | Developer reviews the list and uses the index to select the correct "Alice": `:view 3` | The Browser Panel displays the full details for Alice (index 3). | US-13 (View full details) |
-| 3 | Developer executes the edit command to add a new tag for the project: `:edit 3 t/new-project` | The system updates the contact. Message displayed: `Updated contact: Alice. New tag 'new-project' added.` | US-16 (Add tags to an existing contact), US-22 (Edit contact details) |
+| 1 | Developer searches for the contact by name: `:find Alice` | The Contact List Panel displays matching entries for "Alice". | US-07 (Search by name), US-08 (Additional identifiers in search) |
+| 2 | Developer reviews the list and uses the index to select the correct "Alice": `:view 3` | The Browser Panel displays the full details for Alice (index 3). | US-12 (View full details) |
+| 3 | Developer executes the edit command to add a new tag for the project: `:edit 3 t/new-project` | The system updates the contact and displays a confirmation message with the edited person details. | US-15 (Add tags to an existing contact), US-20 (Edit contact details) |
 | 4 | Developer views the list to confirm the change: `:list` | The Contact List Panel shows Alice (index 3) with the new tag displayed. | US-06 (List all contacts) |
 
 
@@ -351,10 +337,10 @@ _{Explain here how the data archiving feature will be implemented}_
 
 | Step | Action | Outcome/System Response | Corresponding User Story (Reference) |
 |------|--------|-------------------------|--------------------------------------|
-| 1 | Developer issues the delete command using the currently displayed index: `:delete 7` | The Result Display area shows a preview of contact 7 (Name, Phone, Email, Tags). Message displayed: `Contact to be deleted: \[Kai Jie, p/92345678, e/kj@work.com, t/FormerColleague\]. Are you sure you want to delete?` (MVP simplifies confirmation in the UI). | US-24 (Preview contact before deletion) |
-| 2 | Developer verifies the preview details (Name, Phone) are correct for Kai Jie. | N/A (verification step) | US-13 (View full details, implicitly used for verification) |
-| 3 | Developer confirms the deletion (assume a future confirmation mechanism is added, or MVP immediate action): `:delete 7 confirm` | The contact is removed from the list. Message displayed: `Deleted contact: Kai Jie.` The Contact List Panel updates. | US-24 (Preview/Safer deletion) |
-| 4 | Developer immediately realizes they deleted the wrong person and attempts to recover: `:undo` | The system restores the deleted contact. Message displayed: `Restored contact: \[Deleted Contact Name\]`. | US-25 (Undo last action) |
+| 1 | Developer issues the delete command using the currently displayed index: `:delete 7` | The Result Display shows a preview and asks for confirmation. Message includes: `Are you sure you want to delete this person? ... Type 'yes' to confirm.` | US-21 (Preview contact before deletion) |
+| 2 | Developer verifies the preview details (Name, Phone) are correct for Kai Jie. | N/A (verification step) | US-12 (View full details, implicitly used for verification) |
+| 3 | Developer confirms the deletion by typing: `yes` | The contact is removed from the list. A deletion success message is shown, and the Contact List Panel updates. | US-21 (Preview/Safer deletion) |
+| 4 | [Proposed] Developer immediately realizes they deleted the wrong person and attempts to recover: `:undo` | [Proposed] The system restores the deleted contact. | US-22 [Proposed] (Undo last action) |
 
 
 #### Use Case 3: Initial Setup and Categorization
@@ -365,7 +351,7 @@ _{Explain here how the data archiving feature will be implemented}_
 |------|--------|-------------------------|--------------------------------------|
 | 1 | Developer adds a new contact and tags them simultaneously: `:add n/Benny p/98765432 e/benny@biz.com t/Marketing t/Partner` | Message displayed: `New contact added: Benny.` The new contact appears in the list view. | US-03 (Add contact), US-04 (Assign tags when adding) |
 | 2 | Developer quickly adds another contact: `:add n/Chloe p/88887777 e/chloe@rnd.com t/Engineer` | Message displayed: `New contact added: Chloe.` | US-03 (Add contact) |
-| 3 | Developer filters the list to view only their marketing contacts: `:filter t/Marketing` | The Contact List Panel is updated to show only contacts tagged 'Marketing' (e.g., Benny). Message displayed: `Filtered contacts by tag: Marketing.` | US-12 (Filter contacts by tag) |
+| 3 | Developer filters the list to view only their marketing contacts: `:list t/Marketing` | The Contact List Panel is updated to show only contacts tagged 'Marketing' (e.g., Benny). | US-11 (Filter contacts by tag) |
 
 
 ### Non-Functional Requirements (NFRs)
@@ -382,7 +368,7 @@ _{Explain here how the data archiving feature will be implemented}_
 
 | Requirement ID | Requirement | Description | Rationale |
 |---------------:|-------------|-------------|-----------|
-| U-01 | Vim-like UI Consistency | The CLI interface must maintain visual consistency across all command outputs (US-11). It should leverage color coding (US-05) to clearly distinguish fields (Name, Phone, Email, Tags). | Meet the core value proposition: "Vim-ify the experience." |
+| U-01 | Vim-like UI Consistency | The CLI interface must maintain visual consistency across all command outputs (US-10). It should leverage color coding (US-05) to clearly distinguish fields (Name, Phone, Email, Tags). | Meet the core value proposition: "Vim-ify the experience." |
 | U-02 | Error Clarity | All error messages must be clear, concise, and explicitly suggest the correct command format or parameter requirement. | Enhance developer experience by providing immediate, actionable feedback. |
 | U-03 | Help Accessibility | A command (`:help`) must immediately display a comprehensive guide of all available commands and their formats (US-02). | Essential for initial usability and quick command lookup. |
 
@@ -398,8 +384,8 @@ _{Explain here how the data archiving feature will be implemented}_
 | Requirement ID | Requirement | Description | Rationale |
 |---------------:|-------------|-------------|-----------|
 | R-01 | Data Persistence | All contact data must be automatically saved/persisted upon successful execution of any modifying command (Add, Edit, Delete, Clear). | Prevent data loss in case of unexpected shutdown. |
-| R-02 | Input Validation | The system must strictly enforce parameter validation rules (e.g., 8-digit phone, valid email format) as defined in the MVP specification for the `:add` command. | Ensure data integrity (US-03, US-39, US-40). |
-| R-03 | Safe Clear/Delete | The system must require a distinct confirmation step before executing the `:clear` command (US-27) or any action that deletes data (US-24). | Prevent accidental loss of a large amount of data. |
+| R-02 | Input Validation | The system must strictly enforce parameter validation rules (e.g., 8-digit phone, valid email format) as defined in the MVP specification for the `:add` command. | Ensure data integrity (US-03, US-29, US-30). |
+| R-03 | Safe Clear/Delete | The system must require a distinct confirmation step before executing the `:clear` command (US-23) or any action that deletes data (US-21). | Prevent accidental loss of a large amount of data. |
 
 
 ### Glossary
