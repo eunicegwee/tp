@@ -199,7 +199,7 @@ public class ListCommandParserTest {
     }
 
     @Test
-    public void parse_validSortFavorites_returnsListCommand() {
+    public void parse_validSortStarred_returnsListCommand() {
         List<SortCriteria> criteria = Collections.singletonList(
                 new SortCriteria(SortField.STARRED, SortOrder.DESCENDING));
         PersonComparator comparator = new PersonComparator(criteria);
@@ -209,14 +209,14 @@ public class ListCommandParserTest {
     }
 
     @Test
-    public void parse_validSortFavoritesPriority_returnsListCommand() {
+    public void parse_validSortStarredPriority_returnsListCommand() {
         List<SortCriteria> criteria = Arrays.asList(
                 new SortCriteria(SortField.STARRED, SortOrder.DESCENDING),
                 new SortCriteria(SortField.NAME, SortOrder.ASCENDING));
         PersonComparator comparator = new PersonComparator(criteria);
         ListCommand expectedCommand = new ListCommand(new ListCommandPredicate(
                 null, null, null, null, null), comparator);
-        // User inputs name first, then favorites. Parser should reorder.
+        // User inputs name first, then starred contacts. Parser should reorder.
         assertParseSuccess(parser, " s/+n s/*", expectedCommand);
     }
 
@@ -229,7 +229,7 @@ public class ListCommandParserTest {
         assertParseFailure(parser, " s/n",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE)); // missing order
 
-        // invalid format for favorites
+        // invalid format for starred contacts
         assertParseFailure(parser, " s/+*",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, ListCommand.MESSAGE_USAGE));
     }

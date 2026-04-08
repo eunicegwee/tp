@@ -28,7 +28,7 @@ public class ListCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all persons. "
             + "Optionally filters by tags, emails, phone numbers, addresses, and/or names. "
-            + "Also supports sorting by name, phone, or favorites.\n"
+            + "Also supports sorting by name, phone, or starred contacts.\n"
             + "Multiple keywords for the same field use OR logic. Different fields are combined with AND logic.\n"
             + "Parameters: [" + PREFIX_TAG + "TAG]... [" + PREFIX_EMAIL + "EMAIL]... "
             + "[" + PREFIX_PHONE + "PHONE]... [" + PREFIX_ADDRESS + "ADDRESS]... [" + PREFIX_NAME + "NAME]... "

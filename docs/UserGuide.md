@@ -21,11 +21,11 @@ This project is based on the AddressBook-Level3 project created by the [SE-EDU 
     - [Deleting Contacts](#deleting-contacts)
     - [Editing Contacts](#editing-contacts)
     - [Exiting 0rb1t](#exiting-0rb1t)
-    - [Favouriting Contacts](#favouriting-contacts)
     - [Finding Contacts](#finding-contacts)
     - [Accessing Help in 0rb1t](#accessing-help-in-0rb1t)
     - [Listing Contacts](#listing-contacts)
     - [Sorting Contacts](#sorting-contacts)
+    - [Starring Contacts](#starring-contacts)
     - [Listing Tags](#listing-tags)
     - [Viewing Contacts](#viewing-contacts)
 - [Storage](#storage)
@@ -180,23 +180,6 @@ Format: `:exit`
 
 Expected: 0rb1t will close. No goodbye message is shown.
 
-### Favouriting Contacts
-
-To make a contact your favourite, type `:favourite` followed by the index of the contact.
-To un-favourite, type `:unfavourite` followed by the index of the contact.
-
-Note: Favourites are indicated by a star next to the contact name. Favourites are persisted and stored in the contact's data.
-
-Format: `:favourite <INDEX>` or `:unfavourite <INDEX>`
-
-Examples:
-
-`:favourite 2`
-
-`:unfavourite 7`
-
-Expected: The contact at the given index will have a star icon next to their name, indicating that they are a favourite.
-
 ### Finding Contacts
 
 To find a particular contact, type `:list` followed by the field you wish to use. The fields you can use are:
@@ -247,7 +230,7 @@ If tags are added, all contacts with the relevant tags will be made available in
 ### Sorting Contacts
 
 To sort contact by specific fields, type `:list s/` followed by the field you wish to sort by. Use `+`or `-` to sort in either ascending or descending order respectively.
-Typing `s/*` ensures favourites are always at the top. The fields you can sort by are:
+Typing `s/*` ensures starred contacts are always at the top. The fields you can sort by are:
 
 - The contact’s name, typed after `n/`.
 - The contact’s phone number, typed after `p/`.
@@ -260,7 +243,24 @@ Examples:
 
 `:list s/* s/-a`
 
-Expected: The list of contacts will be sorted based on the paramter and in the order specified. If s/* was used, favourited contacts will be pinned at the top.
+Expected: The list of contacts will be sorted based on the paramter and in the order specified. If s/* was used, starred contacts will be pinned at the top.
+
+### Starring Contacts
+
+To star a contact, type `:star` followed by the index of the contact.
+To unstar, type `:star` followed by the index of the contact.
+
+Note: Starred contacts are indicated by a star next to the contact name. They are persisted and stored in the contact's data.
+
+Format: `:star <INDEX>` or `:unstar <INDEX>`
+
+Examples:
+
+`:star 2`
+
+`:unstar 7`
+
+Expected: The contact at the given index will have a star icon next to their name, indicating that they are starred.
 
 ### Listing Tags
 
@@ -331,19 +331,19 @@ The following enhancements are planned for future releases:
 
 ## Command Summary
 
-| Command        | Format                                             | Description                                            | Example                                                                                              |
-|----------------|----------------------------------------------------|--------------------------------------------------------|------------------------------------------------------------------------------------------------------|
-| Access History | `UP` or `DOWN`                                     | Navigates to previously used commands.                 | `UP` or `DOWN`                                                                                       |
+| Command        | Format                                         | Description                                            | Example                                                                                              |
+|----------------|------------------------------------------------|--------------------------------------------------------|------------------------------------------------------------------------------------------------------|
+| Access History | `UP` or `DOWN`                                 | Navigates to previously used commands.                 | `UP` or `DOWN`                                                                                       |
 | Add Contact    | `:add n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]...` | Adds a contact to 0rb1t.                               | `:add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 t/friends t/owesMoney` |
-| Add Note       | `:note <INDEX> note`                               | Adds a note to the contact.                            | `:note 2 This is an important contact.`                                                              |
-| Clear          | `:clear` + `yes`                                   | Clears the entire 0rb1t.                               | `:clear`<br/>`...`<br/>`yes`                                                                         |
-| Delete         | `:delete <INDEX>` + `yes`                          | Deletes a contact from 0rb1t.                          | `:delete 2`<br/>`...`<br/>`yes`                                                                      |
-| Edit           | `:edit <INDEX> ...`                                | Edits a contact’s details in 0rb1t.                    | `:edit 3`                                                                                            |
-| Exit           | `:exit`                                            | Exits 0rb1t.                                           | `:exit`                                                                                              |
-| Favourite      | `:favourite` or `:unfavourite`                     | Favourites/unfavourites a contact.                     | `:favourite 5`<br/>`:unfavourite 8`                                                                   |
-| Find           | `:find <NAME>`                                     | Finds a contact in 0rb1t based on their name.          | `:find John`                                                                                         |
-| Help           | `:help`                                            | Opens the help page.                                   | `:help`                                                                                              |
-| List Contacts  | `:list` or `:list <TAG>`                           | Lists all contacts stored in 0rb1t.                    | `:list`<br/>`:list t/friend`                                                                         |
-| Sorting        | `list s/<FIELD_PREFIX + SIGN>`                     | Sorts all contacts based on the field and the order.   | `:list s/+n`                                                                                         |
-| List Tags      | `:tags`                                            | Lists all the tags used in 0rb1t.                      | `:tags`                                                                                              |
-| View           | `:view <INDEX>`                                    | Views a contact’s details in 0rb1t based on the index. | `:view 4`                                                                                            |
+| Add Note       | `:note <INDEX> note`                           | Adds a note to the contact.                            | `:note 2 This is an important contact.`                                                              |
+| Clear          | `:clear` + `yes`                               | Clears the entire 0rb1t.                               | `:clear`<br/>`...`<br/>`yes`                                                                         |
+| Delete         | `:delete <INDEX>` + `yes`                      | Deletes a contact from 0rb1t.                          | `:delete 2`<br/>`...`<br/>`yes`                                                                      |
+| Edit           | `:edit <INDEX> ...`                            | Edits a contact’s details in 0rb1t.                    | `:edit 3`                                                                                            |
+| Exit           | `:exit`                                        | Exits 0rb1t.                                           | `:exit`                                                                                              |
+| Star           | `:star` or `:unstar'                            | Stars/Unstars a contact.                               | `:star 5`<br/>`:unstar 8`                                                                            |
+| Find           | `:find <NAME>`                                 | Finds a contact in 0rb1t based on their name.          | `:find John`                                                                                         |
+| Help           | `:help`                                        | Opens the help page.                                   | `:help`                                                                                              |
+| List Contacts  | `:list` or `:list <TAG>`                       | Lists all contacts stored in 0rb1t.                    | `:list`<br/>`:list t/friend`                                                                         |
+| Sorting        | `list s/<FIELD_PREFIX + SIGN>`                 | Sorts all contacts based on the field and the order.   | `:list s/+n`                                                                                         |
+| List Tags      | `:tags`                                        | Lists all the tags used in 0rb1t.                      | `:tags`                                                                                              |
+| View           | `:view <INDEX>`                                | Views a contact’s details in 0rb1t based on the index. | `:view 4`                                                                                            |
