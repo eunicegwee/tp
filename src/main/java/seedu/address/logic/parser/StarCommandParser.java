@@ -4,23 +4,23 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 
 import seedu.address.commons.core.index.Index;
-import seedu.address.logic.commands.UnfavouriteCommand;
+import seedu.address.logic.commands.StarCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
 
 /**
- * Parses input arguments and creates a new UnfavouriteCommand object.
+ * Parses input arguments and creates a new StarCommand object.
  */
-public class UnfavouriteCommandParser implements Parser<UnfavouriteCommand> {
+public class StarCommandParser implements Parser<StarCommand> {
 
     @Override
-    public UnfavouriteCommand parse(String args) throws ParseException {
+    public StarCommand parse(String args) throws ParseException {
         requireNonNull(args);
         try {
             Index index = ParserUtil.parseIndex(args.trim());
-            return new UnfavouriteCommand(index);
+            return new StarCommand(index);
         } catch (ParseException pe) {
             throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, UnfavouriteCommand.MESSAGE_USAGE), pe);
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, StarCommand.MESSAGE_USAGE), pe);
         }
     }
 }

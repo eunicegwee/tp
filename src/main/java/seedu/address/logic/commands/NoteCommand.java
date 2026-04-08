@@ -70,7 +70,7 @@ public class NoteCommand extends Command {
                 personToEdit.getAddress(),
                 personToEdit.getTags(),
                 updatedNotes,
-                personToEdit.isFavourite()
+                personToEdit.isStarred()
         );
 
         model.setPerson(personToEdit, editedPerson);

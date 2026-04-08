@@ -58,7 +58,7 @@ public class JsonAdaptedPersonTest {
                 personWithNotes.getAddress(),
                 personWithNotes.getTags(),
                 new NoteList(List.of(new Note("Met at conference"), new Note("Prefers email follow-up"))),
-                personWithNotes.isFavourite());
+                personWithNotes.isStarred());
 
         JsonAdaptedPerson adaptedPerson = new JsonAdaptedPerson(personWithNotes);
 

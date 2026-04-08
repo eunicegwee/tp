@@ -127,7 +127,7 @@ public class EditCommand extends Command {
                 updatedAddress,
                 updatedTags,
                 new NoteList(personToEdit.getListOfNotes()),
-                personToEdit.isFavourite());
+                personToEdit.isStarred());
     }
 
     @Override

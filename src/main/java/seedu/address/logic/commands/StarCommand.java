@@ -11,26 +11,26 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Marks a person as favourite and pins them to the top of the displayed list.
+ * Marks a person as starred and pins them to the top of the displayed list.
  */
-public class FavouriteCommand extends Command {
+public class StarCommand extends Command {
 
-    public static final String COMMAND_WORD = ":favourite";
+    public static final String COMMAND_WORD = ":star";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Marks the contact identified by the index number used in the displayed contact list as favourite.\n"
+            + ": Marks the contact identified by the index number used in the displayed contact list as starred.\n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_FAVOURITE_PERSON_SUCCESS =
+    public static final String MESSAGE_STARRED_PERSON_SUCCESS =
             "Starred contact: %1$s";
 
-    public static final String MESSAGE_ALREADY_FAVOURITE =
+    public static final String MESSAGE_ALREADY_STARRED =
             "This contact is already starred.";
 
     private final Index targetIndex;
 
-    public FavouriteCommand(Index targetIndex) {
+    public StarCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
@@ -43,18 +43,18 @@ public class FavouriteCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        Person personToFavourite = lastShownList.get(targetIndex.getZeroBased());
+        Person personToStar = lastShownList.get(targetIndex.getZeroBased());
 
-        if (personToFavourite.isFavourite()) {
-            throw new CommandException(MESSAGE_ALREADY_FAVOURITE);
+        if (personToStar.isStarred()) {
+            throw new CommandException(MESSAGE_ALREADY_STARRED);
         }
 
-        Person favouritedPerson = personToFavourite.withFavourite(true);
-        model.setPerson(personToFavourite, favouritedPerson);
+        Person starredPerson = personToStar.withStar(true);
+        model.setPerson(personToStar, starredPerson);
 
         return CommandResult.createWithPerson(
-                String.format(MESSAGE_FAVOURITE_PERSON_SUCCESS, favouritedPerson.getName()),
-                favouritedPerson
+                String.format(MESSAGE_STARRED_PERSON_SUCCESS, starredPerson.getName()),
+                starredPerson
         );
     }
 
@@ -63,10 +63,10 @@ public class FavouriteCommand extends Command {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof FavouriteCommand)) {
+        if (!(other instanceof StarCommand)) {
             return false;
         }
-        FavouriteCommand otherCommand = (FavouriteCommand) other;
+        StarCommand otherCommand = (StarCommand) other;
         return targetIndex.equals(otherCommand.targetIndex);
     }
 }

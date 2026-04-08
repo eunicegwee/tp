@@ -11,27 +11,27 @@ import seedu.address.model.Model;
 import seedu.address.model.person.Person;
 
 /**
- * Removes the favourite status from a person.
+ * Removes the star status from a person.
  */
-public class UnfavouriteCommand extends Command {
+public class UnstarCommand extends Command {
 
-    public static final String COMMAND_WORD = ":unfavourite";
+    public static final String COMMAND_WORD = ":unstar";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
-            + ": Removes the favourite status from the contact identified by the index number used in"
+            + ": Removes the star status from the contact identified by the index number used in"
             + " the displayed contact list \n"
             + "Parameters: INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " 1";
 
-    public static final String MESSAGE_UNFAVOURITE_PERSON_SUCCESS =
+    public static final String MESSAGE_UNSTARRED_PERSON_SUCCESS =
             "Unstarred contact: %1$s";
 
-    public static final String MESSAGE_NOT_FAVOURITE =
+    public static final String MESSAGE_NOT_STARRED =
             "This contact is not starred.";
 
     private final Index targetIndex;
 
-    public UnfavouriteCommand(Index targetIndex) {
+    public UnstarCommand(Index targetIndex) {
         this.targetIndex = targetIndex;
     }
 
@@ -44,17 +44,17 @@ public class UnfavouriteCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
         }
 
-        Person personToUnfavourite = lastShownList.get(targetIndex.getZeroBased());
+        Person personToUnstar = lastShownList.get(targetIndex.getZeroBased());
 
-        if (!personToUnfavourite.isFavourite()) {
-            throw new CommandException(MESSAGE_NOT_FAVOURITE);
+        if (!personToUnstar.isStarred()) {
+            throw new CommandException(MESSAGE_NOT_STARRED);
         }
 
-        Person updatedPerson = personToUnfavourite.withFavourite(false);
-        model.setPerson(personToUnfavourite, updatedPerson);
+        Person updatedPerson = personToUnstar.withStar(false);
+        model.setPerson(personToUnstar, updatedPerson);
 
         return CommandResult.createWithPerson(
-                String.format(MESSAGE_UNFAVOURITE_PERSON_SUCCESS, updatedPerson.getName()),
+                String.format(MESSAGE_UNSTARRED_PERSON_SUCCESS, updatedPerson.getName()),
                 updatedPerson
         );
     }
@@ -64,10 +64,10 @@ public class UnfavouriteCommand extends Command {
         if (other == this) {
             return true;
         }
-        if (!(other instanceof UnfavouriteCommand)) {
+        if (!(other instanceof UnstarCommand)) {
             return false;
         }
-        UnfavouriteCommand otherCommand = (UnfavouriteCommand) other;
+        UnstarCommand otherCommand = (UnstarCommand) other;
         return targetIndex.equals(otherCommand.targetIndex);
     }
 }

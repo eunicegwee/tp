@@ -23,7 +23,7 @@
       </padding>
       <HBox spacing="5" alignment="CENTER_LEFT">
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
-        <Label fx:id="favouriteIndicator" text="" styleClass="favourite-indicator" />
+        <Label fx:id="starredIndicator" text="" styleClass="starred-indicator" />
       </HBox>
       <FlowPane fx:id="tags" />
     </VBox>

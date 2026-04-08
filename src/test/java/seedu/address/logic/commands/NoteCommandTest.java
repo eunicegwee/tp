@@ -34,7 +34,7 @@ public class NoteCommandTest {
                 personToEdit.getAddress(),
                 personToEdit.getTags(),
                 new NoteList(personToEdit.getListOfNotes()).append(noteContent),
-                personToEdit.isFavourite()
+                personToEdit.isStarred()
         );
 
         NoteCommand noteCommand = new NoteCommand(INDEX_FIRST_PERSON, noteContent);
@@ -67,7 +67,7 @@ public class NoteCommandTest {
                 personToEdit.getAddress(),
                 personToEdit.getTags(),
                 new NoteList(personToEdit.getListOfNotes()).append(noteContent),
-                personToEdit.isFavourite()
+                personToEdit.isStarred()
         );
 
         NoteCommand noteCommand = new NoteCommand(INDEX_FIRST_PERSON, noteContent);
@@ -102,7 +102,7 @@ public class NoteCommandTest {
                 originalPerson.getAddress(),
                 originalPerson.getTags(),
                 maxedNoteList,
-                originalPerson.isFavourite()
+                originalPerson.isStarred()
         );
         model.setPerson(originalPerson, maxedPerson);
 

@@ -32,7 +32,7 @@ class JsonAdaptedPerson {
     private final String address;
     private final List<JsonAdaptedTag> tags = new ArrayList<>();
     private final List<String> notes = new ArrayList<>();
-    private final Boolean isFavourite;
+    private final Boolean isStarred;
 
     /**
      * Constructs a {@code JsonAdaptedPerson} with the given person details.
@@ -42,7 +42,7 @@ class JsonAdaptedPerson {
             @JsonProperty("email") String email, @JsonProperty("address") String address,
             @JsonProperty("tags") List<JsonAdaptedTag> tags,
             @JsonProperty("notes") List<String> notes,
-            @JsonProperty("isFavourite") Boolean isFavourite) {
+            @JsonProperty("isStarred") Boolean isStarred) {
         this.name = name;
         this.phone = phone;
         this.email = email;
@@ -53,7 +53,7 @@ class JsonAdaptedPerson {
         if (notes != null) {
             this.notes.addAll(notes);
         }
-        this.isFavourite = isFavourite;
+        this.isStarred = isStarred;
     }
 
     /**
@@ -70,7 +70,7 @@ class JsonAdaptedPerson {
         notes.addAll(source.getListOfNotes().stream()
                 .map(Note::toString)
                 .collect(Collectors.toList()));
-        isFavourite = source.isFavourite();
+        isStarred = source.isStarred();
     }
 
     /**
@@ -132,8 +132,8 @@ class JsonAdaptedPerson {
         } catch (IllegalArgumentException e) {
             throw new IllegalValueException(e.getMessage());
         }
-        final boolean modelIsFavourite = isFavourite != null && isFavourite;
+        final boolean modelIsStarred = isStarred != null && isStarred;
 
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelNoteList, modelIsFavourite);
+        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelNoteList, modelIsStarred);
     }
 }

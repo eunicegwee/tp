@@ -93,22 +93,22 @@ public class ListCommandParser implements Parser<ListCommand> {
 
         List<SortCriteria> sortCriteriaList = new ArrayList<>();
         if (!sortValues.isEmpty()) {
-            boolean hasFavourite = false;
+            boolean hasStar = false;
             for (String sortArg : sortValues) {
                 SortCriteria criteria = parseSortArg(sortArg);
-                if (criteria.field == SortField.FAVOURITE) {
-                    if (hasFavourite) {
-                        continue; // Skip duplicate favourite declarations
+                if (criteria.field == SortField.STARRED) {
+                    if (hasStar) {
+                        continue; // Skip duplicate starred declarations
                     }
-                    hasFavourite = true;
+                    hasStar = true;
                 }
                 sortCriteriaList.add(criteria);
             }
 
-            if (hasFavourite) {
-                // Ensure favourite sort is always the first criteria
-                sortCriteriaList.removeIf(c -> c.field == SortField.FAVOURITE);
-                sortCriteriaList.add(0, new SortCriteria(SortField.FAVOURITE, SortOrder.DESCENDING));
+            if (hasStar) {
+                // Ensure starred sort is always the first criteria
+                sortCriteriaList.removeIf(c -> c.field == SortField.STARRED);
+                sortCriteriaList.add(0, new SortCriteria(SortField.STARRED, SortOrder.DESCENDING));
             }
         }
 
@@ -121,7 +121,7 @@ public class ListCommandParser implements Parser<ListCommand> {
 
     private SortCriteria parseSortArg(String sortArg) throws ParseException {
         if ("*".equals(sortArg)) {
-            return new SortCriteria(SortField.FAVOURITE, SortOrder.DESCENDING);
+            return new SortCriteria(SortField.STARRED, SortOrder.DESCENDING);
         }
 
         if (sortArg.length() < 2) {

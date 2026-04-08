@@ -14,7 +14,7 @@ public class PersonComparator implements Comparator<Person> {
      * Represents the field to sort by.
      */
     public enum SortField {
-        NAME, PHONE, FAVOURITE
+        NAME, PHONE, STARRED
     }
 
     /**
@@ -85,8 +85,8 @@ public class PersonComparator implements Comparator<Person> {
                     result = p1Phone.compareTo(p2Phone);
                 }
                 break;
-            case FAVOURITE:
-                result = Boolean.compare(p1.isFavourite(), p2.isFavourite());
+            case STARRED:
+                result = Boolean.compare(p1.isStarred(), p2.isStarred());
                 break;
             default:
                 break;

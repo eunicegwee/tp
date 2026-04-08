@@ -19,20 +19,20 @@
     -fx-text-fill: white;
 }
 
-.list-cell.favourite-list-cell:filled {
+.list-cell.starred-list-cell:filled {
     -fx-background-color: #6d5a14;
 }
 
-.favourite-list-cell:filled:selected {
+.starred-list-cell:filled:selected {
     -fx-background-color: #816b19;
 }
 
-.label.favourite-indicator {
+.label.starred-indicator {
     -fx-text-fill: #d3d3d3;
     -fx-font-size: 18px;
     -fx-font-weight: bold;
 }
 
-.list-cell:filled:selected .label.favourite-indicator {
+.list-cell:filled:selected .label.starred-indicator {
     -fx-text-fill: #d3d3d3;
 }

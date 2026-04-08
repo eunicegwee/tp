@@ -26,11 +26,11 @@ public class Person {
     private final Address address;
     private final Set<Tag> tags = new HashSet<>();
     private final NoteList noteList;
-    private final boolean isFavourite;
+    private final boolean isStarred;
 
     /**
      * Every field must be present and not null.
-     * Initializes with an empty NoteList and non-favourite state by default.
+     * Initializes with an empty NoteList and non-starred state by default.
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
         this(name, phone, email, address, tags, new NoteList(), false);
@@ -38,7 +38,7 @@ public class Person {
 
     /**
      * Every field must be present and not null.
-     * Initializes with a non-favourite state by default.
+     * Initializes with a non-starred state by default.
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, NoteList noteList) {
         this(name, phone, email, address, tags, noteList, false);
@@ -48,15 +48,15 @@ public class Person {
      * Every field must be present and not null.
      * Initializes with an empty NoteList by default.
      */
-    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, boolean isFavourite) {
-        this(name, phone, email, address, tags, new NoteList(), isFavourite);
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, boolean isStarred) {
+        this(name, phone, email, address, tags, new NoteList(), isStarred);
     }
 
     /**
      * Every field must be present and not null.
      */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags,
-            NoteList noteList, boolean isFavourite) {
+            NoteList noteList, boolean isStarred) {
         requireAllNonNull(name, phone, email, address, tags, noteList);
         this.name = name;
         this.phone = phone;
@@ -64,7 +64,7 @@ public class Person {
         this.address = address;
         this.tags.addAll(tags);
         this.noteList = noteList;
-        this.isFavourite = isFavourite;
+        this.isStarred = isStarred;
     }
 
     public Name getName() {
@@ -83,12 +83,12 @@ public class Person {
         return address;
     }
 
-    public boolean isFavourite() {
-        return isFavourite;
+    public boolean isStarred() {
+        return isStarred;
     }
 
-    public Person withFavourite(boolean isFavourite) {
-        return new Person(name, phone, email, address, tags, noteList, isFavourite);
+    public Person withStar(boolean isStarred) {
+        return new Person(name, phone, email, address, tags, noteList, isStarred);
     }
 
     /**
@@ -137,12 +137,12 @@ public class Person {
                 && address.equals(otherPerson.address)
                 && tags.equals(otherPerson.tags)
                 && noteList.equals(otherPerson.noteList)
-                && isFavourite == otherPerson.isFavourite();
+                && isStarred == otherPerson.isStarred();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, phone, email, address, tags, noteList, isFavourite);
+        return Objects.hash(name, phone, email, address, tags, noteList, isStarred);
     }
 
     @Override
@@ -154,7 +154,7 @@ public class Person {
                 .add("address", address)
                 .add("tags", tags)
                 .add("notes", noteList)
-                .add("isFavourite", isFavourite)
+                .add("isStarred", isStarred)
                 .toString();
     }
 
