@@ -401,3 +401,181 @@ _{Explain here how the data archiving feature will be implemented}_
 | Browser Panel | The dedicated UI area in the CLI that displays the full, organized details of a single, currently selected contact.                                                                                                           |
 | US-xx         | A specific User Story ID used to track product requirements.                                                                                                                                                                  |
 | Developer     | The primary user of the 0rb1t application. The target user profile is defined as "Developers who prefer keyboard-driven workflows". |
+
+--------------------------------------------------------------------------------------------------------------------
+
+## **Appendix: Instructions for Manual Testing**
+
+This appendix is intended to supplement the [User Guide](UserGuide.md). It gives testers a short path through the user-testable features added or modified for this project, plus a small set of copy-paste inputs that make it easy to set up meaningful test data.
+
+### Recommended test flow
+
+1. Start from a clean state so list order and indices are predictable.
+1. Add a few contacts that differ in name, phone, address, tags, and favourite status.
+1. Exercise list filtering and sorting first, because later commands such as `:view`, `:note`, `:favourite`, `:edit`, and `:delete` act on the currently displayed indices.
+1. Test the single-contact workflows next: viewing details, adding notes, starring and unstarring, and editing tags.
+1. Test the two confirmation-based destructive flows last: `:delete` and `:clear`.
+
+### Test data setup
+
+If the address book is not empty, clear it first:
+
+```text
+:clear
+yes
+```
+
+Then add these contacts:
+
+```text
+:add n/Ada Lovelace p/91234567 e/ada@example.com a/NUS Computing t/core t/java
+:add n/Grace Hopper p/82345678 e/grace@example.com a/COM2 t/core t/backend
+:add n/Alan Turing p/93456789 e/alan@example.com a/UTown t/research t/ai
+:add n/Alicia Tan p/84567890 e/alicia@example.com a/Bishan t/frontend t/design
+```
+
+These contacts are chosen so testers can verify:
+
+* name filtering with overlapping names (`Ada` and `Alicia`)
+* tag filtering with shared and distinct tags
+* sorting by name and phone
+* address filtering using partial text
+
+### Features to cover
+
+#### Listing, filtering, and sorting contacts
+
+Use `:list` to verify the enhanced list behavior:
+
+```text
+:list
+:list t/core
+:list n/Ali
+:list a/Bishan
+:list t/core n/Grace
+:list s/+n
+:list s/-p
+:list s/* s/+n
+```
+
+Checks to perform:
+
+* Different prefixes combine with AND logic.
+* Repeating the same prefix uses OR logic.
+* `s/*` pins favourited contacts to the top once at least one contact has been starred.
+* `:list` with no arguments restores the full list and resets sorting to the default order.
+
+#### Viewing a contact
+
+Run:
+
+```text
+:view 1
+```
+
+Check that the selected contact is highlighted in the list and that the full details panel updates to that contact.
+
+#### Favouriting and unfavouriting
+
+Run:
+
+```text
+:favourite 2
+:list s/* s/+n
+:list
+:unfavourite 2
+```
+
+Check that the star indicator appears and disappears, and that the `s/*` sort keeps starred contacts above non-starred contacts.
+
+#### Adding notes
+
+Run:
+
+```text
+:view 1
+:note 1 First met during CS2103T project discussion.
+:note 1 Follow up about parser refactor next week.
+```
+
+Check that notes are appended in order for the same contact. Also test one invalid input:
+
+```text
+:note 1
+```
+
+This should be rejected because the command requires both an index and note text.
+
+#### Editing tags on an existing contact
+
+Run:
+
+```text
+:edit 3 t/ml
+:edit 3 dt/research
+:edit 3 dt/
+:tags
+```
+
+Check that adding one tag does not remove existing tags, `dt/` removes only the named tag, `dt/` with no arguments delete all of the contact's tags, and `:tags` reflects the updated tag registry.
+
+#### Listing all tags
+
+Run:
+
+```text
+:tags
+```
+
+Check that each tag appears once, in alphabetical order. Because tags are case-sensitive, adding tags that differ only by case should make both appear.
+
+#### Delete confirmation flow
+
+Run:
+
+```text
+:delete 4
+no
+:delete 4
+yes
+```
+
+Check both branches:
+
+* any input other than `yes` cancels the pending deletion
+* `yes` deletes the contact currently at that displayed index after the preview is shown
+
+#### Clear confirmation flow
+
+Run:
+
+```text
+:clear
+no
+:clear
+yes
+```
+
+Check both branches:
+
+* any input other than `yes` cancels the pending clear
+* `yes` empties the address book and clears the tag registry
+
+### Important inputs to copy-paste
+
+These are useful for quick edge-oriented checks while exploring variations:
+
+```text
+:list t/core t/backend
+:list n/Ada n/Alicia
+:list t/core s/+n
+:list t/core s/* s/-p
+:edit 2 t/devops t/mentor
+:edit 2 dt/core
+:note 2 Plain text only: <b>bold?</b> \n \t "quotes"
+```
+
+Notes for testers:
+
+* Indices are always based on the currently displayed list, not the original unfiltered list.
+* If a command is waiting for confirmation, the next input is consumed as the confirmation response rather than being parsed as a fresh command.
