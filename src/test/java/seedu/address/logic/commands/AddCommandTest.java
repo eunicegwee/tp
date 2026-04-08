@@ -3,9 +3,8 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
 
@@ -100,8 +99,8 @@ public class AddCommandTest {
 
         new AddCommand(validPerson).execute(modelStub);
 
-        assertNotNull(modelStub.undoAction);
-        modelStub.undoAction.run();
+        assertNotNull(modelStub.getUndoAction());
+        modelStub.getUndoAction().run();
         assertFalse(modelStub.personsAdded.contains(validPerson));
     }
 
@@ -256,7 +255,7 @@ public class AddCommandTest {
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
         final TagsRegistry tagsRegistry = new TagsRegistry();
-        Runnable undoAction;
+        private Runnable undoAction;
 
         @Override
         public boolean hasPerson(Person person) {
@@ -288,6 +287,11 @@ public class AddCommandTest {
         @Override
         public void setUndoAction(Runnable undoAction) {
             this.undoAction = undoAction;
+        }
+
+        @Override
+        public Runnable getUndoAction() {
+            return undoAction;
         }
 
         @Override
