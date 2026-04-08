@@ -75,6 +75,8 @@ public class NoteCommand extends Command {
 
         model.setPerson(personToEdit, editedPerson);
 
+        model.setUndoAction(() -> model.setPerson(editedPerson, personToEdit));
+
         return new CommandResult(String.format(MESSAGE_SUCCESS, personToEdit.getName(), note));
     }
 
