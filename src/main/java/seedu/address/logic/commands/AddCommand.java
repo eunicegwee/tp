@@ -60,6 +60,11 @@ public class AddCommand extends Command {
 
         model.addTags(toAdd);
 
+        model.setUndoAction(() -> {
+            model.deletePerson(toAdd);
+            model.deleteTags(toAdd);
+        });
+
         return new CommandResult(String.format(MESSAGE_SUCCESS, Messages.format(toAdd)));
     }
 
