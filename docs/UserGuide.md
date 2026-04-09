@@ -21,7 +21,6 @@ This project is based on the AddressBook-Level3 project created by the [SE-EDU 
     - [Deleting Contacts](#deleting-contacts)
     - [Editing Contacts](#editing-contacts)
     - [Exiting 0rb1t](#exiting-0rb1t)
-    - [Finding Contacts](#finding-contacts)
     - [Accessing Help in 0rb1t](#accessing-help-in-0rb1t)
     - [Listing Contacts](#listing-contacts)
     - [Sorting Contacts](#sorting-contacts)
@@ -185,27 +184,6 @@ Format: `:exit`
 
 Expected: 0rb1t will close. No goodbye message is shown.
 
-### Finding Contacts
-
-To find a particular contact, type `:list` followed by the field you wish to use. The fields you can use are:
-
-- The contact’s name, typed after `n/`.
-- The contact’s phone number, typed after `p/`.
-- The contact’s email, typed after `e/`.
-- The contact’s house address, typed after `a/`.
-
-Note: Different fields are combined with AND logic. Multiple values for the same field use OR logic.
-
-Format: `:list <FIELD_PREFIX + KEYWORD>`
-
-Examples:
-
-`:list n/John p/12345678`
-
-`:list n/Bernice n/Sally`
-
-Expected: 0rb1t will display a list of contacts in the sidebar whose details match the search criteria.
-
 ### Accessing Help in 0rb1t
 
 To find help content for using this application, type `:help`.
@@ -342,8 +320,7 @@ The following enhancements are planned for future releases:
 | Delete         | `:delete <INDEX>` + `yes`                      | Deletes a contact from 0rb1t.                          | `:delete 2`<br/>`...`<br/>`yes`                                                                      |
 | Edit           | `:edit <INDEX> ...`                            | Edits a contact’s details in 0rb1t.                    | `:edit 3`                                                                                            |
 | Exit           | `:exit`                                        | Exits 0rb1t.                                           | `:exit`                                                                                              |
-| Star           | `:star` or `:unstar'                            | Stars/Unstars a contact.                               | `:star 5`<br/>`:unstar 8`                                                                            |
-| Find           | `:find <NAME>`                                 | Finds a contact in 0rb1t based on their name.          | `:find John`                                                                                         |
+| Star           | `:star` or `:unstar'                            | Stars/Unstars a contact.                               | `:star 5`<br/>`:unstar 8`                                                                           |
 | Help           | `:help`                                        | Opens the help page.                                   | `:help`                                                                                              |
 | List Contacts  | `:list` or `:list <TAG>`                       | Lists all contacts stored in 0rb1t.                    | `:list`<br/>`:list t/friend`                                                                         |
 | Sorting        | `list s/<FIELD_PREFIX + SIGN>`                 | Sorts all contacts based on the field and the order.   | `:list s/+n`                                                                                         |
