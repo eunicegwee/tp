@@ -26,6 +26,7 @@ This project is based on the AddressBook-Level3 project created by the [SE-EDU 
     - [Sorting Contacts](#sorting-contacts)
     - [Starring Contacts](#starring-contacts)
     - [Listing Tags](#listing-tags)
+    - [Undoing a Command](#undoing-a-command)
     - [Viewing Contacts](#viewing-contacts)
 - [Storage](#storage)
     - [Saving the data](#saving-the-data)
@@ -174,7 +175,7 @@ Examples:
 
 `:edit 3 dt/`
 
-Expected: 0rb1t will display a confirmation message and show the updated details of the contact.
+Expected: 0rb1t will show the updated details of the contact.
 
 ### Exiting 0rb1t
 
@@ -196,7 +197,7 @@ Expected: 0rb1t will open a separate help window, showing the link to the User G
 
 To list all contacts stored in 0rb1t, type `:list` and all contacts will appear on the sidebar.
 
-Format: `:list <TAG>`
+Format: `:list [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [s/SORT]...`
 
 Examples:
 
@@ -212,16 +213,16 @@ If tags are added, all contacts with the relevant tags will be made available in
 
 ### Sorting Contacts
 
-To sort contact by specific fields, type `:list s/` followed by the field you wish to sort by. Use `+`or `-` to sort in either ascending or descending order respectively.
+To sort contacts by specific fields, type `:list s/` followed by `+` or `-` for ascending or descending order, then the field prefix (`n` for name, `p` for phone).
 Typing `s/*` ensures starred contacts are always at the top.
 
-Format: `:list s/<SIGN + FIELD_PREFIX>`
+Format: `:list s/<+/- FIELD> [s/<+/- FIELD>]...`
 
 Examples:
 
 `:list s/+n`
 
-`:list s/* s/-a`
+`:list s/* s/-p`
 
 Expected: The list of contacts will be sorted based on the parameter and in the order specified. If s/* was used, starred contacts will be pinned at the top.
 
@@ -251,6 +252,16 @@ Note: Tags are displayed in alphabetical order, and each tag is shown only once 
 Format: `:tags`
 
 Expected: 0rb1t will display all the tags that have been added to 0rb1t.
+
+### Undoing a Command
+
+To undo the last command that modified data, type `:undo`. This reverses the effect of the most recent mutating command (e.g., `:add`, `:delete`, `:edit`, `:clear`, `:note`, `:star`, `:unstar`).
+
+Note: Only the most recent mutating command can be undone. You cannot undo more than once in a row, and non-mutating commands like `:list` or `:view` do not count as undoable actions.
+
+Format: `:undo`
+
+Expected: 0rb1t will reverse the last mutating command and display a success message. If there is nothing to undo, an error message will be shown.
 
 ### Viewing Contacts
 
@@ -320,9 +331,10 @@ The following enhancements are planned for future releases:
 | Delete         | `:delete <INDEX>` + `yes`                      | Deletes a contact from 0rb1t.                          | `:delete 2`<br/>`...`<br/>`yes`                                                                      |
 | Edit           | `:edit <INDEX> ...`                            | Edits a contact’s details in 0rb1t.                    | `:edit 3`                                                                                            |
 | Exit           | `:exit`                                        | Exits 0rb1t.                                           | `:exit`                                                                                              |
-| Star           | `:star` or `:unstar'                            | Stars/Unstars a contact.                               | `:star 5`<br/>`:unstar 8`                                                                           |
+| Star           | `:star <INDEX>` or `:unstar <INDEX>`            | Stars/Unstars a contact.                               | `:star 5`<br/>`:unstar 8`                                                                           |
 | Help           | `:help`                                        | Opens the help page.                                   | `:help`                                                                                              |
 | List Contacts  | `:list` or `:list <TAG>`                       | Lists all contacts stored in 0rb1t.                    | `:list`<br/>`:list t/friend`                                                                         |
-| Sorting        | `list s/<FIELD_PREFIX + SIGN>`                 | Sorts all contacts based on the field and the order.   | `:list s/+n`                                                                                         |
+| Sorting        | `:list s/<+/- FIELD>`                          | Sorts all contacts based on the field and the order.   | `:list s/+n`                                                                                         |
 | List Tags      | `:tags`                                        | Lists all the tags used in 0rb1t.                      | `:tags`                                                                                              |
+| Undo           | `:undo`                                        | Undoes the last mutating command.                      | `:undo`                                                                                              |
 | View           | `:view <INDEX>`                                | Views a contact’s details in 0rb1t based on the index. | `:view 4`                                                                                            |
