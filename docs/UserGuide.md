@@ -160,6 +160,9 @@ then the field prefixes of the fields you wish to change, and then the new detai
 
 Note: If you wish to leave some fields unchanged, you do not have to include them in the `:edit` command.
 
+Note: Every prefix must be followed by a non-empty value, except `dt/`. without a tag value removes all tags from the 
+contact, while `dt/<tag>` removes only the specified tag(s).
+
 Format: `:edit <INDEX> n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG] [dt/TAG] ...`
 
 Examples:
@@ -169,6 +172,8 @@ Examples:
 `:edit 5 p/13572468 t/school t/friend`
 
 `:edit 1 e/jane_doe@example.com dt/school`
+
+`:edit 3 dt/`
 
 Expected: 0rb1t will display a confirmation message and show the updated details of the contact.
 
@@ -338,7 +343,7 @@ The following enhancements are planned for future releases:
 | Add Note       | `:note <INDEX> note`                               | Adds a note to the contact.                            | `:note 2 This is an important contact.`                                                              |
 | Clear          | `:clear` + `yes`                                   | Clears the entire 0rb1t.                               | `:clear`<br/>`...`<br/>`yes`                                                                         |
 | Delete         | `:delete <INDEX>` + `yes`                          | Deletes a contact from 0rb1t.                          | `:delete 2`<br/>`...`<br/>`yes`                                                                      |
-| Edit           | `:edit <INDEX> ...`                                | Edits a contact’s details in 0rb1t.                    | `:edit 3`                                                                                            |
+| Edit           | `:edit <INDEX> ...`                                | Edits a contact’s details in 0rb1t.                    | `:edit 3 p/91234567`                                                                                 |
 | Exit           | `:exit`                                            | Exits 0rb1t.                                           | `:exit`                                                                                              |
 | Favourite      | `:favourite` or `:unfavourite`                     | Favourites/unfavourites a contact.                     | `:favourite 5`<br/>`unfavourite 8`                                                                   |
 | Help           | `:help`                                            | Opens the help page.                                   | `:help`                                                                                              |

@@ -40,8 +40,10 @@ public class EditCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the person identified "
             + "by the index number used in the displayed person list. "
             + "Existing values will be overwritten by the input values, except for tags.\n"
-            + "Tags can be added with " + PREFIX_TAG + " and removed with " + PREFIX_DELETE_TAG + ". "
-            + "Use " + PREFIX_DELETE_TAG + " without arguments to clear all tags.\n"
+            + "Tags can be added with " + PREFIX_TAG + "TAG and removed with "
+            + PREFIX_DELETE_TAG + "TAG.\n"
+            + "Each prefix must be followed by a non-empty value, except " + PREFIX_DELETE_TAG
+            + " which can be used without a tag to clear all tags.\n"
             + "Parameters: INDEX (must be a positive integer) "
             + "[" + PREFIX_NAME + "NAME] "
             + "[" + PREFIX_PHONE + "PHONE] "
@@ -55,6 +57,9 @@ public class EditCommand extends Command {
 
     public static final String MESSAGE_EDIT_PERSON_SUCCESS = "Edited Person: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
+    public static final String MESSAGE_EMPTY_FIELD = "Edit fields cannot be empty."
+            + " Provide a non-empty value after each prefix, except " + PREFIX_DELETE_TAG
+            + " which may be used alone to clear all tags.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This person already exists in the address book.";
 
     private final Index index;
