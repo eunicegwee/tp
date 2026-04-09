@@ -12,6 +12,9 @@ import java.util.Objects;
  * Immutable; each modification returns a new instance.
  */
 public class NoteList {
+    public static final int MAX_NOTES = 20;
+    public static final String MESSAGE_MAX_NOTES =
+            String.format("Oops! You have reached the maximum limit of %d notes.", MAX_NOTES);
 
     private final List<Note> notes;
 
@@ -27,6 +30,7 @@ public class NoteList {
      */
     public NoteList(List<Note> notes) {
         requireNonNull(notes);
+        requireWithinLimit(notes.size());
         for (Note note : notes) {
             requireNonNull(note);
         }
@@ -38,18 +42,12 @@ public class NoteList {
      */
     public NoteList append(String content) {
         requireNonNull(content);
+        requireWithinLimit(notes.size() + 1);
 
         List<Note> updated = new ArrayList<>(notes);
         updated.add(new Note(content));
 
         return new NoteList(updated);
-    }
-
-    /**
-     * Clears all notes.
-     */
-    public NoteList clear() {
-        return new NoteList();
     }
 
     /**
@@ -88,5 +86,11 @@ public class NoteList {
     @Override
     public int hashCode() {
         return Objects.hash(notes);
+    }
+
+    private static void requireWithinLimit(int noteCount) {
+        if (noteCount > MAX_NOTES) {
+            throw new IllegalArgumentException(MESSAGE_MAX_NOTES);
+        }
     }
 }

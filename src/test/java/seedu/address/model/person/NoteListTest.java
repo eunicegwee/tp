@@ -45,13 +45,24 @@ public class NoteListTest {
     }
 
     @Test
-    public void clear_nonEmptyList_returnsEmptyListAndKeepsOriginalUnchanged() {
-        NoteList original = new NoteList(List.of(new Note("Existing")));
+    public void constructor_moreThanMaxNotes_throwsIllegalArgumentException() {
+        List<Note> notes = new ArrayList<>();
+        for (int i = 0; i < NoteList.MAX_NOTES + 1; i++) {
+            notes.add(new Note("Note " + i));
+        }
 
-        NoteList cleared = original.clear();
+        assertThrows(IllegalArgumentException.class, NoteList.MESSAGE_MAX_NOTES, () -> new NoteList(notes));
+    }
 
-        assertFalse(original.isEmpty());
-        assertTrue(cleared.isEmpty());
+    @Test
+    public void append_whenAtMaxNotes_throwsIllegalArgumentException() {
+        List<Note> notes = new ArrayList<>();
+        for (int i = 0; i < NoteList.MAX_NOTES; i++) {
+            notes.add(new Note("Note " + i));
+        }
+        NoteList noteList = new NoteList(notes);
+
+        assertThrows(IllegalArgumentException.class, NoteList.MESSAGE_MAX_NOTES, () -> noteList.append("Overflow"));
     }
 
     @Test

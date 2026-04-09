@@ -67,7 +67,7 @@ class JsonAdaptedPerson {
         tags.addAll(source.getTags().stream()
                 .map(JsonAdaptedTag::new)
                 .collect(Collectors.toList()));
-        notes.addAll(source.getNoteList().stream()
+        notes.addAll(source.getListOfNotes().stream()
                 .map(Note::toString)
                 .collect(Collectors.toList()));
         isFavourite = source.isFavourite();
@@ -126,7 +126,12 @@ class JsonAdaptedPerson {
                 throw new IllegalValueException(Note.MESSAGE_CONSTRAINTS);
             }
         }
-        final NoteList modelNoteList = new NoteList(modelNotes);
+        final NoteList modelNoteList;
+        try {
+            modelNoteList = new NoteList(modelNotes);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalValueException(e.getMessage());
+        }
         final boolean modelIsFavourite = isFavourite != null && isFavourite;
 
         return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelNoteList, modelIsFavourite);

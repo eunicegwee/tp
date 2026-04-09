@@ -6,6 +6,7 @@ import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.NoteCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
+import seedu.address.model.person.Note;
 
 /**
  * Parses input arguments and creates a new NoteCommand object.
@@ -38,6 +39,9 @@ public class NoteCommandParser implements Parser<NoteCommand> {
         }
 
         String note = splitArgs[1].trim();
+        if (!Note.isValidNote(note)) {
+            throw new ParseException(Note.MESSAGE_CONSTRAINTS);
+        }
 
         return new NoteCommand(index, note);
     }

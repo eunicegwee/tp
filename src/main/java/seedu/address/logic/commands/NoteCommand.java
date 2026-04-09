@@ -56,7 +56,12 @@ public class NoteCommand extends Command {
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
 
-        NoteList updatedNotes = personToEdit.appendNote(note);
+        NoteList updatedNotes;
+        try {
+            updatedNotes = personToEdit.appendNote(note);
+        } catch (IllegalArgumentException e) {
+            throw new CommandException(e.getMessage(), e);
+        }
 
         Person editedPerson = new Person(
                 personToEdit.getName(),

@@ -27,7 +27,7 @@ public class PersonTest {
     @Test
     public void getNoteList_modifyList_throwsUnsupportedOperationException() {
         Person person = new PersonBuilder().build();
-        assertThrows(UnsupportedOperationException.class, () -> person.getNoteList().add(new Note("New note")));
+        assertThrows(UnsupportedOperationException.class, () -> person.getListOfNotes().add(new Note("New note")));
     }
 
     @Test
@@ -36,7 +36,7 @@ public class PersonTest {
 
         NoteList updatedNotes = person.appendNote("Met at conference");
 
-        assertTrue(person.getNoteList().isEmpty());
+        assertTrue(person.getListOfNotes().isEmpty());
         assertEquals(1, updatedNotes.getAll().size());
         assertEquals(new Note("Met at conference"), updatedNotes.getAll().get(0));
     }
@@ -116,7 +116,7 @@ public class PersonTest {
     public void toStringMethod() {
         String expected = Person.class.getCanonicalName() + "{name=" + ALICE.getName() + ", phone=" + ALICE.getPhone()
                 + ", email=" + ALICE.getEmail() + ", address=" + ALICE.getAddress() + ", tags=" + ALICE.getTags()
-                + ", notes=" + ALICE.getNoteList() + ", isFavourite=false}";
+                + ", notes=" + ALICE.getListOfNotes() + ", isFavourite=false}";
         assertEquals(expected, ALICE.toString());
     }
 }

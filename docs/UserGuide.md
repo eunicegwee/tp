@@ -34,6 +34,7 @@ This project is based on the AddressBook-Level3 project created by the [SE-EDU 
 - [Tips and Examples](#tips-and-examples)
 - [Frequently Asked Questions (FAQ)](#frequently-asked-questions-faq)
 - [Known Issues](#known-issues)
+- [Coming Soon](#coming-soon)
 - [Command Summary](#command-summary)
 
 ## Quick Start
@@ -91,7 +92,13 @@ Expected: The new contact will be added to 0rb1t, and it can be viewed at the si
 
 To add a note to a contact, type `:note` followed by the index of the contact and the note you wish to add.
 
-Note: Notes are appended (not overwritten) to the existing ones.
+Notes uses an append-only model, meaning each new note is added to the end of the existing list and individual notes cannot be deleted unless the contact itself is deleted.
+
+Notes follow these constraints:
+- Each contact can have up to 20 notes.
+- Each note can be at most 200 characters long.
+- Formatting-related special characters, such as escape sequences (\n, \t), quotation marks, backslashes, and markup like HTML or Markdown, are not interpreted.
+- notes are displayed exactly as entered.
 
 Format: `:note <INDEX> note`
 
@@ -130,8 +137,9 @@ Example:
 
 `:delete 1`
 
-Are you sure you want to delete this contact?
-<Contact details>
+*A confirmation prompt is displayed:*\
+Are you sure you want to delete this contact?\
+\<Contact details\>\
 Type 'yes' to confirm. Any other input will be taken as no.
 
 `yes`
@@ -198,15 +206,15 @@ To find a particular contact, type `:list` followed by the field you wish to use
 - The contact’s email, typed after `e/`.
 - The contact’s house address, typed after `a/`.
 
-Note: Multiple filters can be combined with `and`, and multiple values for a field can be used with `or`.
+Note: Different fields are combined with AND logic. Multiple values for the same field use OR logic.
 
 Format: `:list <FIELD_PREFIX + KEYWORD>`
 
 Examples:
 
-`:list n/John and p/12345678`
+`:list n/John p/12345678`
 
-`:list n/Bernice or n/Sally`
+`:list n/Bernice n/Sally`
 
 Expected: 0rb1t will display a list of contacts in the sidebar whose details match the search criteria.
 
@@ -243,8 +251,6 @@ Typing `s/*` ensures favourites are always at the top. The fields you can sort b
 
 - The contact’s name, typed after `n/`.
 - The contact’s phone number, typed after `p/`.
-- The contact’s email, typed after `e/`.
-- The contact’s house address, typed after `a/`.
 
 Format: `:list s/<FIELD_PREFIX + SIGN>`
 
@@ -288,7 +294,7 @@ All data in 0rb1t is saved to the hard disk automatically after any command that
 
 ### Editing the data file
 
-All data is saved automatically as a JSON file [JAR file location]/data/0rb1t.json.
+All data is saved automatically as a JSON file [JAR file location]/data/addressbook.json.
 Advanced users are welcome to update data directly by editing that data file.
 
 Caution: If your changes to the data file make its format invalid, 0rb1t will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.
@@ -313,6 +319,15 @@ Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., i
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
 2. **If you minimise the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
+
+## Coming Soon
+
+The following enhancements are planned for future releases:
+
+- Editing and deleting individual notes.
+- Searching based on notes.
+- Text autocomplete for commands, tags, and common field prefixes.
+- Batch operations to apply a command to multiple contacts, e.g.`:delete 3 4 8` deletes contacts indexed 3, 4 and 8.
 
 ## Command Summary
 

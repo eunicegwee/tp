@@ -8,7 +8,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
  */
 public class Note {
 
-    public static final String MESSAGE_CONSTRAINTS = "Note cannot be blank.";
+    public static final int MAX_LENGTH = 200;
+    public static final String MESSAGE_CONSTRAINTS =
+            String.format("Note must be non-blank and at most %d characters long.", MAX_LENGTH);
 
     public final String value;
 
@@ -19,8 +21,16 @@ public class Note {
      */
     public Note(String value) {
         requireNonNull(value);
-        checkArgument(!value.isBlank(), MESSAGE_CONSTRAINTS);
+        checkArgument(isValidNote(value), MESSAGE_CONSTRAINTS);
         this.value = value;
+    }
+
+    /**
+     * Returns true if a given string is a valid note.
+     */
+    public static boolean isValidNote(String test) {
+        requireNonNull(test);
+        return !test.isBlank() && test.length() <= MAX_LENGTH;
     }
 
     @Override

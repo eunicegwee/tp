@@ -15,6 +15,7 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.model.Model;
 import seedu.address.model.ModelManager;
 import seedu.address.model.UserPrefs;
+import seedu.address.model.person.Note;
 import seedu.address.model.person.NoteList;
 import seedu.address.model.person.Person;
 
@@ -32,7 +33,7 @@ public class NoteCommandTest {
                 personToEdit.getEmail(),
                 personToEdit.getAddress(),
                 personToEdit.getTags(),
-                new NoteList(personToEdit.getNoteList()).append(noteContent),
+                new NoteList(personToEdit.getListOfNotes()).append(noteContent),
                 personToEdit.isFavourite()
         );
 
@@ -65,7 +66,7 @@ public class NoteCommandTest {
                 personToEdit.getEmail(),
                 personToEdit.getAddress(),
                 personToEdit.getTags(),
-                new NoteList(personToEdit.getNoteList()).append(noteContent),
+                new NoteList(personToEdit.getListOfNotes()).append(noteContent),
                 personToEdit.isFavourite()
         );
 
@@ -86,6 +87,28 @@ public class NoteCommandTest {
         NoteCommand noteCommand = new NoteCommand(INDEX_SECOND_PERSON, "Met at alumni event");
 
         assertCommandFailure(noteCommand, model, "The person index provided is invalid");
+    }
+
+    @Test
+    public void execute_whenPersonAlreadyHasMaxNotes_throwsCommandException() {
+        Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        NoteList maxedNoteList = new NoteList(java.util.stream.IntStream.range(0, NoteList.MAX_NOTES)
+                .mapToObj(i -> new Note("Note " + i))
+                .toList());
+        Person maxedPerson = new Person(
+                originalPerson.getName(),
+                originalPerson.getPhone(),
+                originalPerson.getEmail(),
+                originalPerson.getAddress(),
+                originalPerson.getTags(),
+                maxedNoteList,
+                originalPerson.isFavourite()
+        );
+        model.setPerson(originalPerson, maxedPerson);
+
+        NoteCommand noteCommand = new NoteCommand(INDEX_FIRST_PERSON, "Overflow note");
+
+        assertCommandFailure(noteCommand, model, NoteList.MESSAGE_MAX_NOTES);
     }
 
     @Test

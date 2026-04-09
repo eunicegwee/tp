@@ -52,7 +52,7 @@ public class PersonBuilder {
         email = personToCopy.getEmail();
         address = personToCopy.getAddress();
         tags = new HashSet<>(personToCopy.getTags());
-        noteList = new NoteList(personToCopy.getNoteList());
+        noteList = new NoteList(personToCopy.getListOfNotes());
         isFavourite = personToCopy.isFavourite();
     }
 
