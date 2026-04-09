@@ -111,6 +111,11 @@
     -fx-background-color: #4a2323;
 }
 
+#cardPane {
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 0 2;
+}
+
 .list-cell:filled:selected #cardPane {
     -fx-border-color: #c75c5c;
     -fx-border-width: 0 0 0 2;
@@ -343,10 +348,6 @@
     -fx-padding: 8 1 8 1;
 }
 
-#cardPane {
-    -fx-background-color: transparent;
-    -fx-border-width: 0;
-}
 
 #commandTypeLabel {
     -fx-font-size: 11px;
