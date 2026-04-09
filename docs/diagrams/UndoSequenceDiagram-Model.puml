@@ -27,9 +27,13 @@ AddCommand -> Model : setUndoAction(undoRunnable)
 activate Model
 Model --> AddCommand
 deactivate Model
-note right : undoRunnable reverses the add:\n  model.deletePerson(toAdd)\n  model.deleteTags(toAdd)
+note right
+  undoRunnable reverses the add:
+  model.deletePerson(toAdd)
+  model.deleteTags(toAdd)
+end note
 
-AddCommand --> [ : result
+[<-- AddCommand : result
 deactivate AddCommand
 
 @enduml

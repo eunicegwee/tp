@@ -6,9 +6,7 @@ skinparam ClassBackgroundColor #FFFFAA
 
 title After command ":undo"
 
-class ModelManager {
-    undoAction = null
-}
+class MM as "<u>:ModelManager</u>"
 
-note bottom of ModelManager : Undo action was executed\n(David was deleted) and then cleared.\n:undo again will return an error.
+note bottom of MM : undoAction = null\n(action was executed then cleared)
 @enduml

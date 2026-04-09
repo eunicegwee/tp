@@ -6,9 +6,7 @@ skinparam ClassBackgroundColor #FFFFAA
 
 title After command ":list"
 
-class ModelManager {
-    undoAction = null
-}
+class MM as "<u>:ModelManager</u>"
 
-note bottom of ModelManager : Non-mutating commands do not\nmodify the undo action.\nundoAction remains null.
+note bottom of MM : undoAction = null\n(non-mutating commands do not\nmodify the undo action)
 @enduml

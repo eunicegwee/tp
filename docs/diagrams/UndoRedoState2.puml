@@ -6,9 +6,10 @@ skinparam ClassBackgroundColor #FFFFAA
 
 title After command ":add n/David"
 
-class ModelManager {
-    undoAction = Runnable
-}
+class MM as "<u>:ModelManager</u>"
+class Undo as "<u>:Runnable</u>"
 
-note bottom of ModelManager : Undo action **overwritten**:\nnow deletes David and his tags.\nPrevious undo action is lost.
+MM -right-> Undo : undoAction
+
+note bottom of Undo : Deletes David and his tags\n(previous undo action overwritten)
 @enduml

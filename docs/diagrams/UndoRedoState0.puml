@@ -6,9 +6,7 @@ skinparam ClassBackgroundColor #FFFFAA
 
 title Initial state
 
-class ModelManager {
-    undoAction = null
-}
+class MM as "<u>:ModelManager</u>"
 
-note bottom of ModelManager : No undo action stored.\n:undo will return an error.
+note bottom of MM : undoAction = null
 @enduml

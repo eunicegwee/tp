@@ -6,9 +6,10 @@ skinparam ClassBackgroundColor #FFFFAA
 
 title After command ":clear"
 
-class ModelManager {
-    undoAction = Runnable
-}
+class MM as "<u>:ModelManager</u>"
+class Undo as "<u>:Runnable</u>"
 
-note bottom of ModelManager : Undo action: restore the saved\nAddressBook snapshot.
+MM -right-> Undo : undoAction
+
+note bottom of Undo : Restores the saved\nAddressBook snapshot
 @enduml
