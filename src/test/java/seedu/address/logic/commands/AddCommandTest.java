@@ -3,6 +3,7 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalPersons.ALICE;
@@ -89,6 +90,18 @@ public class AddCommandTest {
 
         // different person -> returns false
         assertFalse(addAliceCommand.equals(addBobCommand));
+    }
+
+    @Test
+    public void execute_personAcceptedByModel_setsUndoAction() throws Exception {
+        ModelStubAcceptingPersonAdded modelStub = new ModelStubAcceptingPersonAdded();
+        Person validPerson = new PersonBuilder().build();
+
+        new AddCommand(validPerson).execute(modelStub);
+
+        assertNotNull(modelStub.getUndoAction());
+        modelStub.getUndoAction().run();
+        assertFalse(modelStub.personsAdded.contains(validPerson));
     }
 
     @Test
@@ -201,6 +214,21 @@ public class AddCommandTest {
         public String getFormattedTags() {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void setUndoAction(Runnable undoAction) {
+            // no-op for stub
+        }
+
+        @Override
+        public Runnable getUndoAction() {
+            return null;
+        }
+
+        @Override
+        public void clearUndoAction() {
+            // no-op for stub
+        }
     }
 
     /**
@@ -227,6 +255,7 @@ public class AddCommandTest {
     private class ModelStubAcceptingPersonAdded extends ModelStub {
         final ArrayList<Person> personsAdded = new ArrayList<>();
         final TagsRegistry tagsRegistry = new TagsRegistry();
+        private Runnable undoAction;
 
         @Override
         public boolean hasPerson(Person person) {
@@ -243,6 +272,26 @@ public class AddCommandTest {
         @Override
         public void addTags(Person person) {
             tagsRegistry.addPerson(person);
+        }
+
+        @Override
+        public void deletePerson(Person target) {
+            personsAdded.remove(target);
+        }
+
+        @Override
+        public void deleteTags(Person person) {
+            tagsRegistry.removePerson(person);
+        }
+
+        @Override
+        public void setUndoAction(Runnable undoAction) {
+            this.undoAction = undoAction;
+        }
+
+        @Override
+        public Runnable getUndoAction() {
+            return undoAction;
         }
 
         @Override

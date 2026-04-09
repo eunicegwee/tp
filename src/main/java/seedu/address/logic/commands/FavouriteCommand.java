@@ -52,6 +52,8 @@ public class FavouriteCommand extends Command {
         Person favouritedPerson = personToFavourite.withFavourite(true);
         model.setPerson(personToFavourite, favouritedPerson);
 
+        model.setUndoAction(() -> model.setPerson(favouritedPerson, personToFavourite));
+
         return CommandResult.createWithPerson(
                 String.format(MESSAGE_FAVOURITE_PERSON_SUCCESS, favouritedPerson.getName()),
                 favouritedPerson

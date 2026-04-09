@@ -125,4 +125,19 @@ public interface Model {
      * @return A string containing all tags in a display-friendly format.
      */
     String getFormattedTags();
+
+    /**
+     * Sets the undo action to reverse the last mutating command.
+     */
+    void setUndoAction(Runnable undoAction);
+
+    /**
+     * Returns the current undo action, or null if there is nothing to undo.
+     */
+    Runnable getUndoAction();
+
+    /**
+     * Clears the current undo action.
+     */
+    void clearUndoAction();
 }

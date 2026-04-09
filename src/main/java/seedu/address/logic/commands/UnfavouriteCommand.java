@@ -53,6 +53,8 @@ public class UnfavouriteCommand extends Command {
         Person updatedPerson = personToUnfavourite.withFavourite(false);
         model.setPerson(personToUnfavourite, updatedPerson);
 
+        model.setUndoAction(() -> model.setPerson(updatedPerson, personToUnfavourite));
+
         return CommandResult.createWithPerson(
                 String.format(MESSAGE_UNFAVOURITE_PERSON_SUCCESS, updatedPerson.getName()),
                 updatedPerson

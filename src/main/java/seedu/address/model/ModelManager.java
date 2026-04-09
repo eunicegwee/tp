@@ -27,6 +27,7 @@ public class ModelManager implements Model {
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
     private final SortedList<Person> sortedPersons;
+    private Runnable undoAction;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -186,5 +187,22 @@ public class ModelManager implements Model {
     @Override
     public String getFormattedTags() {
         return tagsRegistry.getFormattedTags();
+    }
+
+    //=========== Undo =============================================================
+
+    @Override
+    public void setUndoAction(Runnable undoAction) {
+        this.undoAction = undoAction;
+    }
+
+    @Override
+    public Runnable getUndoAction() {
+        return undoAction;
+    }
+
+    @Override
+    public void clearUndoAction() {
+        this.undoAction = null;
     }
 }

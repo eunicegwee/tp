@@ -51,6 +51,10 @@ public class DeleteCommand extends Command {
         return new CommandResult(previewMessage, false, false, () -> {
             model.deletePerson(personToDelete);
             model.deleteTags(personToDelete);
+            model.setUndoAction(() -> {
+                model.addPerson(personToDelete);
+                model.addTags(personToDelete);
+            });
             return new CommandResult(
                     String.format(MESSAGE_DELETE_PERSON_SUCCESS, Messages.format(personToDelete)));
         }, null);

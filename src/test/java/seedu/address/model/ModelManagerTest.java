@@ -2,6 +2,7 @@ package seedu.address.model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.model.Model.PREDICATE_SHOW_ALL_PERSONS;
 import static seedu.address.testutil.Assert.assertThrows;
@@ -263,5 +264,23 @@ public class ModelManagerTest {
         // Reset sort: Alice, Benson (Insertion order if added in that order)
         modelManager.updateSortedPersonList(null);
         assertEquals(Arrays.asList(ALICE, BENSON), modelManager.getFilteredPersonList());
+    }
+
+    //=========== Undo Tests =============================================================
+
+    @Test
+    public void undoAction_setAndGet() {
+        assertNull(modelManager.getUndoAction());
+
+        Runnable action = () -> { };
+        modelManager.setUndoAction(action);
+        assertEquals(action, modelManager.getUndoAction());
+    }
+
+    @Test
+    public void clearUndoAction_clearsStoredAction() {
+        modelManager.setUndoAction(() -> { });
+        modelManager.clearUndoAction();
+        assertNull(modelManager.getUndoAction());
     }
 }

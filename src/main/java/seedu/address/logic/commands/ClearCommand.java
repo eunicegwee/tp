@@ -20,9 +20,11 @@ public class ClearCommand extends Command {
     @Override
     public CommandResult execute(Model model) {
         requireNonNull(model);
+        AddressBook savedBook = new AddressBook(model.getAddressBook());
         return new CommandResult(MESSAGE_CONFIRM_CLEAR, false, false, () -> {
             model.setAddressBook(new AddressBook());
             model.clearTagsRegistry();
+            model.setUndoAction(() -> model.setAddressBook(savedBook));
             return new CommandResult(MESSAGE_SUCCESS);
         }, null);
     }
