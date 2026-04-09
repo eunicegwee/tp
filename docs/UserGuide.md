@@ -14,6 +14,7 @@ This project is based on the AddressBook-Level3 project created by the [SE-EDU 
 # Table of Contents
 
 - [Command List](#command-list)
+    - [Notes about the Command Format](#notes-about-the-command-format)
     - [Accessing Command History](#accessing-command-history)
     - [Adding Contacts](#adding-contacts)
     - [Adding Notes to Contacts](#adding-notes-to-contacts)
@@ -51,10 +52,28 @@ Follow these steps to get 0rb1t running on your computer:
 ```
 java -jar 0rb1t.jar
 ```
+A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.
+
+![img.png](images/quickStart.png)
 
 ---
 
 ## Command List
+
+### Notes about the Command Format
+
+- Words in `UPPER_CASE` are parameters to be supplied by you.
+  Example: in `:add n/NAME`, `NAME` can be used as `:add n/John Doe`.
+- Items in square brackets are optional.
+  Example: `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or `n/John Doe`.
+- Items followed by `...` can be used multiple times (including zero times).
+  Example: `[t/TAG]...` can be used as no tags, `t/friend`, or `t/friend t/family`.
+- Parameters can appear in any order unless otherwise stated.
+  Example: if a command accepts `n/NAME p/PHONE`, then `p/PHONE n/NAME` is also accepted.
+- For commands that do not take additional parameters (such as `:help` and `:exit`), extra text is ignored.
+  Example: `:help 123` is interpreted as `:help`.
+- If you are using a PDF version of this guide, be careful when copying multi-line commands.
+  Spaces around line breaks may be omitted when copied into the app.
 
 ### Accessing Command History
 
@@ -86,7 +105,9 @@ Examples:
 
 `:add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
-Expected: The new contact will be added to 0rb1t, and it can be viewed at the sidebar.
+Expected: The new contact will be added to 0rb1t, and it can be viewed in the main window.
+
+![addJohnDoe.png](images/addJohnDoe.png)
 
 ### Adding Notes to Contacts
 
@@ -98,7 +119,7 @@ Notes follow these constraints:
 - Each contact can have up to 20 notes.
 - Each note can be at most 200 characters long.
 - Formatting-related special characters, such as escape sequences (\n, \t), quotation marks, backslashes, and markup like HTML or Markdown, are not interpreted.
-- notes are displayed exactly as entered.
+- Notes are displayed exactly as entered.
 
 Format: `:note <INDEX> note`
 
@@ -110,6 +131,8 @@ Examples:
 
 Expected: The note will be added/appended to the contact in 0rb1t.
 
+![addNote.png](images/addNote.png)
+
 ### Clearing 0rb1t
 
 To clear the entire 0rb1t, type `:clear`. 0rb1t will ask you whether you wish to clear the entire 0rb1t (in case you mistyped). Typing `yes` will clear 0rb1t, while typing anything else will cancel the command.
@@ -120,8 +143,8 @@ Example:
 
 `:clear`
 
-Are you sure you want to clear the entire 0rb1t?
-Type 'yes' to confirm. Any other input will be taken as no.
+_Are you sure you want to clear the entire 0rb1t?
+Type 'yes' to confirm. Any other input will be taken as no._
 
 `yes`
 
@@ -137,10 +160,9 @@ Example:
 
 `:delete 1`
 
-*A confirmation prompt is displayed:*\
-Are you sure you want to delete this contact?\
+_Are you sure you want to delete this contact?\
 \<Contact details\>\
-Type 'yes' to confirm. Any other input will be taken as no.
+Type 'yes' to confirm. Any other input will be taken as no._
 
 `yes`
 
@@ -160,10 +182,10 @@ then the field prefixes of the fields you wish to change, and then the new detai
 
 Note: If you wish to leave some fields unchanged, you do not have to include them in the `:edit` command.
 
-Note: Every prefix must be followed by a non-empty value, except `dt/`. without a tag value removes all tags from the 
+Note: Every prefix must be followed by a non-empty value, except `dt/`. `dt/` without a tag value removes all tags from the 
 contact, while `dt/<tag>` removes only the specified tag(s).
 
-Format: `:edit <INDEX> n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG] [dt/TAG] ...`
+Format: `:edit <INDEX> [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG] [dt/TAG] ...`
 
 Examples:
 
@@ -189,6 +211,8 @@ Expected: 0rb1t will close. No goodbye message is shown.
 
 To find help content for using this application, type `:help`.
 
+![helpMessage.png](images/helpMessage.png)
+
 Format: `:help`
 
 Expected: 0rb1t will open a separate help window, showing the link to the User Guide of 0rb1t.
@@ -199,17 +223,21 @@ To list all contacts stored in 0rb1t, type `:list` and all contacts will appear 
 
 Format: `:list [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [s/SORT]...`
 
+Note: Items followed by `...` can be used multiple times (including zero times). Example: `[t/TAG]...` can be used as no tags, `t/friend`, or `t/friend t/family`.
+
 Examples:
 
 `:list`
 
-`:list t/friend`
+`:list t/friends`
 
-`:list t/friend t/colleague`
+`:list t/friends t/colleagues`
 
 Expected: 0rb1t will state that it listed all contacts, and the entire list will be made available in the sidebar.
 
 If tags are added, all contacts with the relevant tags will be made available in the sidebar.
+
+![listContactsWithTags.png](images/listContactsWithTags.png)
 
 ### Sorting Contacts
 
@@ -242,6 +270,8 @@ Examples:
 `:unstar 7`
 
 Expected: The contact at the given index will have a star icon next to their name, indicating that they are starred.
+
+![starContact.png](images/starContact.png)
 
 ### Listing Tags
 
