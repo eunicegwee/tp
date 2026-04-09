@@ -160,6 +160,9 @@ then the field prefixes of the fields you wish to change, and then the new detai
 
 Note: If you wish to leave some fields unchanged, you do not have to include them in the `:edit` command.
 
+Note: Every prefix must be followed by a non-empty value, except `dt/`. without a tag value removes all tags from the 
+contact, while `dt/<tag>` removes only the specified tag(s).
+
 Format: `:edit <INDEX> n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG] [dt/TAG] ...`
 
 Examples:
@@ -169,6 +172,8 @@ Examples:
 `:edit 5 p/13572468 t/school t/friend`
 
 `:edit 1 e/jane_doe@example.com dt/school`
+
+`:edit 3 dt/`
 
 Expected: 0rb1t will display a confirmation message and show the updated details of the contact.
 
@@ -299,10 +304,10 @@ Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., i
 
 ## Tips and Examples
 
-- Use `:find` to search for the right contact before any other action to avoid changing/deleting the wrong contact.
+- Use `:list n/<NAME>` to narrow down the right contact before any other action to avoid changing/deleting the wrong contact.
 
 - Example:
-`:find adam`
+`:list n/adam`
 `:edit 1 p/12345678`
 `:delete 1`
 

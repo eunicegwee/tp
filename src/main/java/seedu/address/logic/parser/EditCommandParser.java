@@ -46,6 +46,10 @@ public class EditCommandParser implements Parser<EditCommand> {
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_PHONE, PREFIX_EMAIL, PREFIX_ADDRESS);
 
+        if (isEmptyValuePresent(argMultimap)) {
+            throw new ParseException(EditCommand.MESSAGE_EMPTY_FIELD);
+        }
+
         EditPersonDescriptor editPersonDescriptor = new EditPersonDescriptor();
 
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
@@ -61,19 +65,19 @@ public class EditCommandParser implements Parser<EditCommand> {
             editPersonDescriptor.setAddress(ParserUtil.parseAddress(argMultimap.getValue(PREFIX_ADDRESS).get()));
         }
         parseTagsForEdit(argMultimap.getAllValues(PREFIX_TAG)).ifPresent(editPersonDescriptor::setTagsToAdd);
-        parseTagsForEdit(argMultimap.getAllValues(PREFIX_DELETE_TAG)).ifPresent(editPersonDescriptor::setTagsToRemove);
+        parseDeleteTagsForEdit(argMultimap.getAllValues(PREFIX_DELETE_TAG))
+                .ifPresent(editPersonDescriptor::setTagsToRemove);
 
         if (!editPersonDescriptor.isAnyFieldEdited()) {
             throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
         }
 
+        assert editPersonDescriptor.isAnyFieldEdited() : "Parser must reject edit commands with no fields.";
         return new EditCommand(index, editPersonDescriptor);
     }
 
     /**
      * Parses {@code Collection<String> tags} into a {@code Set<Tag>} if {@code tags} is non-empty.
-     * If {@code tags} contain only one element which is an empty string, it will be parsed into a
-     * {@code Set<Tag>} containing zero tags.
      */
     private Optional<Set<Tag>> parseTagsForEdit(Collection<String> tags) throws ParseException {
         assert tags != null;
@@ -81,8 +85,34 @@ public class EditCommandParser implements Parser<EditCommand> {
         if (tags.isEmpty()) {
             return Optional.empty();
         }
-        Collection<String> tagSet = tags.size() == 1 && tags.contains("") ? Collections.emptySet() : tags;
-        return Optional.of(ParserUtil.parseTags(tagSet));
+        return Optional.of(ParserUtil.parseTags(tags));
+    }
+
+    private Optional<Set<Tag>> parseDeleteTagsForEdit(Collection<String> tags) throws ParseException {
+        assert tags != null;
+
+        if (tags.isEmpty()) {
+            return Optional.empty();
+        }
+
+        Collection<String> tagsToRemove = tags.size() == 1 && tags.contains("") ? Collections.emptySet() : tags;
+        return Optional.of(ParserUtil.parseTags(tagsToRemove));
+    }
+
+    private boolean isEmptyValuePresent(ArgumentMultimap argMultimap) {
+        return hasEmptyValue(argMultimap.getValue(PREFIX_NAME))
+                || hasEmptyValue(argMultimap.getValue(PREFIX_PHONE))
+                || hasEmptyValue(argMultimap.getValue(PREFIX_EMAIL))
+                || hasEmptyValue(argMultimap.getValue(PREFIX_ADDRESS))
+                || hasAnyEmptyValue(argMultimap.getAllValues(PREFIX_TAG));
+    }
+
+    private boolean hasEmptyValue(Optional<String> value) {
+        return value.isPresent() && value.get().trim().isEmpty();
+    }
+
+    private boolean hasAnyEmptyValue(Collection<String> values) {
+        return values.stream().anyMatch(value -> value.trim().isEmpty());
     }
 
 }
