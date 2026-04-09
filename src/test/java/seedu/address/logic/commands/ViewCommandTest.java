@@ -38,7 +38,8 @@ public class ViewCommandTest {
         Index outOfBoundIndex = Index.fromOneBased(model.getFilteredPersonList().size() + 1);
         ViewCommand viewCommand = new ViewCommand(outOfBoundIndex);
 
-        assertCommandFailure(viewCommand, model, "Invalid person index");
+        assertCommandFailure(viewCommand, model,
+                seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
@@ -61,7 +62,8 @@ public class ViewCommandTest {
 
         ViewCommand viewCommand = new ViewCommand(INDEX_SECOND_PERSON);
 
-        assertCommandFailure(viewCommand, model, "Invalid person index");
+        assertCommandFailure(viewCommand, model,
+                seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
     }
 
     @Test
