@@ -158,6 +158,48 @@ Classes used by multiple components are in the `seedu.address.commons` package.
 
 This section describes some noteworthy details on how certain features are implemented.
 
+### Tags Management
+
+#### Registry Structure
+
+The application maintains a derived `TagsRegistry` in the `ModelManager` to keep track of every tag currently in use.
+This registry is separate from the `AddressBook` itself and is rebuilt from the person list during initialization.
+As a result, the `:tags` command can list all active tags directly without scanning the full address book on every request.
+
+<puml src="diagrams/TagsManagementClassDiagram.puml" width="320" />
+
+The class diagram above focuses on the model-side structure behind tag management.
+
+* `ModelManager` owns both the `AddressBook` and the `TagsRegistry`.
+* `TagsRegistry` stores tag usage counts as `Map<Tag, Integer>`, so it can remove a tag only when the last person using it no longer has that tag.
+* Commands interact with tag management through the `Model` API, which keeps the tag-maintenance logic centralized in the model layer.
+* Read-only access such as `:tags` is handled through `Model#getFormattedTags()`.
+
+#### Command-Level Tag Updates
+
+The registry is updated by the following command flows:
+
+* `:add` adds the person into the address book, then adds that person's tags into the registry.
+* `:delete` removes the person and decrements tag counts for that person's tags after confirmation.
+* `:edit` computes the edited tag set by starting from the current tags, removing any `dt/` tags, and then adding any `t/` tags.
+* `:clear` resets the address book and clears the registry entirely.
+
+#### Tag Edit Sequence
+
+The following sequence diagram illustrates the main update path for tag edits at a high level.
+
+<puml src="diagrams/TagsManagementEditSequenceDiagram.puml" width="800" />
+
+When the user executes an edit command with tag changes, such as `:edit 3 t/backend dt/frontend`, the flow is as follows:
+
+1. `LogicManager` passes the command text to `AddressBookParser`, which returns an `EditCommand`.
+1. `EditCommand` updates the edited person in `ModelManager`.
+1. `EditCommand` then asks `ModelManager` to refresh tag data for the edited person.
+1. `ModelManager#updateEditedTags(...)` delegates to `TagsRegistry#updatePerson(...)` so the registry stays consistent with the latest person state.
+1. A `CommandResult` is returned to the user after both the person record and the tag registry have been updated.
+
+This design keeps the `TagsRegistry` consistent with the address book while avoiding duplicated tag-maintenance logic across commands.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
