@@ -116,6 +116,11 @@ public class PersonComparator implements Comparator<Person> {
     }
 
     @Override
+    public int hashCode() {
+        return Objects.hash(criteriaList);
+    }
+
+    @Override
     public String toString() {
         return new ToStringBuilder(this).add("criteria", criteriaList).toString();
     }
