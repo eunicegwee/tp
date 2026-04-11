@@ -16,6 +16,8 @@ import seedu.address.model.tag.Tag;
  * Guarantees: details are present and not null, field values are validated, immutable.
  */
 public class Person {
+    public static final int MAX_TAGS = 10;
+    public static final String MESSAGE_MAX_TAGS = "Each contact can have at most " + MAX_TAGS + " tags.";
 
     // Identity fields
     private final Name name;
@@ -58,6 +60,9 @@ public class Person {
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags,
             NoteList noteList, boolean isStarred) {
         requireAllNonNull(name, phone, email, address, tags, noteList);
+        if (tags.size() > MAX_TAGS) {
+            throw new IllegalArgumentException(MESSAGE_MAX_TAGS);
+        }
         this.name = name;
         this.phone = phone;
         this.email = email;

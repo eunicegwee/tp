@@ -231,6 +231,19 @@ public class EditCommandTest {
     }
 
     @Test
+    public void execute_addTagsBeyondMax_failure() {
+        Person personWithMaxTags = new PersonBuilder(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()))
+                .withTags("t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10")
+                .build();
+        model.setPerson(model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased()), personWithMaxTags);
+
+        EditPersonDescriptor descriptor = new EditPersonDescriptorBuilder().withTags("t11").build();
+        EditCommand editCommand = new EditCommand(INDEX_FIRST_PERSON, descriptor);
+
+        assertCommandFailure(editCommand, model, Person.MESSAGE_MAX_TAGS);
+    }
+
+    @Test
     public void execute_undoAfterEdit_restoresOriginalPerson() throws Exception {
         Person originalPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
         Person editedPerson = new PersonBuilder().withTags("friends").build();

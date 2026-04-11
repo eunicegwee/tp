@@ -87,7 +87,12 @@ public class EditCommand extends Command {
         }
 
         Person personToEdit = lastShownList.get(index.getZeroBased());
-        Person editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
+        Person editedPerson;
+        try {
+            editedPerson = createEditedPerson(personToEdit, editPersonDescriptor);
+        } catch (IllegalArgumentException e) {
+            throw new CommandException(e.getMessage(), e);
+        }
 
         if (!personToEdit.isSamePerson(editedPerson) && model.hasPerson(editedPerson)) {
             throw new CommandException(MESSAGE_DUPLICATE_PERSON);
