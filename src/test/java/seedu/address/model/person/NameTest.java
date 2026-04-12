@@ -29,6 +29,7 @@ public class NameTest {
         assertFalse(Name.isValidName(" ")); // spaces only
         assertFalse(Name.isValidName("^")); // only non-alphanumeric characters
         assertFalse(Name.isValidName("peter*")); // contains non-alphanumeric characters
+        assertFalse(Name.isValidName("Peter\nJack")); // newline not allowed
         assertFalse(Name.isValidName("a".repeat(Name.MAX_LENGTH + 1))); // exceeds max length
 
         // valid name

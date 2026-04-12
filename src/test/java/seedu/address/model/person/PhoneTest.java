@@ -35,6 +35,7 @@ public class PhoneTest {
         assertFalse(Phone.isValidPhone("phone")); // non-numeric
         assertFalse(Phone.isValidPhone("9011p041")); // alphabets within digits
         assertFalse(Phone.isValidPhone("9312 1534")); // spaces within digits
+        assertFalse(Phone.isValidPhone("9312\n1534")); // newline not allowed
         assertFalse(Phone.isValidPhone("1234567890123456")); // more than 15 digits
         assertFalse(Phone.isValidPhone("+1234567890123456")); // more than 15 digits with plus
         assertFalse(Phone.isValidPhone("12+345")); // plus not at the beginning
