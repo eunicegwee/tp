@@ -454,7 +454,7 @@ Priorities: High (must have) - `***`, Medium (nice to have) - `**`, Low (unlikel
 | -------- | ------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ |
 | `***`    | new developer user                                      | see sample contacts when I first launch the app                | understand how entries are structured                        |
 | `***`    | new developer user                                      | access a help guide                                            | refer to command usage when I forget the syntax              |
-| `***`    | developer                                               | add a contact with a name, phone number, and email             | store essential contact details                              |
+| `***`    | developer                                               | add a contact with a name, phone number, email, and address    | store essential contact details                              |
 | `***`    | developer                                               | list all contacts                                              | review everyone I have added                                 |
 | `***`    | developer                                               | search for contacts by name                                    | find someone without scanning the whole list                 |
 | `***`    | developer                                               | view the full details of a selected contact                    | verify I have selected the correct person                    |
