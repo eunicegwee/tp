@@ -19,6 +19,7 @@ import seedu.address.model.person.Note;
 import seedu.address.model.person.NoteList;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.Phone;
+import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
 public class JsonAdaptedPersonTest {
@@ -27,6 +28,7 @@ public class JsonAdaptedPersonTest {
     private static final String INVALID_ADDRESS = " ";
     private static final String INVALID_EMAIL = "example.com";
     private static final String INVALID_TAG = "#friend";
+    private static final String TOO_LONG_TAG = "a".repeat(33);
 
     private static final String VALID_NAME = BENSON.getName().toString();
     private static final String VALID_PHONE = BENSON.getPhone().toString();
@@ -148,6 +150,16 @@ public class JsonAdaptedPersonTest {
                 new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
                         invalidTags, VALID_NOTES, false);
         assertThrows(IllegalValueException.class, person::toModelType);
+    }
+
+    @Test
+    public void toModelType_tooLongTag_throwsIllegalValueException() {
+        List<JsonAdaptedTag> invalidTags = new ArrayList<>(VALID_TAGS);
+        invalidTags.add(new JsonAdaptedTag(TOO_LONG_TAG));
+        JsonAdaptedPerson person =
+                new JsonAdaptedPerson(VALID_NAME, VALID_PHONE, VALID_EMAIL, VALID_ADDRESS,
+                        invalidTags, VALID_NOTES, false);
+        assertThrows(IllegalValueException.class, Tag.MESSAGE_CONSTRAINTS, person::toModelType);
     }
 
     @Test
