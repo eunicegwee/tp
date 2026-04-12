@@ -696,7 +696,7 @@ Test case: `:view 1`
 Expected: The first contact in the displayed list is selected and their full details appear in the details panel.
 
 Test case: `:view 0`  
-Expected: No contact is selected. An error message is shown.
+Expected: The command fails, an error message is shown, and the current selection remains unchanged.
 
 ### Adding notes
 
