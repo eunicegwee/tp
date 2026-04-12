@@ -591,8 +591,8 @@ For all use cases below, the **System** is 0rb1t and the **Actor** is the user, 
 
     Use case ends.
 
-- 4a. The edited contact would duplicate an existing contact.
-  - 4a1. 0rb1t shows an error message.
+- 4a. The edited contact would have the same name as an existing contact.
+  - 4a1. 0rb1t shows an error message explaining that contacts with duplicate names are not allowed.
 
     Use case ends.
 
