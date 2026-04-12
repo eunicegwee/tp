@@ -201,7 +201,9 @@ Expected: The note will be added/appended to the contact in 0rb1t.
 
 ### Clearing 0rb1t
 
-To clear the entire 0rb1t, type `:clear`. 0rb1t will ask you whether you wish to clear the entire 0rb1t (in case you mistyped). Typing `yes` will clear 0rb1t, while typing anything else will cancel the command.
+To clear the entire 0rb1t, type `:clear`.
+A confirmation message will appear, in case you mistyped. To stop the command, type `no`.
+Another other input will not be considered, and the confirmation will be pending. To proceed, type `yes`.
 
 Format: `:clear` + `yes`
 
@@ -219,6 +221,8 @@ Expected: The entire 0rb1t will be cleared, and the sidebar will be empty.
 ### Deleting Contacts
 
 To delete a contact, type `:delete` followed by the index of the contact you wish to delete. The index of each individual contact can be found at the sidebar.
+A confirmation message will appear, in case you entered the wrong index. To stop the command, type `no`. 
+Another other input will not be considered, and the confirmation will be pending. To proceed, type `yes`.
 
 Format: `:delete <INDEX>` + `yes`
 
