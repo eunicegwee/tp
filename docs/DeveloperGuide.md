@@ -504,7 +504,7 @@ For all use cases below, the **System** is 0rb1t and the **Actor** is the user, 
 - 3a. The given index is invalid.
   - 3a1. 0rb1t shows an error message.
 
-    Use case resumes at step 2.
+    Use case resumes at step 3.
 
 - 5a. The user does not confirm the deletion.
   - 5a1. 0rb1t cancels the deletion.
