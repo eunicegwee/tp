@@ -9,6 +9,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
+import org.junit.jupiter.api.Assumptions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -21,18 +22,24 @@ import seedu.address.testutil.PersonBuilder;
 public class PersonCardTest {
 
     private static final AtomicBoolean IS_JAVAFX_STARTED = new AtomicBoolean(false);
+    private static volatile boolean isJavaFxAvailable = true;
 
     @BeforeAll
     public static void setUpClass() throws InterruptedException {
         if (IS_JAVAFX_STARTED.compareAndSet(false, true)) {
             CountDownLatch latch = new CountDownLatch(1);
-            Platform.startup(latch::countDown);
-            latch.await();
+            try {
+                Platform.startup(latch::countDown);
+                latch.await();
+            } catch (UnsupportedOperationException e) {
+                isJavaFxAvailable = false;
+            }
         }
     }
 
     @Test
     public void constructor_starredPerson_displaysSortedTagsAndStar() throws Exception {
+        assertJavaFxAvailable();
         Person person = new PersonBuilder()
                 .withName("Zara")
                 .withTags("beta", "alpha")
@@ -49,6 +56,7 @@ public class PersonCardTest {
 
     @Test
     public void constructor_unstarredPerson_hidesStarIndicator() throws Exception {
+        assertJavaFxAvailable();
         Person person = new PersonBuilder().withName("Yuki").build();
 
         PersonCard personCard = createPersonCard(person, 1);
@@ -91,6 +99,10 @@ public class PersonCardTest {
         Field field = PersonCard.class.getDeclaredField(fieldName);
         field.setAccessible(true);
         return type.cast(field.get(personCard));
+    }
+
+    private void assertJavaFxAvailable() {
+        Assumptions.assumeTrue(isJavaFxAvailable, "JavaFX toolkit is not available in this environment");
     }
 
     @FunctionalInterface
