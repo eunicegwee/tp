@@ -467,7 +467,7 @@ Priorities: High (must have) - `***`, Medium (nice to have) - `**`, Low (unlikel
 | `**`     | developer organizing contacts by role or project        | assign tags when adding a contact                              | categorize contacts immediately                              |
 | `**`     | developer organizing contacts by role or project        | filter contacts by tag                                         | focus on a relevant group of contacts                        |
 | `**`     | developer with many contacts                            | search using multiple filters such as name and tag together    | narrow down results more precisely                           |
-| `**`     | developer with multiple contacts sharing the same name  | see additional identifiers in the list view                    | distinguish similar contacts easily                          |
+| `**`     | developer maintaining a contact list with unique names  | rely on names to uniquely identify contacts                    | avoid duplicate entries and ambiguous matches                |
 | `**`     | developer with many contacts                            | sort contacts meaningfully                                     | find contacts faster                                         |
 | `**`     | developer maintaining a shortlist of important contacts | mark certain contacts as favourites                            | access frequently used contacts more quickly                 |
 | `**`     | developer maintaining contact context over time         | add notes to a contact                                         | keep lightweight context about previous interactions         |
