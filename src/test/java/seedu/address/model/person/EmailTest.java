@@ -3,7 +3,6 @@ package seedu.address.model.person;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
-import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.testutil.Assert.assertThrows;
 
@@ -86,13 +85,13 @@ public class EmailTest {
         assertEquals(new Email("valid@email.com"), email);
 
         // same object -> returns true
-        assertSame(email, sameEmail(email));
+        assertTrue(email.equals(email));
 
         // null -> returns false
-        assertNotEquals(null, email);
+        assertFalse(email.equals(null));
 
         // different types -> returns false
-        assertNotEquals(5.0f, email);
+        assertFalse(email.equals(5.0f));
 
         // different values -> returns false
         assertNotEquals(new Email("other.valid@email.com"), email);
@@ -100,9 +99,5 @@ public class EmailTest {
 
     private static String repeat(char character, int count) {
         return String.valueOf(character).repeat(count);
-    }
-
-    private static Email sameEmail(Email email) {
-        return email;
     }
 }

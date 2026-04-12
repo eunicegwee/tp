@@ -17,7 +17,7 @@ public class Address {
      * The first character of the address must not be a whitespace,
      * otherwise " " (a blank string) becomes a valid input.
      */
-    public static final String VALIDATION_REGEX = "(?=.{1,255}$)(?=.*[A-Za-z0-9])(?!.*\\p{Cntrl})[^\\s].*";
+    public static final String VALIDATION_REGEX = "(?=.{1,255}$)(?=.*[\\p{L}\\p{N}])(?!.*\\p{Cntrl})[^\\s].*";
 
     public final String value;
 

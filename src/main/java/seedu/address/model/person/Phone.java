@@ -11,7 +11,7 @@ public class Phone {
 
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Phone numbers should be 3 to 15 digits, and may start with '+' followed by 1-9.";
+            "Phone numbers should be 3 to 15 digits, must not be all zeros, and may start with '+' followed by 1-9.";
     public static final String VALIDATION_REGEX = "(?:\\+[1-9][0-9]{2,14}|(?!0{3,15}$)[0-9]{3,15})";
     public final String value;
 
