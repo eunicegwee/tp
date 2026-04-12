@@ -10,6 +10,9 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class Email {
 
     private static final String SPECIAL_CHARACTERS = "+_.-";
+    private static final int LOCAL_PART_MAX_LENGTH = 64;
+    private static final int DOMAIN_MAX_LENGTH = 253;
+    private static final int EMAIL_MAX_LENGTH = 254;
     public static final String MESSAGE_CONSTRAINTS = "Emails should be of the format local-part@domain "
             + "and adhere to the following constraints:\n"
             + "1. The local-part should only contain alphanumeric characters and these special characters, excluding "
@@ -21,15 +24,10 @@ public class Email {
             + "    - end with a domain label at least 2 characters long\n"
             + "    - have each domain label start and end with alphanumeric characters\n"
             + "    - have each domain label consist of alphanumeric characters, separated only by hyphens, if any.";
-    // alphanumeric and special characters
-    private static final String ALPHANUMERIC_NO_UNDERSCORE = "[^\\W_]+"; // alphanumeric characters except underscore
-    private static final String LOCAL_PART_REGEX = "^" + ALPHANUMERIC_NO_UNDERSCORE + "([" + SPECIAL_CHARACTERS + "]"
-            + ALPHANUMERIC_NO_UNDERSCORE + ")*";
-    private static final String DOMAIN_PART_REGEX = ALPHANUMERIC_NO_UNDERSCORE
-            + "(-" + ALPHANUMERIC_NO_UNDERSCORE + ")*";
-    private static final String DOMAIN_LAST_PART_REGEX = "(" + DOMAIN_PART_REGEX + "){2,}$"; // At least two chars
-    private static final String DOMAIN_REGEX = "(" + DOMAIN_PART_REGEX + "\\.)*" + DOMAIN_LAST_PART_REGEX;
-    public static final String VALIDATION_REGEX = LOCAL_PART_REGEX + "@" + DOMAIN_REGEX;
+    private static final String LOCAL_PART_REGEX = "[A-Za-z0-9]+(?:[" + SPECIAL_CHARACTERS + "][A-Za-z0-9]+)*";
+    private static final String DOMAIN_LABEL_REGEX = "[A-Za-z0-9]+(?:-[A-Za-z0-9]+)*";
+    public static final String VALIDATION_REGEX = LOCAL_PART_REGEX + "@" + DOMAIN_LABEL_REGEX
+            + "(?:\\." + DOMAIN_LABEL_REGEX + ")+";
 
     public final String value;
 
@@ -48,7 +46,26 @@ public class Email {
      * Returns if a given string is a valid email.
      */
     public static boolean isValidEmail(String test) {
-        return test.matches(VALIDATION_REGEX);
+        requireNonNull(test);
+
+        if (!test.matches(VALIDATION_REGEX)) {
+            return false;
+        }
+
+        int atIndex = test.indexOf('@');
+        String localPart = test.substring(0, atIndex);
+        String domainPart = test.substring(atIndex + 1);
+
+        if (localPart.length() > LOCAL_PART_MAX_LENGTH || domainPart.length() > DOMAIN_MAX_LENGTH) {
+            return false;
+        }
+
+        if (test.length() > EMAIL_MAX_LENGTH) {
+            return false;
+        }
+
+        String[] domainLabels = domainPart.split("\\.");
+        return domainLabels[domainLabels.length - 1].length() >= 2;
     }
 
     @Override
@@ -63,11 +80,10 @@ public class Email {
         }
 
         // instanceof handles nulls
-        if (!(other instanceof Email)) {
+        if (!(other instanceof Email otherEmail)) {
             return false;
         }
 
-        Email otherEmail = (Email) other;
         return value.equals(otherEmail.value);
     }
 
