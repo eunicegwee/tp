@@ -43,6 +43,7 @@ public class PersonCard extends UiPart<Region> {
     public PersonCard(Person person, int displayedIndex) {
         super(FXML);
         this.person = person;
+        cardPane.setMinWidth(Region.USE_PREF_SIZE);
         id.setText(Integer.toString(displayedIndex));
         name.setText(person.getName().fullName);
         starredIndicator.setText(person.isStarred() ? "\u2605" : "");
