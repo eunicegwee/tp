@@ -2,10 +2,10 @@
 
 **0rb1t** is a desktop application designed for developers who prefer keyboard-driven workflows.
 
-- It brings a **Vim-inspired interface** to contact and task management, so you never have to reach for the mouse.
+- It brings a **Vim-inspired interface** to contact management, so you never have to reach for the mouse.
 - Built for developers who feel at home in Vim: 0rb1t lets you navigate, edit, and manage with the keybindings you already know.
 
-The app is **written in Object-Oriented Programming (OOP) fashion**, based on a ~6 KLoC codebase with solid user and developer documentation.
+The app is **written in Object-Oriented Programming (OOP) fashion**, with solid user and developer documentation.
 
 For detailed documentation, see the [**0rb1t Product Website**](https://ay2526s2-cs2103t-t15-4.github.io/tp/).
 
@@ -13,20 +13,27 @@ This project is based on the AddressBook-Level3 project created by the [SE-EDU 
 
 # Table of Contents
 
+- [Quick Start](#quick-start)
+- [Data Entry Specifications](#data-entry-specifications)
+    - [Name Requirements](#name-requirements)
+    - [Phone Requirements](#phone-requirements)
+    - [Email Requirements](#email-requirements)
+    - [Address Requirements](#address-requirements)
+    - [Tag Requirements](#tag-requirements)
 - [Command List](#command-list)
     - [Notes about the Command Format](#notes-about-the-command-format)
     - [Accessing Command History](#accessing-command-history)
+    - [Accessing Help in 0rb1t](#accessing-help-in-0rb1t)
     - [Adding Contacts](#adding-contacts)
     - [Adding Notes to Contacts](#adding-notes-to-contacts)
     - [Clearing 0rb1t](#clearing-0rb1t)
     - [Deleting Contacts](#deleting-contacts)
     - [Editing Contacts](#editing-contacts)
     - [Exiting 0rb1t](#exiting-0rb1t)
-    - [Accessing Help in 0rb1t](#accessing-help-in-0rb1t)
     - [Listing Contacts](#listing-contacts)
+    - [Listing Tags](#listing-tags)
     - [Sorting Contacts](#sorting-contacts)
     - [Starring Contacts](#starring-contacts)
-    - [Listing Tags](#listing-tags)
     - [Undoing a Command](#undoing-a-command)
     - [Viewing Contacts](#viewing-contacts)
 - [Storage](#storage)
@@ -44,7 +51,7 @@ Follow these steps to get 0rb1t running on your computer:
 
 1. **Ensure you have Java 17 or above installed.**
     - **Mac users:** Make sure you have the exact JDK version required.
-2. **Download the latest `.jar` file** from [here](https://github.com/AY2526S2-CS2103T-T15-4/tp/releases/tag/v1.0.0).
+2. **Download the latest `.jar` file** from [here](https://github.com/AY2526S2-CS2103T-T15-4/tp/releases/tag/v1.6.0).
 3. **Copy the `.jar` file** to the folder you want to use as the home folder for 0rb1t.
 4. **Open a terminal** and navigate to the folder containing the `.jar` file.
 5. **Run the application** using the following command:
@@ -58,11 +65,70 @@ A GUI similar to the below should appear in a few seconds. Note how the app cont
 
 ---
 
+## Data Entry Specifications
+
+### Name Requirements
+
+Names should adhere to the following constraints:
+
+- Names must not be blank.
+- Names can contain Unicode letters and digits (supports names from different languages/scripts).
+- Allowed punctuation in names: spaces, hyphens (-), apostrophes ('), and periods (.).
+- Other special characters are not allowed.
+- Names must start with an alphanumeric character.
+- Names have a character limit of 100.
+
+### Phone Requirements
+
+Phone numbers should adhere to the following constraints:
+
+- Phone numbers must use ASCII digits 0-9 only.
+- Phone numbers must be 3 to 15 digits long.
+- An optional leading + is allowed, but only as the first character.
+- If + is present, the next character must be a digit from 1 to 9.
+- Phone numbers cannot be all zeros.
+- No spaces, letters, punctuation, or other symbols are allowed.
+
+
+### Email Requirements
+
+Emails should be of the format `local-part@domain` and adhere to the following constraints:
+
+- Local-part may contain only ASCII letters, digits, and the special characters +, _, ., -.
+- Local-part must not start/end with a special character, and special characters cannot appear consecutively.
+- Local-part must be at most 64 characters long.
+- Domain must contain at least one . so it has both a second-level domain and a top-level domain.
+- Domain may contain only ASCII letters, digits, hyphens, and periods.
+- Each domain label must start and end with an alphanumeric character; hyphens may appear only inside a label.
+- The top-level domain must be at least 2 characters long.
+- Domain must be at most 253 characters long.
+- Entire email address must be at most 254 characters long.
+
+### Address Requirements
+
+Addresses should adhere to the following constraints:
+
+- Address must be 1 to 255 characters long.
+- Address must contain at least one alphanumeric character.
+- Address cannot contain any ISO control characters.
+- Spaces and punctuation are allowed as long as the above rules are satisfied.
+
+### Tag Requirements
+
+Tags should adhere to the following constraints:
+
+- Tags are alphanumeric only.
+- A contact can have up to 10 tags. Adding more than 10 tags to a single contact is not allowed.
+- Tags are automatically converted to lowercase when added/stored. 
+So, when adding a tag `Friend`, it will be added/stored as `friend`. Same for `FRIEND` and `FrIeNd`.
+
+---
+
 ## Command List
 
 ### Notes about the Command Format
 
-- Words in `UPPER_CASE` are parameters to be supplied by you.
+- Words in `UPPER_CASE` are parameters to be supplied by you. 
   Example: in `:add n/NAME`, `NAME` can be used as `:add n/John Doe`.
 - Items in square brackets are optional.
   Example: `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or `n/John Doe`.
@@ -70,20 +136,34 @@ A GUI similar to the below should appear in a few seconds. Note how the app cont
   Example: `[t/TAG]...` can be used as no tags, `t/friend`, or `t/friend t/family`.
 - Parameters can appear in any order unless otherwise stated.
   Example: if a command accepts `n/NAME p/PHONE`, then `p/PHONE n/NAME` is also accepted.
-- For commands that do not take additional parameters (such as `:help` and `:exit`), extra text is ignored.
+- For commands that take additional parameters (such as `:add`, `:edit` etc.), 
+  the field prefixes (such as `n/`, `p/`, etc.) are case-sensitive and must be in lowercase.
+- For commands that do not take additional parameters (such as `:clear`, `:exit`, `:help` and `:undo`), extra text is ignored.
   Example: `:help 123` is interpreted as `:help`.
 - If you are using a PDF version of this guide, be careful when copying multi-line commands.
   Spaces around line breaks may be omitted when copied into the app.
 
 ### Accessing Command History
 
-To navigate previously used commands, use the `UP` and `DOWN` arrow keys in the command box. `UP` to recall older commands, `DOWN` to recall newer commands.
+To navigate previously used commands, click inside the command box to focus your cursor, 
+then use the `UP` and `DOWN` arrow keys on your keyboard:
+`UP` to recall older commands, `DOWN` to recall newer commands.
 
-Note: Navigating past the most recent command clears the command box. Up to 64 commands are stored.
+>Note: Navigating past the most recent command clears the command box. Up to 64 commands are stored.
 
 Format: `UP` or `DOWN`
 
 Expected: The command box will display the selected command from the history, depending on whether you press the `UP` or `DOWN` key.
+
+### Accessing Help in 0rb1t
+
+To find help content for using this application, type `:help`.
+
+![helpMessage.png](images/helpMessage.png)
+
+Format: `:help`
+
+Expected: 0rb1t will open a separate help window, showing the link to the User Guide of 0rb1t.
 
 ### Adding Contacts
 
@@ -95,11 +175,7 @@ To add a contact, simply type `:add` followed by the details of the contact you 
 - The contact’s house address, typed after `a/`.
 - Any tags you wish to identify the contact with, typed after `t/`, and each additional tag after the first one separated by `t/`.
 
-Note: All parameters are required except for tags. A contact can have up to 10 tags.
-
-Note: Tags are automatically converted to lowercase when added. For example, `t/Friend` will be stored as `friend`.
-
-Note: Adding more than 10 tags to a single contact is not allowed.
+>Note: Each contact is uniquely identified by their name. Entries with duplicate names (exactly the same characters) will be rejected.
 
 Format: `:add n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]...`
 
@@ -117,7 +193,9 @@ Expected: The new contact will be added to 0rb1t, and it can be viewed in the ma
 
 To add a note to a contact, type `:note` followed by the index of the contact and the note you wish to add.
 
-Notes uses an append-only model, meaning each new note is added to the end of the existing list and individual notes cannot be deleted unless the contact itself is deleted.
+Notes uses an adaptation of the append-only model, meaning each new note is added to the end of the existing list.
+Other than `:undo`, which will revert the most recently added note, notes cannot be modified or removed individually.
+Only by deleting the contact will all notes be deleted.
 
 Notes follow these constraints:
 - Each contact can have up to 20 notes.
@@ -125,7 +203,7 @@ Notes follow these constraints:
 - Formatting-related special characters, such as escape sequences (\n, \t), quotation marks, backslashes, and markup like HTML or Markdown, are not interpreted.
 - Notes are displayed exactly as entered.
 
-Format: `:note <INDEX> note`
+Format: `:note INDEX NOTE`
 
 Examples: 
 
@@ -139,7 +217,9 @@ Expected: The note will be added/appended to the contact in 0rb1t.
 
 ### Clearing 0rb1t
 
-To clear the entire 0rb1t, type `:clear`. 0rb1t will ask you whether you wish to clear the entire 0rb1t (in case you mistyped). Typing `yes` will clear 0rb1t, while typing anything else will cancel the command.
+To clear all contacts, type `:clear`.
+A confirmation message will appear. To cancel the command, type `no`.
+For any other input, the confirmation will remain pending. To proceed, type `yes`.
 
 Format: `:clear` + `yes`
 
@@ -147,30 +227,32 @@ Example:
 
 `:clear`
 
-_Are you sure you want to clear the entire 0rb1t?
-Type 'yes' to confirm. Any other input will be taken as no._
+_Are you sure you want to clear the entire address book? Type 'yes' to confirm or 'no' to cancel._
 
 `yes`
 
-Expected: The entire 0rb1t will be cleared, and the sidebar will be empty.
+Expected: All contacts will be cleared, and the sidebar will be empty.
 
 ### Deleting Contacts
 
 To delete a contact, type `:delete` followed by the index of the contact you wish to delete. The index of each individual contact can be found at the sidebar.
+A confirmation message will appear. To cancel the command, type `no`.
+For any other input, the confirmation will remain pending. To proceed, type `yes`.
 
-Format: `:delete <INDEX>` + `yes`
+Format: `:delete INDEX` + `yes`
 
 Example:
 
 `:delete 1`
 
-_Are you sure you want to delete this contact?\
+_Are you sure you want to delete this person?\
 \<Contact details\>\
-Type 'yes' to confirm. Any other input will be taken as no._
+Type 'yes' to confirm or 'no' to cancel._
 
 `yes`
 
-Expected: The contact corresponding to the entered index will be deleted from 0rb1t. 0rb1t confirms that the chosen contact has been deleted, and shows the details of the contact deleted.
+Expected: The contact corresponding to the entered index will be deleted from 0rb1t. 
+0rb1t confirms that the chosen contact has been deleted, and the details of the contact deleted are shown in the results box.
 
 ### Editing Contacts
 
@@ -184,16 +266,15 @@ then the field prefixes of the fields you wish to change, and then the new detai
 - Any tags you wish to identify the contact with, typed after `t/`, and each additional tag after the first one separated by `t/`.
 - Any tags you wish to remove from the contact, typed after `dt/`, and each additional tag to be removed separated by `dt/`.
 
-Note: If you wish to leave some fields unchanged, you do not have to include them in the `:edit` command.
+>Note: If you wish to leave some fields unchanged, you do not have to include them in the `:edit` command.
 
-Note: Every prefix must be followed by a non-empty value, except `dt/`. `dt/` without a tag value removes all tags from the 
-contact, while `dt/<tag>` removes only the specified tag(s).
+>Note: Every prefix must be followed by a non-empty value, except `dt/`. `dt/` without a tag value removes all tags from the 
+contact, while `dt/TAG` removes only the specified tag.
 
-Note: Tags added with `t/` are automatically converted to lowercase before being stored.
+Format:
 
-Note: A contact can only have at most 10 tags after the edit is applied.
-
-Format: `:edit <INDEX> [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG] [dt/TAG] ...`
+- `:edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [dt/]`
+- `:edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [dt/TAG]...`    
 
 Examples:
 
@@ -205,7 +286,7 @@ Examples:
 
 `:edit 3 dt/`
 
-Expected: 0rb1t will show the updated details of the contact.
+Expected: 0rb1t will show the updated details of the contact, regardless of whether the edit was successful or not.
 
 ### Exiting 0rb1t
 
@@ -215,23 +296,13 @@ Format: `:exit`
 
 Expected: 0rb1t will close. No goodbye message is shown.
 
-### Accessing Help in 0rb1t
-
-To find help content for using this application, type `:help`.
-
-![helpMessage.png](images/helpMessage.png)
-
-Format: `:help`
-
-Expected: 0rb1t will open a separate help window, showing the link to the User Guide of 0rb1t.
-
 ### Listing Contacts
 
-To list all contacts stored in 0rb1t, type `:list` and all contacts will appear on the sidebar.
+To list all contacts stored in 0rb1t, type `:list` and all contacts will appear in the sidebar. 
+If you want to find contacts based on a particular field, type `:list` followed by the field and the string match.
+All fields except tags use substring matches to filter the list.
 
-Format: `:list [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [s/SORT]...`
-
-Note: Items followed by `...` can be used multiple times (including zero times). Example: `[t/TAG]...` can be used as no tags, `t/friend`, or `t/friend t/family`.
+Format: `:list [n/NAME]... [p/PHONE]... [e/EMAIL]... [a/ADDRESS]... [t/TAG]... [s/SORT]...`
 
 Examples:
 
@@ -247,12 +318,22 @@ If tags are added, all contacts with the relevant tags will be made available in
 
 ![listContactsWithTags.png](images/listContactsWithTags.png)
 
+### Listing Tags
+
+To display all the tags that you have added in 0rb1t, type `:tags` and all the tags you have added will be shown, with each tag separated by a comma.
+
+>Note: Tags are displayed in alphabetical order, and each tag is shown only once even if multiple contacts have the same tag.
+
+Format: `:tags`
+
+Expected: 0rb1t will display all the tags that have been added to 0rb1t.
+
 ### Sorting Contacts
 
-To sort contacts by specific fields, type `:list s/` followed by `+` or `-` for ascending or descending order, then the field prefix (`n` for name, `p` for phone).
-Typing `s/*` ensures starred contacts are always at the top.
+To sort contacts by specific fields, type `:list s/` followed by `+` or `-` for ascending or descending order, then the `FIELD` prefix (`n` for name, `p` for phone).
+Typing `s/*` ensures starred contacts are always at the top. Contacts are always sorted in lexicographical order, based on the field given.
 
-Format: `:list s/<+/- FIELD> [s/<+/- FIELD>]...`
+Format: `:list [s/+FIELD]... [s/-FIELD]... [s/*]...`
 
 Examples:
 
@@ -260,16 +341,16 @@ Examples:
 
 `:list s/* s/-p`
 
-Expected: The list of contacts will be sorted based on the parameter and in the order specified. If s/* was used, starred contacts will be pinned at the top.
+Expected: The list of contacts will be sorted based on the parameter and in the order specified. If `s/*` was used, starred contacts will be pinned at the top.
 
 ### Starring Contacts
 
 To star a contact, type `:star` followed by the index of the contact.
 To unstar, type `:unstar` followed by the index of the contact.
 
-Note: Starred contacts are indicated by a star next to the contact name. They are persisted and stored in the contact's data.
+>Note: Starred contacts are indicated by a star next to the contact name. They are persisted and stored in the contact's data.
 
-Format: `:star <INDEX>` or `:unstar <INDEX>`
+Format: `:star INDEX` or `:unstar INDEX`
 
 Examples:
 
@@ -281,21 +362,11 @@ Expected: The contact at the given index will have a star icon next to their nam
 
 ![starContact.png](images/starContact.png)
 
-### Listing Tags
-
-To display all the tags that you have added in 0rb1t, type `:tags` and all the tags you have added will be shown, with each tag separated by a comma.
-
-Note: Tags are displayed in alphabetical order, and each tag is shown only once even if multiple contacts have the same tag. Tags are stored in lowercase, so entering `Friend` and `friend` results in the same tag: `friend`.
-
-Format: `:tags`
-
-Expected: 0rb1t will display all the tags that have been added to 0rb1t.
-
 ### Undoing a Command
 
 To undo the last command that modified data, type `:undo`. This reverses the effect of the most recent mutating command (e.g., `:add`, `:delete`, `:edit`, `:clear`, `:note`, `:star`, `:unstar`).
 
-Note: Only the most recent mutating command can be undone. You cannot undo more than once in a row, and non-mutating commands like `:list` or `:view` do not count as undoable actions.
+>Note: Only the most recent mutating command can be undone. You cannot undo more than once in a row, and non-mutating commands like `:list` or `:view` do not count as undoable actions.
 
 Format: `:undo`
 
@@ -305,7 +376,7 @@ Expected: 0rb1t will reverse the last mutating command and display a success mes
 
 To view the details of a contact, type `:view` followed by the index of the contact you wish to view.
 
-Format: `:view <INDEX>`
+Format: `:view INDEX`
 
 Examples:
 
@@ -313,7 +384,10 @@ Examples:
 
 `:view 10`
 
-Expected: 0rb1t will state which contact is being shown by stating the name of the contact. The corresponding contact will be highlighted in the sidebar, and the contact details can be viewed in the main window.
+Expected: 0rb1t will state which contact is being shown by stating the name of the contact. 
+The corresponding contact will be highlighted in the sidebar, and the contact details can be viewed in the details panel.
+
+---
 
 ## Storage
 
@@ -323,31 +397,42 @@ All data in 0rb1t is saved to the hard disk automatically after any command that
 
 ### Editing the data file
 
-All data is saved automatically as a JSON file [JAR file location]/data/addressbook.json.
+All data is saved automatically as a JSON file [JAR file directory]/data/addressbook.json.
 Advanced users are welcome to update data directly by editing that data file.
 
-Caution: If your changes to the data file make its format invalid, 0rb1t will discard all data and start with an empty data file at the next run. Hence, it is recommended to take a backup of the file before editing it.
+Caution: If your changes to the data file make its format invalid, 0rb1t will discard all data and start with an empty data file at the next run. Hence, it is recommended to save a backup of the file before editing it.
 Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
+
+---
 
 ## Tips and Examples
 
-- Use `:list n/<NAME>` to narrow down the right contact before any other action to avoid changing/deleting the wrong contact.
+- Use `:list n/NAME` to narrow down the right contact before any other action to avoid changing/deleting the wrong contact.
 
 - Example:
+
 `:list n/adam`
+
 `:edit 1 p/12345678`
+
 `:delete 1`
+
+---
 
 ## Frequently Asked Questions (FAQ)
 
 **Q**: How do I transfer my data to another computer?
 
-**A**: Install the app on the other computer and overwrite the empty data file it creates with the file that contains the data of your previous AddressBook home folder.
+**A**: Install the app on the other computer and overwrite the empty data file it creates with the data file from your previous 0rb1t home folder.
+
+---
 
 ## Known Issues
 
 1. **When using multiple screens**, if you move the application to a secondary screen, and later switch to using only the primary screen, the GUI will open off-screen. The remedy is to delete the `preferences.json` file created by the application before running the application again.
-2. **If you minimise the Help Window** and then run the `help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
+2. **If you minimise the Help Window** and then run the `:help` command (or use the `Help` menu, or the keyboard shortcut `F1`) again, the original Help Window will remain minimised, and no new Help Window will appear. The remedy is to manually restore the minimised Help Window.
+
+---
 
 ## Coming Soon
 
@@ -358,21 +443,23 @@ The following enhancements are planned for future releases:
 - Text autocomplete for commands, tags, and common field prefixes.
 - Batch operations to apply a command to multiple contacts, e.g.`:delete 3 4 8` deletes contacts indexed 3, 4 and 8.
 
+---
+
 ## Command Summary
 
-| Command        | Format                                         | Description                                            | Example                                                                                              |
-|----------------|------------------------------------------------|--------------------------------------------------------|------------------------------------------------------------------------------------------------------|
-| Access History | `UP` or `DOWN`                                 | Navigates to previously used commands.                 | `UP` or `DOWN`                                                                                       |
-| Add Contact    | `:add n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]...` | Adds a contact to 0rb1t.                               | `:add n/John Doe p/98765432 e/johnd@example.com a/311, Clementi Ave 2, #02-25 t/friends t/owesMoney` |
-| Add Note       | `:note <INDEX> note`                           | Adds a note to the contact.                            | `:note 2 This is an important contact.`                                                              |
-| Clear          | `:clear` + `yes`                               | Clears the entire 0rb1t.                               | `:clear`<br/>`...`<br/>`yes`                                                                         |
-| Delete         | `:delete <INDEX>` + `yes`                      | Deletes a contact from 0rb1t.                          | `:delete 2`<br/>`...`<br/>`yes`                                                                      |
-| Edit           | `:edit <INDEX> ...`                            | Edits a contact’s details in 0rb1t.                    | `:edit 3`                                                                                            |
-| Exit           | `:exit`                                        | Exits 0rb1t.                                           | `:exit`                                                                                              |
-| Star           | `:star <INDEX>` or `:unstar <INDEX>`            | Stars/Unstars a contact.                               | `:star 5`<br/>`:unstar 8`                                                                           |
-| Help           | `:help`                                        | Opens the help page.                                   | `:help`                                                                                              |
-| List Contacts  | `:list` or `:list <TAG>`                       | Lists all contacts stored in 0rb1t.                    | `:list`<br/>`:list t/friend`                                                                         |
-| Sorting        | `:list s/<+/- FIELD>`                          | Sorts all contacts based on the field and the order.   | `:list s/+n`                                                                                         |
-| List Tags      | `:tags`                                        | Lists all the tags used in 0rb1t.                      | `:tags`                                                                                              |
-| Undo           | `:undo`                                        | Undoes the last mutating command.                      | `:undo`                                                                                              |
-| View           | `:view <INDEX>`                                | Views a contact’s details in 0rb1t based on the index. | `:view 4`                                                                                            |
+| Command        | Format                                                                                                                                                         | Description                                           | Example                                                                                                                              |
+|----------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------|
+| Access History | `UP` or `DOWN`                                                                                                                                                 | Navigates command history.                            | `UP` or `DOWN`                                                                                                                       |
+| Access Help    | `:help`                                                                                                                                                        | Opens the help window.                                | `:help`                                                                                                                              |
+| Add Contact    | `:add n/NAME p/PHONE e/EMAIL a/ADDRESS [t/TAG]...`                                                                                                             | Adds a contact.                                       | `:add n/John Doe p/98765432 e/johnd@example.com a/John Street, Block 123, #01-01`                                                    |
+| Add Note       | `:note INDEX NOTE`                                                                                                                                             | Adds a note to the contact.                           | `:note 1 This is an important contact.`                                                                                              |
+| Clear          | `:clear` + `yes`                                                                                                                                               | Clears all contacts.                                  | `:clear`<br/> _Are you sure you want to clear the entire address book? Type 'yes' to confirm or 'no' to cancel._ <br/>`yes`          |
+| Delete         | `:delete INDEX` + `yes`                                                                                                                                        | Deletes a contact.                                    | `:delete 2`<br/> _Are you sure you want to delete this person?\<Contact details>Type 'yes' to confirm or 'no' to cancel._ <br/>`yes` |
+| Edit           | `:edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [dt/]`<br/><br/>`:edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [dt/TAG]...` | Edits a contact’s details.                            | `:edit 2`<br/>`:edit 5 p/13572468 t/school t/friend`<br/>`:edit 3 dt/`                                                               |
+| Exit           | `:exit`                                                                                                                                                        | Exits 0rb1t.                                          | `:exit`                                                                                                                              |
+| List Contacts  | `:list [n/NAME]... [p/PHONE]... [e/EMAIL]... [a/ADDRESS]... [t/TAG]... [s/SORT]...`                                                                            | Lists all contacts.                                   | `:list`<br/>`:list t/friends t/colleagues`                                                                                           |
+| List Tags      | `:tags`                                                                                                                                                        | Lists all tags used.                                  | `:tags`                                                                                                                              |
+| Sort           | `:list [s/+FIELD]... [s/-FIELD]... [s/*]...`                                                                                                                   | Sorts all contacts based on the field and the order.  | `:list s/+n`<br/>`:list s/* s/-p`                                                                                                    |
+| Star           | `:star INDEX` or `:unstar INDEX`                                                                                                                               | Stars/Unstars a contact.                              | `:star 5`<br/>`:unstar 8`                                                                                                            |
+| Undo           | `:undo`                                                                                                                                                        | Undoes the last mutating command.                     | `:undo`                                                                                                                              |
+| View           | `:view INDEX`                                                                                                                                                  | Views a contact’s details.                            | `:view 4`                                                                                                                            |
