@@ -51,7 +51,7 @@ Follow these steps to get 0rb1t running on your computer:
 
 1. **Ensure you have Java 17 or above installed.**
     - **Mac users:** Make sure you have the exact JDK version required.
-2. **Download the latest `.jar` file** from [here](https://github.com/AY2526S2-CS2103T-T15-4/tp/releases/tag/v1.6.0).
+2. **Download the latest `.jar` file** from [here](https://github.com/AY2526S2-CS2103T-T15-4/tp/releases/tag/v1.6.1).
 3. **Copy the `.jar` file** to the folder you want to use as the home folder for 0rb1t.
 4. **Open a terminal** and navigate to the folder containing the `.jar` file.
 5. **Run the application** using the following command:
