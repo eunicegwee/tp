@@ -61,7 +61,12 @@ public class LogicManager implements Logic {
                 logger.info("User confirmed pending command.");
                 Supplier<CommandResult> action = pendingConfirmation;
                 pendingConfirmation = null;
-                commandResult = action.get();
+                try {
+                    commandResult = action.get();
+                } catch (RuntimeException e) {
+                    logger.warning("Unexpected error while executing confirmed command: " + e.getMessage());
+                    throw e;
+                }
             } else if (trimmedInput.equals("no")) {
                 logger.info("User cancelled pending command.");
                 pendingConfirmation = null;

@@ -1,5 +1,7 @@
 package seedu.address.model.person;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -12,6 +14,7 @@ public class TagContainsKeywordPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
     public TagContainsKeywordPredicate(List<String> keywords) {
+        requireNonNull(keywords);
         this.keywords = keywords;
     }
 
