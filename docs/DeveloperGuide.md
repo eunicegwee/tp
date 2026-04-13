@@ -9,19 +9,25 @@
 <!-- * Table of Contents -->
 <page-nav-print />
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Acknowledgements**
 
-* This project is based on the [AddressBook-Level3 (AB3)](https://se-education.org/addressbook-level3/) project created by the [SE-EDU initiative](https://se-education.org/).
+- The overall project structure and parts of the original codebase were adapted from [AddressBook-Level3](https://github.com/se-edu/addressbook-level3).
+- The structure of this developer guide was adapted from the [AddressBook-Level4 Developer Guide](https://se-education.org/addressbook-level4/DeveloperGuide.html).
+- The team also used AI-assisted development tools during the project:
+  - Eunice used Copilot to assist with code writing, especially for writing test cases.
+  - Jaeden used Codex to update `DarkTheme.css` for UI improvements and to brainstorm additional tests from written test cases, and used Copilot autocomplete to assist with code writing.
+  - Kavish used Codex to add more extensive test cases and polish the developer guide, and used Copilot autocomplete to assist with code writing.
+  - Harron used ChatGPT to assist with merge conflicts.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Setting up, getting started**
 
 Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Design**
 
@@ -29,134 +35,271 @@ Refer to the guide [_Setting up and getting started_](SettingUp.md).
 
 <puml src="diagrams/ArchitectureDiagram.puml" width="280" />
 
-The ***Architecture Diagram*** given above explains the high-level design of the App.
+The _Architecture Diagram_ above shows the high-level structure of 0rb1t.
 
-Given below is a quick overview of main components and how they interact with each other.
+0rb1t follows the same broad component split as AB3:
 
-**Main components of the architecture**
+- [**`UI`**](#ui-component): Renders the interface and reacts to user interaction.
+- [**`Logic`**](#logic-component): Parses and executes colon-prefixed commands.
+- [**`Model`**](#model-component): Holds in-memory contact data, query state, and other derived state.
+- [**`Storage`**](#storage-component): Reads and writes application data to disk.
+- [**`Commons`**](#common-classes): Shared utilities used across components.
 
-**`Main`** (consisting of classes [`Main`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/Main.java) and [`MainApp`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/MainApp.java)) is in charge of the app launch and shut down.
-* At app launch, it initializes the other components in the correct sequence, and connects them up with each other.
-* At shut down, it shuts down the other components and invokes cleanup methods where necessary.
+`MainApp` initializes these components in startup order. It loads configuration and preferences, constructs
+`StorageManager`, `ModelManager`, `LogicManager`, and `UiManager`, and starts the JavaFX application.
 
-The bulk of the app's work is done by the following four components:
+Unlike a plain CRUD address book, 0rb1t also has a few architectural behaviors worth calling out up front:
 
-* [**`UI`**](#ui-component): The UI of the App.
-* [**`Logic`**](#logic-component): The command executor.
-* [**`Model`**](#model-component): Holds the data of the App in memory.
-* [**`Storage`**](#storage-component): Reads data from, and writes data to, the hard disk.
+- command handling is fully colon-driven through `AddressBookParser`
+- destructive commands such as `:delete` and `:clear` use a logic-level confirmation mechanism
+- the model owns both base data and derived/query state, including a `TagsRegistry`, a filtered list, a sorted list,
+  and a single stored undo action
+- the UI uses a master-detail layout, where the list panel and details panel stay synchronized through selection and
+  command results
 
-[**`Commons`**](#common-classes) represents a collection of classes used by multiple other components.
-
-**How the architecture components interact with each other**
-
-The *Sequence Diagram* below shows how the components interact with each other for the scenario where the user issues the command `:delete 1`.
+The following sequence diagram shows a representative command flow for `:delete 1`.
 
 <puml src="diagrams/ArchitectureSequenceDiagram.puml" width="574" />
 
-Each of the four main components (also shown in the diagram above),
+At a high level, the interaction works as follows:
 
-* defines its *API* in an `interface` with the same name as the Component.
-* implements its functionality using a concrete `{Component Name}Manager` class (which follows the corresponding API `interface` mentioned in the previous point.
+1. The user enters a command into the UI.
+1. `LogicManager` passes the text to `AddressBookParser`, which returns the matching `Command`.
+1. The command executes against `Model`.
+1. If the command requires confirmation, the first execution returns a `CommandResult` containing a deferred action
+   instead of mutating immediately.
+1. `LogicManager` executes that deferred action only when the next user input is `yes`.
+1. After successful execution, `Storage` persists the updated address book and the UI updates based on the returned
+   `CommandResult`.
 
-For example, the `Logic` component defines its API in the `Logic.java` interface and implements its functionality using the `LogicManager.java` class which follows the `Logic` interface. Other components interact with a given component through its interface rather than the concrete class (reason: to prevent outside component's being coupled to the implementation of a component), as illustrated in the (partial) class diagram below.
+This separation keeps responsibilities clear:
+
+- `UI` is responsible for presentation and user interaction.
+- `Logic` is responsible for parsing, command dispatch, and confirmation workflow.
+- `Model` is responsible for data mutation, query state, and derived state such as tags and undo.
+- `Storage` is responsible for persistence only.
+
+Each main component defines an interface and is implemented by a corresponding manager class.
+This reduces coupling between components and keeps the concrete implementation behind a small API surface.
 
 <puml src="diagrams/ComponentManagers.puml" width="300" />
 
-The sections below give more details of each component.
+The next few sections describe each component in more detail.
 
 ### UI component
 
-The **API** of this component is specified in [`Ui.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/Ui.java)
-
 <puml src="diagrams/UiClassDiagram.puml" alt="Structure of the UI Component"/>
 
-The UI consists of a `MainWindow` that is made up of parts e.g.`CommandBox`, `ResultDisplay`, `PersonListPanel`, `StatusBarFooter` etc. All these, including the `MainWindow`, inherit from the abstract `UiPart` class which captures the commonalities between classes that represent parts of the visible GUI.
+The `UI` component is responsible for rendering the application and forwarding user input to `Logic`.
+Its top-level container is `MainWindow`, which assembles the main visible parts of the application:
 
-The `UI` component uses the JavaFx UI framework. The layout of these UI parts are defined in matching `.fxml` files that are in the `src/main/resources/view` folder. For example, the layout of the [`MainWindow`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/ui/MainWindow.java) is specified in [`MainWindow.fxml`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/resources/view/MainWindow.fxml)
+- `CommandBox`, where users enter colon-prefixed commands
+- `ResultDisplay`, which shows command feedback and error messages
+- `PersonListPanel`, which displays the current filtered and sorted list of contacts
+- `PersonDetailsPanel`, which shows the full details of the currently selected contact
+- `StatusBarFooter`, which displays the address book file path
 
-The `UI` component,
+The UI uses JavaFX, and each major UI part is backed by a matching `.fxml` file in `src/main/resources/view`.
 
-* executes user commands using the `Logic` component.
-* listens for changes to `Model` data so that the UI can be updated with the modified data.
-* keeps a reference to the `Logic` component, because the `UI` relies on the `Logic` to execute commands.
-* depends on some classes in the `Model` component, as it displays `Person` object residing in the `Model`.
+0rb1t uses a master-detail layout. `PersonListPanel` owns the current selection in the list view, while
+`PersonDetailsPanel` renders the selected contact's full information. This means the details panel can be updated in
+two ways:
+
+- when the user changes the selected contact in the list
+- when a command returns a `CommandResult` containing a `Person` to focus, such as `:view`, `:star`, or `:unstar`
+
+This behavior is coordinated in two places:
+
+- `PersonListPanel` listens to list selection changes and updates `PersonDetailsPanel`
+- `MainWindow` handles `CommandResult` values after command execution and selects the returned contact in the list
+
+The list panel also maintains a sensible default selection policy:
+
+- if the list is non-empty on startup, the first contact is selected
+- if the displayed list becomes empty, the details panel is cleared
+- if a contact is added and no selection exists, the newly added contact is selected
+
+As a result, the UI stays synchronized with both user-driven navigation and command-driven state changes without
+embedding business logic in the UI layer.
 
 ### Logic component
 
-**API** : [`Logic.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/logic/Logic.java)
-
-Here's a (partial) class diagram of the `Logic` component:
-
 <puml src="diagrams/LogicClassDiagram.puml" width="550"/>
 
-The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute(":delete 1")` API call as an example.
+The `Logic` component is responsible for turning raw user input into executable commands and returning
+`CommandResult` objects to the UI.
 
-<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
+The main entry point is `LogicManager`. When the UI submits a command string, `LogicManager`:
 
-<box type="info" seamless>
+1. receives the raw command text
+2. parses it through `AddressBookParser`
+3. executes the resulting `Command`
+4. persists the updated address book through `Storage`
+5. returns a `CommandResult` to the UI
 
-**Note:** The lifeline for `DeleteCommandParser` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline continues till the end of diagram.
-</box>
+Unlike the original AB3 flow, command parsing in 0rb1t is fully colon-based. All commands must begin with `:`,
+for example `:add`, `:list`, or `:delete`.
 
-How the `Logic` component works:
+`AddressBookParser` performs the first-stage split between command word and arguments, validates that the command
+starts with `:`, and dispatches to a command-specific parser where needed.
 
-1. When `Logic` is called upon to execute a command, it is passed to an `AddressBookParser` object which in turn creates a parser that matches the command (e.g., `DeleteCommandParser`) and uses it to parse the command.
-1. This results in a `Command` object (more precisely, an object of one of its subclasses e.g., `DeleteCommand`) which is executed by the `LogicManager`.
-1. The command can communicate with the `Model` when it is executed (e.g. to delete a person).<br>
-   Note that although this is shown as a single step in the diagram above (for simplicity), in the code it can take several interactions (between the command object and the `Model`) to achieve.
-1. The result of the command execution is encapsulated as a `CommandResult` object which is returned back from `Logic`.
+The sequence diagram below illustrates the interactions inside the `Logic` component using `:delete 1` as an example.
 
-Here are the other classes in `Logic` (omitted from the class diagram above) that are used for parsing a user command:
+<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `:delete 1` Command" />
 
-<puml src="diagrams/ParserClasses.puml" width="600"/>
+`CommandResult` is the contract between `Logic` and `UI`. Besides feedback text, it can also carry extra information
+that affects UI or workflow behavior:
 
-How the parsing works:
-* When called upon to parse a user command, the `AddressBookParser` class creates an `XYZCommandParser` (`XYZ` is a placeholder for the specific command name e.g., `AddCommandParser`) which uses the other classes shown above to parse the user command and create a `XYZCommand` object (e.g., `AddCommand`) which the `AddressBookParser` returns back as a `Command` object.
-* All `XYZCommandParser` classes (e.g., `AddCommandParser`, `DeleteCommandParser`, ...) inherit from the `Parser` interface so that they can be treated similarly where possible e.g, during testing.
+- whether the help window should be shown
+- whether the application should exit
+- whether a confirmation is pending
+- which `Person` should be focused in the UI
+
+One of the most important logic-level customizations in 0rb1t is its confirmation flow for destructive commands.
+`LogicManager` owns a pending confirmation callback. Commands such as `:delete` and `:clear` return a
+`CommandResult` containing a deferred action instead of mutating the model immediately.
+
+While a confirmation is pending:
+
+- `yes` executes the stored action
+- `no` cancels it
+- any other input keeps confirmation pending and reminds the user that confirmation is required
+
+This design keeps confirmation handling centralized in `LogicManager` rather than spreading the workflow across
+multiple UI classes or individual commands.
+
+The parser subsystem contains one parser per command where argument parsing is non-trivial, such as
+`AddCommandParser`, `EditCommandParser`, `ListCommandParser`, and `NoteCommandParser`.
+These classes implement the shared `Parser` interface so they can be handled consistently in tests and in the parser
+dispatch flow.
 
 ### Model component
-**API** : [`Model.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/model/Model.java)
 
 <puml src="diagrams/ModelClassDiagram.puml" width="450" />
 
+The `Model` component holds the application's in-memory state.
 
-The `Model` component,
+At its core, `ModelManager` owns the `AddressBook`, which stores the current set of `Person` objects.
+However, the model in 0rb1t also owns several kinds of derived or query-related state that are important to the
+product's behavior:
 
-* stores the address book data i.e., all `Person` objects (which are contained in a `UniquePersonList` object).
-* stores the currently 'selected' `Person` objects (e.g., results of a search query) as a separate _filtered_ list which is exposed to outsiders as an unmodifiable `ObservableList<Person>` that can be 'observed' e.g. the UI can be bound to this list so that the UI automatically updates when the data in the list change.
-* stores a `UserPref` object that represents the user’s preferences. This is exposed to the outside as a `ReadOnlyUserPref` objects.
-* does not depend on any of the other three components (as the `Model` represents data entities of the domain, they should make sense on their own without depending on other components)
+- a `FilteredList<Person>` representing the currently visible subset of contacts
+- a `SortedList<Person>` layered on top of the filtered list to support ordering
+- a derived `TagsRegistry` that tracks all tags currently in use
+- a single stored undo callback for reversing the most recent mutating command
 
-<box type="info" seamless>
+As a result, the model does more than store raw data. It also owns the current query state and some lightweight
+workflow state.
 
-**Note:** An alternative (arguably, a more OOP) model is given below. It has a `Tag` list in the `AddressBook`, which `Person` references. This allows `AddressBook` to only require one `Tag` object per unique tag, instead of each `Person` needing their own `Tag` objects.<br>
+The `Person` model has also been extended beyond the original AB3 shape. A `Person` in 0rb1t contains:
 
-<puml src="diagrams/BetterModelClassDiagram.puml" width="450" />
+- identity fields such as name, phone, and email
+- address data
+- a set of tags
+- a `NoteList`
+- a starred flag
 
-</box>
+The filtered and sorted person lists are exposed to the rest of the application as observable views.
+This allows the UI to react automatically when the visible set of contacts changes due to filtering, sorting,
+addition, deletion, or editing.
 
+`TagsRegistry` is an example of derived model state. It is not the source of truth for tags; instead, it is rebuilt
+from the address book on startup and maintained incrementally as persons are added, deleted, or edited.
+This makes it efficient to support commands such as `:tags` without rescanning the full address book each time.
+
+Unlike `UI`, `Logic`, and `Storage`, the `Model` does not depend on the other main components.
+It remains the central owner of domain data and related in-memory state.
 
 ### Storage component
 
-**API** : [`Storage.java`](https://github.com/se-edu/addressbook-level3/tree/master/src/main/java/seedu/address/storage/Storage.java)
-
 <puml src="diagrams/StorageClassDiagram.puml" width="550" />
 
-The `Storage` component,
-* can save both address book data and user preference data in JSON format, and read them back into corresponding objects.
-* inherits from both `AddressBookStorage` and `UserPrefStorage`, which means it can be treated as either one (if only the functionality of only one is needed).
-* depends on some classes in the `Model` component (because the `Storage` component's job is to save/retrieve objects that belong to the `Model`)
+The `Storage` component is responsible for persistence.
+
+`StorageManager` coordinates two storage concerns:
+
+- address book data, through `AddressBookStorage`
+- user preferences, through `UserPrefsStorage`
+
+The current implementation uses JSON-backed storage classes. Address book data is stored through
+`JsonAddressBookStorage`, while user preferences are stored through `JsonUserPrefsStorage`.
+
+Person persistence has been extended to support 0rb1t-specific fields. `JsonAdaptedPerson` stores and restores:
+
+- name
+- phone
+- email
+- address
+- tags
+- notes
+- starred state
+
+This means features such as notes and favourite contacts survive application restarts without needing separate storage
+mechanisms.
+
+Not all model state is persisted directly. In particular, `TagsRegistry` is not saved as its own structure.
+Instead, it is reconstructed from the persisted list of persons during model initialization.
+This keeps the persisted format simpler and avoids storing redundant derived data.
+
+The `Storage` component depends on parts of the model because its job is to serialize and deserialize model objects,
+but it does not contain business logic for command execution or query behavior.
 
 ### Common classes
 
-Classes used by multiple components are in the `seedu.address.commons` package.
+Classes shared across multiple components are kept in the `seedu.address.commons` package.
 
---------------------------------------------------------------------------------------------------------------------
+These include utility classes, configuration support, logging support, and general-purpose helpers used by the rest of
+the application. Keeping them in a separate package prevents unrelated cross-component dependencies from accumulating in
+the main feature packages.
+
+---
 
 ## **Implementation**
 
-This section describes some noteworthy details on how certain features are implemented.
+This section describes noteworthy implementation details of features and workflows that are important to understanding
+or extending the codebase.
+
+### Confirmation flow
+
+0rb1t uses an explicit confirmation workflow for destructive commands such as `:delete` and `:clear`.
+Instead of mutating the model immediately, these commands first return a preview or warning message and wait for a
+follow-up confirmation input.
+
+This behavior is implemented centrally in `LogicManager`, which stores at most one pending confirmation action as a
+`Supplier<CommandResult>`.
+
+#### How it works
+
+When a destructive command is executed, the command does not perform the mutation immediately.
+Instead, it returns a `CommandResult` containing:
+
+- feedback text to show the user
+- a deferred confirmation action that performs the actual mutation
+
+`LogicManager` inspects the returned `CommandResult`. If a confirmation action is present, it stores that action and
+enters a pending-confirmation state.
+
+While that state is active:
+
+- `yes` executes the stored action
+- `no` cancels the stored action
+- any other input leaves the confirmation pending and returns a reminder message
+
+Only after a confirmed action runs does the model actually change and the updated state get persisted.
+
+#### Example: `:delete`
+
+When the user runs `:delete 1`, the flow is:
+
+1. `AddressBookParser` parses the command and returns a `DeleteCommand`.
+1. `DeleteCommand` validates the index and prepares a preview of the target person.
+1. `DeleteCommand` returns a `CommandResult` containing a deferred action instead of deleting immediately.
+1. `LogicManager` stores the deferred action as the current pending confirmation.
+1. If the next user input is `yes`, `LogicManager` runs the stored action, which deletes the person, updates tags,
+   stores the undo action, and returns a success result.
+
+This design keeps confirmation logic out of the UI layer and avoids duplicating the same yes/no handling across
+multiple command classes.
 
 ### Tags Management
 
@@ -170,19 +313,19 @@ As a result, the `:tags` command can list all active tags directly without scann
 
 The class diagram above focuses on the model-side structure behind tag management.
 
-* `ModelManager` owns both the `AddressBook` and the `TagsRegistry`.
-* `TagsRegistry` stores tag usage counts as `Map<Tag, Integer>`, so it can remove a tag only when the last person using it no longer has that tag.
-* Commands interact with tag management through the `Model` API, which keeps the tag-maintenance logic centralized in the model layer.
-* Read-only access such as `:tags` is handled through `Model#getFormattedTags()`.
+- `ModelManager` owns both the `AddressBook` and the `TagsRegistry`.
+- `TagsRegistry` stores tag usage counts as `Map<Tag, Integer>`, so it can remove a tag only when the last person using that tag no longer has that tag.
+- Commands interact with tag management through the `Model` API, which keeps the tag-maintenance logic centralized in the model layer.
+- Read-only access such as `:tags` is handled through `Model#getFormattedTags()`.
 
 #### Command-Level Tag Updates
 
 The registry is updated by the following command flows:
 
-* `:add` adds the person into the address book, then adds that person's tags into the registry.
-* `:delete` removes the person and decrements tag counts for that person's tags after confirmation.
-* `:edit` computes the edited tag set by starting from the current tags, removing any `dt/` tags, and then adding any `t/` tags.
-* `:clear` resets the address book and clears the registry entirely.
+- `:add` adds the person into the address book, then adds that person's tags into the registry.
+- `:delete` removes the person and decrements tag counts for that person's tags after confirmation.
+- `:edit` computes the edited tag set by starting from the current tags, removing any `dt/` tags, and then adding any `t/` tags.
+- `:clear` resets the address book and clears the registry entirely.
 
 #### Tag Edit Sequence
 
@@ -204,100 +347,94 @@ This design keeps the `TagsRegistry` consistent with the address book while avoi
 
 #### Implementation
 
-The undo mechanism uses a callback-based approach. Each mutating command stores a `Runnable` in the `Model` that reverses its effect. The `Model` interface exposes three methods for this:
+0rb1t supports single-level undo for the most recent mutating command.
 
-* `Model#setUndoAction(Runnable)` — Stores the undo action.
-* `Model#getUndoAction()` — Retrieves the stored undo action (or `null` if none exists).
-* `Model#clearUndoAction()` — Clears the undo action after it has been executed.
+The undo mechanism uses a callback-based approach. Instead of storing full snapshots after every mutation, each
+mutating command stores a `Runnable` in the `Model` that reverses its own effect.
 
-Only **one** undo action is stored at a time. When a new mutating command executes, it overwrites the previous undo action. This means only the most recent mutating command can be undone.
+The `Model` interface exposes three methods for this:
 
-Given below is an example usage scenario and how the undo mechanism behaves at each step.
+- `Model#setUndoAction(Runnable)` stores the undo action
+- `Model#getUndoAction()` retrieves the stored undo action, or `null` if none exists
+- `Model#clearUndoAction()` clears the stored undo action after it has been used
 
-Step 1. The user launches the application for the first time. No commands have been executed yet, so `undoAction` is `null`.
+Only one undo action is stored at a time. When a new mutating command succeeds, it overwrites the previous undo
+action. As a result, only the most recent successful mutating command can be undone.
 
-<puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
+Typical examples include:
 
-Step 2. The user executes `:delete 5` to delete the 5th person in the address book. After the user confirms with `yes`, the `DeleteCommand` stores an undo action that re-adds the deleted person and their tags.
+- `:add` stores an undo action that deletes the newly added person
+- confirmed `:delete` stores an undo action that re-adds the deleted person and restores their tags
+- `:edit` stores an undo action that restores the original person and updates tag state accordingly
+- `:note`, `:star`, and `:unstar` store undo actions that restore the previous `Person`
+- confirmed `:clear` stores an undo action that restores the saved `AddressBook`
 
-<puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
+When the user executes `:undo`, `UndoCommand` retrieves the stored undo action from the model, runs it, and then
+clears it. If no undo action is available, `:undo` fails with an error message instead of attempting to run a
+non-existent action.
 
-Step 3. The user executes `:add n/David …` to add a new person. The `AddCommand` stores an undo action that deletes David, **overwriting** the previous undo action from the delete.
-
-<puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
-
-<box type="info" seamless>
-
-**Note:** If a command fails its execution, it will not call `Model#setUndoAction()`, so the undo action remains unchanged.
-
-</box>
-
-Step 4. The user decides that adding David was a mistake and executes `:undo`. The `UndoCommand` retrieves the stored undo action, runs it (which deletes David), and then clears the undo action.
-
-<puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
-
-<box type="info" seamless>
-
-**Note:** If `undoAction` is `null`, there is nothing to undo. The `:undo` command checks for this and returns an error to the user rather than attempting to execute a null action.
-
-</box>
+Commands that do not mutate application state, such as `:list` or `:view`, do not replace the stored undo action.
 
 The following sequence diagram shows how an undo operation goes through the `Logic` component:
 
 <puml src="diagrams/UndoSequenceDiagram-Logic.puml" alt="UndoSequenceDiagram-Logic" />
 
-<box type="info" seamless>
-
-**Note:** The lifeline for `UndoCommand` should end at the destroy marker (X) but due to a limitation of PlantUML, the lifeline reaches the end of diagram.
-
-</box>
-
-The following sequence diagram shows how a mutating command (using `AddCommand` as an example) sets up its undo action during execution:
+The following sequence diagram shows how a mutating command sets up its undo action during execution:
 
 <puml src="diagrams/UndoSequenceDiagram-Model.puml" alt="UndoSequenceDiagram-Model" />
 
-Step 5. The user then executes the command `:list`. Commands that do not modify data, such as `:list`, do not call `Model#setUndoAction()`. Thus, the undo action remains unchanged (in this case, `null`).
+#### Design considerations
 
-<puml src="diagrams/UndoRedoState4.puml" alt="UndoRedoState4" />
+**Aspect: How undo executes**
 
-Step 6. The user executes `:clear` and confirms with `yes`. The `ClearCommand` saves a snapshot of the current `AddressBook` before clearing it, and stores an undo action that restores the saved snapshot.
+- **Alternative 1:** Store full snapshots of the address book after each mutation.
+  - Pros: Simpler conceptual model and easier support for multi-level undo/redo.
+  - Cons: Higher memory cost and more copying work on each mutating command.
+- **Alternative 2 (current choice):** Store a command-specific callback that reverses the last mutation.
+  - Pros: Lower memory usage and no need to snapshot the full model for every mutating command. The same callback-based
+    design can also be extended in the future to support multiple undo levels without requiring a full history of model snapshots.
+  - Cons: Each mutating command must implement its own reversal logic, and the design supports only single-level undo.
 
-<puml src="diagrams/UndoRedoState5.puml" alt="UndoRedoState5" />
+### List filtering and sorting
 
-<box type="info" seamless>
+`:list` serves as the main query command for contacts.
+It supports filtering by tag, email, phone, address, and name, and it can also apply sorting.
 
-**Note:** Unlike commands such as `:delete` and `:add` which capture individual persons, the `:clear` command captures the entire `AddressBook` since it needs to restore all contacts.
+Filtering behavior is implemented through `ListCommandPredicate`:
 
-</box>
+- repeated values of the same prefix use OR logic
+- different prefix groups combine with AND logic
 
-The following activity diagram summarizes what happens when a user executes a new command:
+Sorting behavior is implemented through `PersonComparator`, which supports multiple sort criteria.
+The current sort fields are name, phone, and starred state.
 
-<puml src="diagrams/CommitActivityDiagram.puml" width="250" />
+The model applies these behaviors through a `FilteredList<Person>` wrapped by a `SortedList<Person>`.
+This keeps query behavior in the model layer and allows the UI to react automatically to changes in the visible list.
 
-#### Design considerations:
+The `s/*` sort is handled specially: it is always moved to the front of the sort criteria so starred contacts remain
+pinned above non-starred contacts.
 
-**Aspect: How undo executes:**
+---
 
-* **Alternative 1:** Saves the entire address book (snapshot-based using a `VersionedAddressBook`).
-  * Pros: Easy to implement. Supports multi-level undo/redo.
-  * Cons: May have performance issues in terms of memory usage.
+## **Documentation**
 
-* **Alternative 2 (current choice):** Each command stores a callback that reverses its own effect.
-  * Pros: Uses less memory (e.g. for `:delete`, only the deleted person is captured, not the entire address book). Faster execution since no deep copying is needed on every command.
-  * Cons: Each command must correctly implement its own reversal logic. Only supports single-level undo.
+- [User Guide](UserGuide.md)
+- [Setting up and getting started](SettingUp.md)
+- [Logging guide](Logging.md)
 
+---
 
---------------------------------------------------------------------------------------------------------------------
+## **Testing**
 
-## **Documentation, logging, testing, configuration, dev-ops**
+- [Testing guide](Testing.md)
 
-* [Documentation guide](Documentation.md)
-* [Testing guide](Testing.md)
-* [Logging guide](Logging.md)
-* [Configuration guide](Configuration.md)
-* [DevOps guide](DevOps.md)
+---
 
---------------------------------------------------------------------------------------------------------------------
+## **Dev Ops**
+
+- [DevOps guide](DevOps.md)
+
+---
 
 ## **Appendix: Requirements**
 
@@ -305,308 +442,402 @@ The following activity diagram summarizes what happens when a user executes a ne
 
 **Target user profile**:
 
-* Developers who prefer keyboard-driven workflows
+Developers who:
 
-**Value proposition**: Vim-ify the experience for developers who are more used to the Vim interface — provide a keyboard-first, modal interaction model that lets developers navigate and edit contacts without leaving the keyboard so they feel comfortable and at home.
+- manage a moderate to large number of contacts
+- prefer keyboard-driven workflows over mouse-heavy interaction
+- can type quickly
+- are comfortable using command-based desktop applications
+- want fast access to contact details, tags, and lightweight notes
+- often need to organize contacts by role, project, or context
 
+**Value proposition**: Vim-ify the experience for developers who are more used to the Vim interface — provide a keyboard-first interaction model that lets developers navigate and edit contacts without leaving the keyboard so they feel comfortable and at home.
 
 ### User stories
 
-| ID   | Priority | As a …​                                    | I want to …​                 | So that I can…​                                                        |
-|------|----------|--------------------------------------------|------------------------------|------------------------------------------------------------------------|
-| US-01 | Medium   | new user                                   | see sample contacts when I first launch the app | I understand how entries are structured                 |
-| US-02 | Medium   | new user                                   | access a help guide         | I know what commands are available                 |
-| US-03 | High     | new user                                   | add a contact with name, phone number, and email | I can store basic information             |
-| US-04 | Medium   | new user                                   | assign tags when adding a contact | I can categorize people immediately           |
-| US-05 | Medium   | new user                                   | visually distinguish fields (e.g., name, phone, email, tags) using different colours | visually distinguish fields (e.g., name, phone, email, tags) using different colours |
-| US-06 | High     | user                                       | list all contacts           | I can review everyone I've added                 |
-| US-07 | High     | user                                       | search by name             | I can quickly find someone's contact details                 |
-| US-08 | Medium   | user with multiple contacts sharing the same name | see additional identifiers (e.g., tags or email preview) in search results | I can differentiate them easily                 |
-| US-09 | Medium   | user                                       | search using both name and tag together | I can narrow down results more precisely                 |
-| US-10 | High     | user                                       | rely on consistent UI behaviour | the app feels predictable and efficient                 |
-| US-11 | Medium   | user                                       | filter contacts by tag     | I can view only people in a specific role or project                 |
-| US-12 | High     | user                                       | view full details of a selected contact | I can verify I have the correct person                 |
-| US-13 | Medium   | user                                       | sort search results meaningfully | similar names do not confuse me                 |
-| US-14 | Medium   | user                                       | mark certain contacts as favorites | I can access frequently contacted people faster                 |
-| US-15 | Medium   | user                                       | add tags to an existing contact | I can update their roles over time                 |
-| US-16 | High     | user                                       | edit a specific tag without deleting other tags | I do not accidentally lose information                 |
-| US-17 | Medium   | user                                       | remove a single tag from a contact | I can keep tags accurate                 |
-| US-18 | Medium   | user                                       | view all existing tags in the system | I know what categories I have created                 |
-| US-19 | High     | user                                       | avoid accidental deletion of all tags when editing one tag | my data remains intact                 |
-| US-20 | High     | user                                       | edit a contact's details   | I can update outdated information                 |
-| US-21 | High     | user                                       | preview the contact before confirming deletion | I avoid mistakes                 |
-| US-22 [Proposed] | Medium   | user                            | undo my last action        | I can recover from accidental deletions                 |
-| US-23 | High     | user                                       | receive confirmation before clearing the entire list | I do not lose data impulsively                 |
-| US-24 | Medium   | user with over 100 contacts                | rely on powerful search instead of scrolling | I can find people efficiently                 |
-| US-25 | Medium   | user                                       | use the app for both professional and personal contacts | everything is centralized                 |
-| US-26 | Medium   | user                                       | tag contacts as "family" or "friends" | I can separate them logically                 |
-| US-27 | Low      | user                                       | search by location (e.g., 'Bishan') | I can find someone nearby                 |
-| US-28 | Medium   | user                                       | store address information   | I can plan gatherings easily                 |
-| US-29 | High     | user                                       | quickly retrieve a phone number | I can call someone immediately                 |
-| US-30 | High     | user                                       | quickly retrieve an email address | I can send messages efficiently                 |
-| US-31 | Medium   | frequent user                              | use keyboard shortcuts     | I can work faster                 |
-| US-32 | Medium   | frequent user                              | search partial matches     | I do not need exact spelling                 |
-| US-33 | Medium   | user                                       | tag contacts by the programming language they use | I can search for a person who knows a specific language (e.g. Java) immediately |
+Priorities: High (must have) - `***`, Medium (nice to have) - `**`, Low (unlikely to have) - `*`
+
+| Priority | As a ...                                                | I want to ...                                                  | So that I can...                                             |
+| -------- | ------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ |
+| `***`    | new developer user                                      | see sample contacts when I first launch the app                | understand how entries are structured                        |
+| `***`    | new developer user                                      | access a help guide                                            | refer to command usage when I forget the syntax              |
+| `***`    | developer                                               | add a contact with a name, phone number, email, and address    | store essential contact details                              |
+| `***`    | developer                                               | list all contacts                                              | review everyone I have added                                 |
+| `***`    | developer                                               | search for contacts by name                                    | find someone without scanning the whole list                 |
+| `***`    | developer                                               | select a contact                                               | view the full details of a contact                           |
+| `***`    | developer                                               | edit a contact's details                                       | keep information up to date                                  |
+| `***`    | developer                                               | preview a contact and receive confirmation before deleting them | avoid deleting the wrong person                              |
+| `***`    | developer                                               | receive confirmation before clearing the entire list           | avoid accidental mass deletion                               |
+| `***`    | developer                                               | undo my last mutating action                                   | recover from mistakes quickly                                |
+| `***`    | developer                                               | retrieve a phone number quickly                                | call someone immediately                                     |
+| `***`    | developer                                               | retrieve an email address quickly                              | message someone immediately                                  |
+| `***`    | developer                                               | retrieve an address quickly                                    | visit someone immediately                                    |
+| `**`     | developer organizing contacts by role or project        | assign tags when adding a contact                              | categorize contacts immediately                              |
+| `**`     | developer organizing contacts by role or project        | filter contacts by tag                                         | focus on a relevant group of contacts                        |
+| `**`     | developer with many contacts                            | search using multiple filters                                  | narrow down results more precisely                           |
+| `**`     | developer with many contacts                            | sort contacts meaningfully                                     | find contacts faster                                         |
+| `**`     | developer maintaining a shortlist of important contacts | mark certain contacts as favourites                            | access frequently used contacts more quickly                 |
+| `**`     | developer organizing contacts by role or project        | add tags to an existing contact without overwriting the others | update roles over time without losing information            |
+| `**`     | developer organizing contacts by role or project        | remove specific tags from a contact                            | keep tag data accurate                                       |
+| `**`     | developer organizing contacts by role or project        | view all tags currently in use                                 | understand how my contacts are organized                     |
 
 ### Use cases
 
-#### Use Case 1: Updating a Contact's Role/Tag
+For all use cases below, the **System** is 0rb1t and the **Actor** is the user, unless specified otherwise.
 
-**Goal:** A developer needs to update a contact's role/tag in the system for a new project. They need a way to easily find and modify the correct contact entry.
+#### Use case: Add contact
 
-| Step | Action | Outcome/System Response | Corresponding User Story (Reference) |
-|------|--------|-------------------------|--------------------------------------|
-| 1 | Developer searches for the contact by name: `:list n/Alice` | The Contact List Panel displays multiple entries for "Alice" along with their distinguishing tags and emails. | US-07 (Search by name), US-09 (Additional identifiers in search) |
-| 2 | Developer reviews the list and uses the index to select the correct "Alice": `:view 3` | The Browser Panel displays the full details for Alice (index 3). | US-13 (View full details) |
-| 3 | Developer executes the edit command to add a new tag for the project: `:edit 3 t/new-project` | The system updates the contact. Message displayed: `Updated contact: Alice. New tag 'new-project' added.` | US-16 (Add tags to an existing contact), US-22 (Edit contact details) |
-| 4 | Developer views the list to confirm the change: `:list` | The Contact List Panel shows Alice (index 3) with the new tag displayed. | US-06 (List all contacts) |
+**MSS**
 
+1. User requests to add a contact with valid details.
+2. 0rb1t adds the contact.
+3. 0rb1t shows the updated contact list.
 
-#### Use Case 2: Safely Deleting an Outdated Contact
+   Use case ends.
 
-**Goal:** A developer needs to safely delete an outdated contact entry while ensuring they don't accidentally remove the wrong person or lose valuable data.
+**Extensions**
 
-| Step | Action | Outcome/System Response | Corresponding User Story (Reference) |
-|------|--------|-------------------------|--------------------------------------|
-| 1 | Developer issues the delete command using the currently displayed index: `:delete 7` | The Result Display shows a preview and asks for confirmation. Message includes: `Are you sure you want to delete this person? ... Type 'yes' to confirm.` | US-21 (Preview contact before deletion) |
-| 2 | Developer verifies the preview details (Name, Phone) are correct for Kai Jie. | N/A (verification step) | US-12 (View full details, implicitly used for verification) |
-| 3 | Developer confirms the deletion by typing: `yes` | The contact is removed from the list. A deletion success message is shown, and the Contact List Panel updates. | US-21 (Preview/Safer deletion) |
-| 4 | [Proposed] Developer immediately realizes they deleted the wrong person and attempts to recover: `:undo` | [Proposed] The system restores the deleted contact. | US-22 [Proposed] (Undo last action) |
+- 1a. The command contains invalid input.
 
+  - 1a1. 0rb1t shows an error message.
 
-#### Use Case 3: Initial Setup and Categorization
+    Use case ends.
 
-**Goal:** A developer needs to quickly add new contacts and categorize them using tags for effective organization and later filtering.
+- 1b. A contact with the same name already exists.
 
-| Step | Action | Outcome/System Response | Corresponding User Story (Reference) |
-|------|--------|-------------------------|--------------------------------------|
-| 1 | Developer adds a new contact and tags them simultaneously: `:add n/Benny p/98765432 e/benny@biz.com t/Marketing t/Partner` | Message displayed: `New contact added: Benny.` The new contact appears in the list view. | US-03 (Add contact), US-04 (Assign tags when adding) |
-| 2 | Developer quickly adds another contact: `:add n/Chloe p/88887777 e/chloe@rnd.com t/Engineer` | Message displayed: `New contact added: Chloe.` | US-03 (Add contact) |
-| 3 | Developer filters the list to view only their marketing contacts: `:list t/Marketing` | The Contact List Panel is updated to show only contacts tagged 'Marketing' (e.g., Benny). | US-11 (Filter contacts by tag) |
+  - 1b1. 0rb1t shows an error message explaining that contacts with duplicate names are not allowed.
 
+    Use case ends.
 
-### Non-Functional Requirements (NFRs)
+#### Use case: Delete contact
 
-#### 1. Performance Requirements (P)
+**MSS**
 
-| Requirement ID | Requirement | Description | Rationale |
-|---------------:|-------------|-------------|-----------|
-| P-01 | Search Speed | The application must return search results (e.g., using `:list n/NAME`) in less than 0.5 seconds for a contact list size of up to 500 entries. | Ensure a fast, keyboard-driven workflow, matching the "Vim-ify the experience" value proposition.
-| P-02 | Startup Time | The application must fully load and be ready to accept commands within 1.0 second. | Maintain user flow efficiency, especially for a CLI tool used throughout the day.
-| P-03 | CRUD Operation Speed | Basic operations (Add, Delete, Edit) must complete in less than 0.1 seconds after command execution. | Core contact management should be instantaneous.
+1. User requests to list contacts.
+2. 0rb1t shows a list of contacts.
+3. User requests to delete a specific contact in the list.
+4. 0rb1t shows a preview of the contact and asks for confirmation.
+5. User confirms the deletion.
+6. 0rb1t deletes the contact.
 
-#### 2. Usability Requirements (U)
+   Use case ends.
 
-| Requirement ID | Requirement | Description | Rationale |
-|---------------:|-------------|-------------|-----------|
-| U-01 | Vim-like UI Consistency | The CLI interface must maintain visual consistency across all command outputs (US-10). It should leverage color coding (US-05) to clearly distinguish fields (Name, Phone, Email, Tags). | Meet the core value proposition: "Vim-ify the experience." |
-| U-02 | Error Clarity | All error messages must be clear, concise, and explicitly suggest the correct command format or parameter requirement. | Enhance developer experience by providing immediate, actionable feedback. |
-| U-03 | Help Accessibility | A command (`:help`) must immediately display a comprehensive guide of all available commands and their formats (US-02). | Essential for initial usability and quick command lookup. |
+**Extensions**
 
-#### 3. Scalability Requirements (S)
+- 2a. The list is empty.
 
-| Requirement ID | Requirement | Description | Rationale |
-|---------------:|-------------|-------------|-----------|
-| S-01 | Contact Capacity | The application must reliably handle and store a minimum of 500 unique contact entries without a noticeable degradation in performance (P-01). | Accommodate a lead developer's potentially large network (Scenario 20th use mentions 100+ contacts). |
-| S-02 | Tag Capacity | The system must support a minimum of 50 unique tags and allow any single contact to have up to 10 tags. | Allow for rich categorization of contacts based on roles, projects, and personal context. |
+  Use case ends.
 
-#### 4. Reliability Requirements (R)
+- 3a. The given index is invalid.
 
-| Requirement ID | Requirement | Description | Rationale |
-|---------------:|-------------|-------------|-----------|
-| R-01 | Data Persistence | All contact data must be automatically saved/persisted upon successful execution of any modifying command (Add, Edit, Delete, Clear). | Prevent data loss in case of unexpected shutdown. |
-| R-02 | Input Validation | The system must strictly enforce parameter validation rules (e.g., 8-digit phone, valid email format) as defined in the MVP specification for the `:add` command. | Ensure data integrity (US-03, US-29, US-30). |
-| R-03 | Safe Clear/Delete | The system must require a distinct confirmation step before executing the `:clear` command (US-23) or any action that deletes data (US-21). | Prevent accidental loss of a large amount of data. |
+  - 3a1. 0rb1t shows an error message.
 
+    Use case resumes from step 2.
+
+- 5a. The user does not confirm the deletion.
+
+  - 5a1. 0rb1t cancels the deletion.
+
+    Use case ends.
+
+#### Use case: Filter contacts by criterion
+
+**MSS**
+
+1. User requests to list contacts that fulfill a given criterion.
+2. 0rb1t shows a list of all contacts that fulfill the given criterion.
+
+   Use case ends.
+
+**Extensions**
+
+- 1a. The given filter is invalid.
+
+  - 1a1. 0rb1t shows an error message.
+
+    Use case ends.
+
+- 2a. No contacts fulfill the given criterion.
+
+  Use case ends.
+
+#### Use case: Sort contacts by criterion
+
+**MSS**
+
+1. User requests to list contacts sorted by a given criterion.
+2. 0rb1t shows a list of all contacts in the requested order.
+
+   Use case ends.
+
+**Extensions**
+
+- 1a. The given sort criterion is invalid.
+
+  - 1a1. 0rb1t shows an error message.
+
+    Use case ends.
+
+#### Use case: Undo last action
+
+**MSS**
+
+1. User requests to undo the last action.
+2. 0rb1t reverses the last mutating action.
+
+   Use case ends.
+
+**Extensions**
+
+- 2a. There is no action to undo.
+
+  - 2a1. 0rb1t shows an error message.
+
+    Use case ends.
+
+#### Use case: Edit a contact
+
+**MSS**
+
+1. User requests to list contacts.
+2. 0rb1t shows a list of contacts.
+3. User requests to edit a specific contact in the list.
+4. 0rb1t updates the contact.
+
+   Use case ends.
+
+**Extensions**
+
+- 2a. The list is empty.
+
+  Use case ends.
+
+- 3a. The given index is invalid.
+
+  - 3a1. 0rb1t shows an error message.
+
+    Use case resumes from step 2.
+
+- 3b. The edit command contains invalid input.
+
+  - 3b1. 0rb1t shows an error message.
+
+    Use case ends.
+
+- 3c. The edited contact would have the same name as an existing contact.
+
+  - 3c1. 0rb1t shows an error message explaining that contacts with duplicate names are not allowed.
+
+    Use case ends.
+
+### Non-Functional Requirements
+
+1. Should work on any mainstream OS as long as it has Java 17 or above installed.
+2. Should be able to hold up to 1000 contacts without noticeable sluggishness in typical usage.
+3. Should automatically persist contact data after every successful mutating command.
+4. Should display an informative error message within 1 second when a command fails due to invalid syntax, invalid indices, or invalid field values.
+5. Should complete common commands such as `:list`, `:view`, and `:tags` within 1 second under normal usage conditions.
+6. Should be ready for use within 2 seconds after launch under normal usage conditions.
+7. Should remain usable at screen resolutions of 1280x720 and above.
+8. Should allow the main contact-management workflows to be completed without requiring mouse interaction.
+9. The packaged application should not exceed 100 MB as a single distributable JAR file.
+10. Should preserve contacts, notes, tags, and starred state across application restarts unless the user explicitly removes them.
 
 ### Glossary
 
-| Term          | Definition                                                                                                                                                                                                                    |
-|---------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| 0rb1t         | The name of the contact management application.                                                                                                                                                                               |
-| CLI           | Command Line Interface. The environment in which 0rb1t operates, taking text-based commands.                                                                                                                                  |
-| Persona       | A concrete representation of the target user, used internally for design reference. (e.g., Brandon)                                                                                                                           |
-| MVP           | Minimum Viable Product. The version of the product containing only the essential features (Add, List, View, Delete, Clear) required to satisfy initial user needs.                                                            |
-| Index         | The sequential, positive integer displayed next to a contact entry in the Contact List Panel, used to reference the contact for commands like `:view` or `:delete`.                                                           |
-| Tag           | A label or keyword assigned to a contact for categorization (e.g., "Developer", "Marketing", "Friend").                                                                                                                       |
-| Browser Panel | The dedicated UI area in the CLI that displays the full, organized details of a single, currently selected contact.                                                                                                           |
-| US-xx         | A specific User Story ID used to track product requirements.                                                                                                                                                                  |
-| Developer     | The primary user of the 0rb1t application. The target user profile is defined as "Developers who prefer keyboard-driven workflows". |
+- 0rb1t: The contact-management application developed in this project.
+- Contact: A single person entry managed by 0rb1t.
+- Tag: A label attached to a contact for categorization, such as a role, project, or context.
+- TagsRegistry: A derived model structure that tracks all tags currently in use and their usage counts.
+- Note: A short piece of text attached to a contact to preserve lightweight context.
+- Starred contact: A contact marked as important or frequently used.
+- Index: The positive integer shown beside a contact in the currently displayed list and used by commands such as `:view`, `:edit`, and `:delete`.
+- Filtered list: The currently visible subset of contacts after applying list filters.
+- Sorted list: The ordering applied to the currently visible contacts after applying sort criteria.
+- Mutating command: A command that changes application state, such as `:add`, `:edit`, `:delete`, `:note`, `:star`, `:unstar`, or `:clear`.
 
---------------------------------------------------------------------------------------------------------------------
+---
 
 ## **Appendix: Instructions for Manual Testing**
 
-This appendix is intended to supplement the [User Guide](UserGuide.md). It gives testers a short path through the user-testable features added or modified for this project, plus a small set of copy-paste inputs that make it easy to set up meaningful test data.
+Given below are instructions to test the app manually. These instructions only provide a starting point for testers to
+work from; testers are expected to do more exploratory testing.
 
-### Recommended test flow
+### Launch and shutdown
 
-1. Start from a clean state so list order and indices are predictable.
-1. Add a few contacts that differ in name, phone, address, tags, and star status.
-1. Exercise list filtering and sorting first, because later commands such as `:view`, `:note`, `:star`, `:edit`, and `:delete` act on the currently displayed indices.
-1. Test the single-contact workflows next: viewing details, adding notes, starring and unstarring, and editing tags.
-1. Test the two confirmation-based destructive flows last: `:delete` and `:clear`.
+**Initial launch**
 
-### Test data setup
+Prerequisites: Download the JAR file and copy it into an empty folder.
 
-If the address book is not empty, clear it first:
+Test case: Run `java -jar <jar-file-name>.jar`.  
+Expected: The GUI appears with a set of sample contacts. The initial window size may not be optimal.
 
-```text
-:clear
-yes
-```
+**Saving window preferences**
 
-Then add these contacts:
+Prerequisites: The app has been launched successfully at least once.
 
-```text
-:add n/Ada Lovelace p/91234567 e/ada@example.com a/NUS Computing t/core t/java
-:add n/Grace Hopper p/82345678 e/grace@example.com a/COM2 t/core t/backend
-:add n/Alan Turing p/93456789 e/alan@example.com a/UTown t/research t/ai
-:add n/Alicia Tan p/84567890 e/alicia@example.com a/Bishan t/frontend t/design
-```
+Test case: Resize the window, move it to a different location, then close the app. Launch it again.  
+Expected: The most recent window size and location are retained.
 
-These contacts are chosen so testers can verify:
+### Listing, filtering, and sorting contacts
 
-* name filtering with overlapping names (`Ada` and `Alicia`)
-* tag filtering with shared and distinct tags
-* sorting by name and phone
-* address filtering using partial text
+**Listing all contacts**
 
-### Features to cover
+Test case: `:list`  
+Expected: All contacts are shown in the default order.
 
-#### Listing, filtering, and sorting contacts
+**Filtering by a single criterion**
 
-Use `:list` to verify the enhanced list behavior:
+Test case: `:list t/friends`  
+Expected: Only contacts tagged `friends` are shown.
 
-```text
-:list
-:list t/core
-:list n/Ali
-:list a/Bishan
-:list t/core n/Grace
-:list s/+n
-:list s/-p
-:list s/* s/+n
-```
+Test case: `:list n/Alex`  
+Expected: Only contacts whose names contain `Alex` are shown.
 
-Checks to perform:
+**Filtering by multiple criteria**
 
-* Different prefixes combine with AND logic.
-* Repeating the same prefix uses OR logic.
-* `s/*` pins starred contacts to the top once at least one contact has been starred.
-* `:list` with no arguments restores the full list and resets sorting to the default order.
+Test case: `:list t/friends n/Bernice`  
+Expected: Only contacts tagged `friends` whose names contain `Bernice` are shown.
 
-#### Viewing a contact
+**Filtering with multiple values for the same criterion**
 
-Run:
+Test case: `:list n/Alex n/Roy`  
+Expected: Only contacts whose names contain `Alex` or `Roy` are shown.
 
-```text
-:view 1
-```
+**Sorting contacts**
 
-Check that the selected contact is highlighted in the list and that the full details panel updates to that contact.
+Test case: `:list s/+n`  
+Expected: Contacts are listed in ascending name order.
 
-#### Favouriting and unfavouriting
+Test case: `:list s/-p`  
+Expected: Contacts are listed in descending lexicographical phone order.
 
-Run:
+Test case: `:list s/* s/+n`  
+Expected: Starred contacts are pinned above non-starred contacts, and each group is ordered by name.
 
-```text
-:star 2
-:list s/* s/+n
-:list
-:unstar 2
-```
+**Invalid list command**
 
-Check that the star indicator appears and disappears, and that the `s/*` sort keeps starred contacts above non-starred contacts.
+Test case: `:list hello`  
+Expected: No contacts are changed. An error message is shown.
 
-#### Adding notes
+### Viewing a contact
 
-Run:
+Prerequisites: There is at least one contact in the currently displayed list.
 
-```text
-:view 1
-:note 1 First met during CS2103T project discussion.
-:note 1 Follow up about parser refactor next week.
-```
+Test case: `:view 1`  
+Expected: The first contact in the displayed list is selected and their full details appear in the details panel.
 
-Check that notes are appended in order for the same contact. Also test one invalid input:
+Test case: `:view 0`  
+Expected: The command fails, an error message is shown, and the current selection remains unchanged.
 
-```text
-:note 1
-```
+### Adding notes
 
-This should be rejected because the command requires both an index and note text.
+Prerequisites: There is at least one contact in the currently displayed list.
 
-#### Editing tags on an existing contact
+Test case: `:note 1 First met during CS2103T.`  
+Expected: A new note is appended to the first displayed contact.
 
-Run:
+Test case: `:note 1`  
+Expected: No note is added. An error message is shown.
 
-```text
-:edit 3 t/ml
-:edit 3 dt/research
-:edit 3 dt/
-:tags
-```
+### Editing a contact
 
-Check that adding one tag does not remove existing tags, `dt/` removes only the named tag, `dt/` with no arguments delete all of the contact's tags, and `:tags` reflects the updated tag registry.
+Prerequisites: There is at least one contact in the currently displayed list.
 
-#### Listing all tags
+Test case: `:edit 1 p/91234567`  
+Expected: The first displayed contact's phone number is updated.
 
-Run:
+Test case: `:edit 1 t/backend`  
+Expected: The `backend` tag is added without removing the contact's existing tags.
 
-```text
-:tags
-```
+Test case: `:edit 1 dt/backend`  
+Expected: The `backend` tag is removed from the contact if it exists.
 
-Check that each tag appears once, in alphabetical order. Because tags are case-sensitive, adding tags that differ only by case should make both appear.
+Test case: `:edit 1 dt/`  
+Expected: All tags are removed from the contact.
 
-#### Delete confirmation flow
+Test case: `:edit 0 n/Amy`  
+Expected: No contact is edited. An error message is shown.
 
-Run:
+### Listing all tags
 
-```text
-:delete 4
-no
-:delete 4
-yes
-```
+Test case: `:tags`  
+Expected: All tags currently in use are shown once each in alphabetical order.
 
-Check both branches:
+### Starring and unstarring contacts
 
-* any input other than `yes` cancels the pending deletion
-* `yes` deletes the contact currently at that displayed index after the preview is shown
+Prerequisites: There is at least one contact in the currently displayed list.
 
-#### Clear confirmation flow
+Test case: `:star 1`  
+Expected: The first displayed contact is starred if it is not starred.
 
-Run:
+Test case: `:unstar 1`  
+Expected: The first displayed contact is unstarred if it is starred.
 
-```text
-:clear
-no
-:clear
-yes
-```
+Test case: `:star 0`  
+Expected: No contact is starred. An error message is shown.
 
-Check both branches:
+### Deleting a contact
 
-* any input other than `yes` cancels the pending clear
-* `yes` empties the address book and clears the tag registry
+Prerequisites: List all contacts using `:list`. There are multiple contacts in the displayed list.
 
-### Important inputs to copy-paste
+Test case: `:delete 1`  
+Expected: A preview of the first displayed contact is shown in the result box and the app asks for confirmation.
 
-These are useful for quick edge-oriented checks while exploring variations:
+Test case: After `:delete 1`, enter `yes`.  
+Expected: The contact is deleted from the list.
 
-```text
-:list t/core t/backend
-:list n/Ada n/Alicia
-:list t/core s/+n
-:list t/core s/* s/-p
-:edit 2 t/devops t/mentor
-:edit 2 dt/core
-:note 2 Plain text only: <b>bold?</b> \n \t "quotes"
-```
+Test case: After `:delete 1`, enter `no`.  
+Expected: The deletion is cancelled.
 
-Notes for testers:
+Test case: After `:delete 1`, enter any other input, such as `maybe`.  
+Expected: The contact is not deleted. The confirmation remains pending and a reminder is shown.
 
-* Indices are always based on the currently displayed list, not the original unfiltered list.
-* If a command is waiting for confirmation, the next input is consumed as the confirmation response rather than being parsed as a fresh command.
+Test case: `:delete 0`  
+Expected: No contact is deleted. An error message is shown.
+
+### Clearing all contacts
+
+Prerequisites: There is at least one contact in the address book.
+
+Test case: `:clear`  
+Expected: A confirmation prompt is shown.
+
+Test case: After `:clear`, enter `yes`.  
+Expected: All contacts are removed.
+
+Test case: After `:clear`, enter `no`.  
+Expected: The clear action is cancelled.
+
+Test case: After `:clear`, enter any other input, such as `maybe`.  
+Expected: The address book is not cleared. The confirmation remains pending and a reminder is shown.
+
+### Undoing the last action
+
+Prerequisites: A successful mutating command has just been executed in the same session.
+
+Test case: `:undo`  
+Expected: The most recent mutating action is reversed.
+
+### Saving data
+
+**Saving after a change**
+
+Prerequisites: The app has been launched successfully.
+
+Test case: Add, edit, note, star, or delete a contact, then close and relaunch the app.  
+Expected: The last successful change is still present after relaunch.
+
+**Missing data file**
+
+Prerequisites: Close the app and delete the existing address book data file.
+
+Test case: Launch the app again.  
+Expected: The app starts successfully with sample data.
+
+**Corrupted data file**
+
+Prerequisites: Close the app and manually corrupt the address book data file contents.
+
+Test case: Launch the app again.  
+Expected: The app starts without crashing and falls back to an empty address book if the data cannot be loaded.

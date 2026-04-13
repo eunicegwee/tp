@@ -193,4 +193,11 @@ public class AddCommandParserTest {
                 + ADDRESS_DESC_BOB + TAG_DESC_HUSBAND + TAG_DESC_FRIEND,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddCommand.MESSAGE_USAGE));
     }
+
+    @Test
+    public void parse_tooManyTags_failure() {
+        String tooManyTags = " t/tag1 t/tag2 t/tag3 t/tag4 t/tag5 t/tag6 t/tag7 t/tag8 t/tag9 t/tag10 t/tag11";
+        assertParseFailure(parser, NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB + ADDRESS_DESC_BOB + tooManyTags,
+                Person.MESSAGE_MAX_TAGS);
+    }
 }

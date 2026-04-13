@@ -10,8 +10,12 @@
 
     <Label text="Person Details" styleClass="details-heading" />
 
-    <ScrollPane fitToWidth="true" fitToHeight="true" hbarPolicy="NEVER" stylesheets="@PersonDetails.css"
-                styleClass="details-scroll-pane" xmlns:fx="http://javafx.com/fxml">
+    <ScrollPane VBox.vgrow="ALWAYS"
+                fitToWidth="false"
+                fitToHeight="true"
+                hbarPolicy="AS_NEEDED"
+                stylesheets="@PersonDetails.css"
+                styleClass="details-scroll-pane">
         <content>
             <VBox spacing="8" styleClass="details-panel">
                 <HBox spacing="5">

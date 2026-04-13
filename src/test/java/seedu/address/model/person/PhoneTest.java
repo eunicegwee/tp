@@ -28,14 +28,25 @@ public class PhoneTest {
         assertFalse(Phone.isValidPhone("")); // empty string
         assertFalse(Phone.isValidPhone(" ")); // spaces only
         assertFalse(Phone.isValidPhone("91")); // less than 3 numbers
+        assertFalse(Phone.isValidPhone("+91")); // less than 3 digits after optional plus
+        assertFalse(Phone.isValidPhone("000")); // all zeros are not allowed
+        assertFalse(Phone.isValidPhone("+000")); // all zeros are not allowed even with plus
+        assertFalse(Phone.isValidPhone("+001")); // plus must be followed by 1-9
         assertFalse(Phone.isValidPhone("phone")); // non-numeric
         assertFalse(Phone.isValidPhone("9011p041")); // alphabets within digits
         assertFalse(Phone.isValidPhone("9312 1534")); // spaces within digits
+        assertFalse(Phone.isValidPhone("9312\n1534")); // newline not allowed
+        assertFalse(Phone.isValidPhone("1234567890123456")); // more than 15 digits
+        assertFalse(Phone.isValidPhone("+1234567890123456")); // more than 15 digits with plus
+        assertFalse(Phone.isValidPhone("12+345")); // plus not at the beginning
 
         // valid phone numbers
         assertTrue(Phone.isValidPhone("911")); // exactly 3 numbers
+        assertTrue(Phone.isValidPhone("001")); // zeros allowed when at least one digit is non-zero
+        assertTrue(Phone.isValidPhone("+101")); // leading plus must be followed by 1-9
         assertTrue(Phone.isValidPhone("93121534"));
-        assertTrue(Phone.isValidPhone("124293842033123")); // long phone numbers
+        assertTrue(Phone.isValidPhone("124293842033123")); // exactly 15 digits
+        assertTrue(Phone.isValidPhone("+124293842033123")); // exactly 15 digits with leading plus
     }
 
     @Test
