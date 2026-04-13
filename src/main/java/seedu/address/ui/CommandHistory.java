@@ -30,7 +30,9 @@ public class CommandHistory {
         if (history.size() > MAX_HISTORY_SIZE) {
             history.remove(0);
         }
-        assert history.size() <= MAX_HISTORY_SIZE;
+        assert history.size() <= MAX_HISTORY_SIZE
+                : "history size should not exceed MAX_HISTORY_SIZE: "
+                + history.size() + " > " + MAX_HISTORY_SIZE;
         currentIndex = history.size();
     }
 
@@ -57,11 +59,10 @@ public class CommandHistory {
             return null;
         }
         currentIndex++;
+        assert currentIndex <= history.size() : "currentIndex should not exceed history size";
         if (currentIndex == history.size()) {
-            assert currentIndex <= history.size() : "currentIndex should not exceed history size";
             return "";
         }
-        assert currentIndex <= history.size() : "currentIndex should not exceed history size";
         return history.get(currentIndex);
     }
 

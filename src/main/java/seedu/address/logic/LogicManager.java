@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -64,7 +65,7 @@ public class LogicManager implements Logic {
                 try {
                     commandResult = action.get();
                 } catch (RuntimeException e) {
-                    logger.warning("Unexpected error while executing confirmed command: " + e.getMessage());
+                    logger.log(Level.WARNING, "Unexpected error while executing confirmed command.", e);
                     throw e;
                 }
             } else if (trimmedInput.equals("no")) {
