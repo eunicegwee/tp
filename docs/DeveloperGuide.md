@@ -849,3 +849,15 @@ Prerequisites: Close the app and manually corrupt the address book data file con
 
 Test case: Launch the app again.  
 Expected: The app starts without crashing and falls back to an empty address book if the data cannot be loaded.
+
+## **Appendix: Effort**
+
+This project was moderately to highly challenging. Compared with AB3, 0rb1t required more effort because it goes beyond a single contact-management flow and supports richer contact data, multiple derived states, and more interactive workflows. In AB3, most features revolve around one basic `Person` entity and straightforward CRUD operations. In 0rb1t, we had to extend that foundation to support notes, tags, starred contacts, filtered and sorted views, undo, and confirmation-based destructive commands while keeping the UI, logic, model, and storage layers synchronized.
+
+The most difficult parts were maintaining consistency across the model and derived state, especially when commands could affect several pieces of data at once. For example, editing a contact could change fields, tags, filtered results, the selected contact, and undo history. Confirmation handling for `:delete` and `:clear` also added complexity because the application had to preserve a pending action across user inputs without breaking normal command flow. Another challenge was keeping the UI responsive and predictable while supporting both selection-driven updates and command-driven focus changes.
+
+The amount of effort required was significant because many features had to be adapted across several layers instead of being implemented in isolation. We spent time designing and testing command behavior, updating parsers, making the model maintain derived information correctly, and ensuring storage could persist the extended contact structure. Debugging also took considerable effort because small changes in one component could affect filtering, sorting, undo, or confirmation behavior elsewhere.
+
+One area where reuse saved effort was the AB3 codebase itself. We reused the overall application structure, including the high-level separation into `UI`, `Logic`, `Model`, and `Storage`, along with the command parsing and JSON persistence foundation. This reduced the time needed to build the project skeleton and allowed us to focus our work on adapting the code for 0rb1t’s extra features rather than starting from scratch. Even so, most of the project effort still went into extending and integrating the reused code for our new requirements.
+
+Despite the complexity, we achieved a cohesive contact manager with richer functionality than AB3: keyboard-first workflows, contact notes, tag management, starred contacts, undo support, confirmation prompts for destructive actions, and synchronized list/detail views. The final system preserves the core usability of AB3 while adding substantially more behavior and state management, which made the project both demanding and rewarding.
