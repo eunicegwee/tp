@@ -18,8 +18,6 @@ import seedu.address.model.person.Person;
  * The command first shows a preview of the person to delete and asks for confirmation.
  */
 public class DeleteCommand extends Command {
-    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
-
     public static final String COMMAND_WORD = ":delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -33,6 +31,8 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_CONFIRM_DELETE =
             "Are you sure you want to delete this person?\n%1$s\n"
             + "Type 'yes' to confirm. Any other input will be taken as no.";
+
+    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
 
     private final Index targetIndex;
 

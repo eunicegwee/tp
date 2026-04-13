@@ -10,11 +10,11 @@ import seedu.address.model.Model;
  * Undoes the last mutating command.
  */
 public class UndoCommand extends Command {
-    private static final Logger logger = LogsCenter.getLogger(UndoCommand.class);
-
     public static final String COMMAND_WORD = ":undo";
     public static final String MESSAGE_SUCCESS = "Undo successful!";
     public static final String MESSAGE_NOTHING_TO_UNDO = "Nothing to undo! You can only undo once after a command.";
+
+    private static final Logger logger = LogsCenter.getLogger(UndoCommand.class);
 
     @Override
     public CommandResult execute(Model model) throws CommandException {

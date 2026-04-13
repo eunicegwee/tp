@@ -12,13 +12,13 @@ import seedu.address.model.Model;
  * Clears the address book.
  */
 public class ClearCommand extends Command {
-    private static final Logger logger = LogsCenter.getLogger(ClearCommand.class);
-
     public static final String COMMAND_WORD = ":clear";
     public static final String MESSAGE_SUCCESS = "Address book has been cleared!";
     public static final String MESSAGE_CONFIRM_CLEAR =
             "Are you sure you want to clear the entire address book?\n"
             + "Type 'yes' to confirm. Any other input will be taken as no.";
+
+    private static final Logger logger = LogsCenter.getLogger(ClearCommand.class);
 
 
     @Override

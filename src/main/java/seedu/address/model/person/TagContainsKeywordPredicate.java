@@ -13,6 +13,9 @@ import seedu.address.commons.util.ToStringBuilder;
 public class TagContainsKeywordPredicate implements Predicate<Person> {
     private final List<String> keywords;
 
+    /**
+     * Creates a predicate that checks whether a person's tags contain any of the given keywords.
+     */
     public TagContainsKeywordPredicate(List<String> keywords) {
         requireNonNull(keywords);
         this.keywords = keywords;
