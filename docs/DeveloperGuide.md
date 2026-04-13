@@ -102,8 +102,8 @@ Its top-level container is `MainWindow`, which assembles the main visible parts 
 The UI uses JavaFX, and each major UI part is backed by a matching `.fxml` file in `src/main/resources/view`.
 
 0rb1t uses a master-detail layout. `PersonListPanel` owns the current selection in the list view, while
-`PersonDetailsPanel` renders the selected contact's full information. This means the details panel can be updated in
-two ways:
+`PersonDetailsPanel` renders the selected contact's name, phone, email, address and notes. 
+This means the details panel can be updated in two ways:
 
 - when the user changes the selected contact in the list
 - when a command returns a `CommandResult` containing a `Person` to focus, such as `:view`, `:star`, or `:unstar`
@@ -143,9 +143,12 @@ for example `:add`, `:list`, or `:delete`.
 `AddressBookParser` performs the first-stage split between command word and arguments, validates that the command
 starts with `:`, and dispatches to a command-specific parser where needed.
 
-The sequence diagram below illustrates the interactions inside the `Logic` component using `:delete 1` as an example.
+The delete flow is split into two stages: the initial preview returned by `:delete 1`, and the follow-up confirmation
+handled by `yes`.
 
-<puml src="diagrams/DeleteSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `:delete 1` Command" />
+<puml src="diagrams/DeleteSequenceDiagram-Preview.puml" alt="Delete preview sequence for the `:delete 1` command" />
+
+<puml src="diagrams/DeleteSequenceDiagram-Confirmation.puml" alt="Delete confirmation sequence for the `yes` command" />
 
 `CommandResult` is the contract between `Logic` and `UI`. Besides feedback text, it can also carry extra information
 that affects UI or workflow behavior:
@@ -455,7 +458,7 @@ Developers who:
 
 ### User stories
 
-Priorities: High (must have) - `***`, Medium (nice to have) - `**`, Low (unlikely to have) - `*`
+Priorities: High (must have) - `***`, Medium (nice to have) - `**`
 
 | Priority | As a ...                                                | I want to ...                                                  | So that I can...                                             |
 | -------- | ------------------------------------------------------- | -------------------------------------------------------------- | ------------------------------------------------------------ |
@@ -505,7 +508,7 @@ For all use cases below, the **System** is 0rb1t and the **Actor** is the user, 
 
 - 1b. A contact with the same name already exists.
 
-  - 1b1. 0rb1t shows an error message explaining that contacts with duplicate names are not allowed.
+  - 1b1. 0rb1t displays an error message if a contact with an existing name match (case-sensitive) is added.
 
     Use case ends.
 
@@ -516,8 +519,8 @@ For all use cases below, the **System** is 0rb1t and the **Actor** is the user, 
 1. User requests to list contacts.
 2. 0rb1t shows a list of contacts.
 3. User requests to delete a specific contact in the list.
-4. 0rb1t shows a preview of the contact and asks for confirmation.
-5. User confirms the deletion.
+4. 0rb1t asks for confirmation.
+5. User inputs `yes`.
 6. 0rb1t deletes the contact.
 
    Use case ends.
@@ -534,11 +537,16 @@ For all use cases below, the **System** is 0rb1t and the **Actor** is the user, 
 
     Use case resumes from step 2.
 
-- 5a. The user does not confirm the deletion.
+- 5a. The user inputs `no`.
 
   - 5a1. 0rb1t cancels the deletion.
 
     Use case ends.
+
+- 5b. The user inputs any input other than `yes` and `no`.
+
+  Use case resumes from step 4.
+
 
 #### Use case: Filter contacts by criterion
 
@@ -626,7 +634,7 @@ For all use cases below, the **System** is 0rb1t and the **Actor** is the user, 
 
 - 3c. The edited contact would have the same name as an existing contact.
 
-  - 3c1. 0rb1t shows an error message explaining that contacts with duplicate names are not allowed.
+  - 3c1. 0rb1t displays an error message if a contact with an existing name match (case-sensitive) is added.
 
     Use case ends.
 
@@ -710,7 +718,7 @@ Test case: `:list s/+n`
 Expected: Contacts are listed in ascending name order.
 
 Test case: `:list s/-p`  
-Expected: Contacts are listed in descending lexicographical phone order.
+Expected: Contacts are ordered first by increasing length of the phone number, and then by lexicographical order in descending order.
 
 Test case: `:list s/* s/+n`  
 Expected: Starred contacts are pinned above non-starred contacts, and each group is ordered by name.
@@ -725,7 +733,7 @@ Expected: No contacts are changed. An error message is shown.
 Prerequisites: There is at least one contact in the currently displayed list.
 
 Test case: `:view 1`  
-Expected: The first contact in the displayed list is selected and their full details appear in the details panel.
+Expected: The first contact in the displayed list is selected and their name, phone, email, address and notes appear in the details panel.
 
 Test case: `:view 0`  
 Expected: The command fails, an error message is shown, and the current selection remains unchanged.
