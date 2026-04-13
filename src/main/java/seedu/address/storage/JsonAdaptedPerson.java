@@ -134,6 +134,11 @@ class JsonAdaptedPerson {
         }
         final boolean modelIsStarred = isStarred != null && isStarred;
 
-        return new Person(modelName, modelPhone, modelEmail, modelAddress, modelTags, modelNoteList, modelIsStarred);
+        try {
+            return new Person(modelName, modelPhone, modelEmail, modelAddress,
+                    modelTags, modelNoteList, modelIsStarred);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalValueException(e.getMessage());
+        }
     }
 }

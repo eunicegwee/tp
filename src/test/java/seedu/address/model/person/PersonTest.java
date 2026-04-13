@@ -42,6 +42,13 @@ public class PersonTest {
     }
 
     @Test
+    public void constructor_moreThanMaxTags_throwsIllegalArgumentException() {
+        assertThrows(IllegalArgumentException.class, Person.MESSAGE_MAX_TAGS, () ->
+                new PersonBuilder().withTags("t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11")
+                        .build());
+    }
+
+    @Test
     public void isSamePerson() {
         // same object -> returns true
         assertTrue(ALICE.isSamePerson(ALICE));

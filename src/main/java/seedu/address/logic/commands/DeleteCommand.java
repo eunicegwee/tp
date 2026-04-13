@@ -29,7 +29,7 @@ public class DeleteCommand extends Command {
 
     public static final String MESSAGE_CONFIRM_DELETE =
             "Are you sure you want to delete this person?\n%1$s\n"
-            + "Type 'yes' to confirm. Any other input will be taken as no.";
+            + "Type 'yes' to confirm or 'no' to cancel.";
 
     private final Index targetIndex;
 

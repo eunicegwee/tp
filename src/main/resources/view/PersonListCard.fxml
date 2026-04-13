@@ -15,7 +15,7 @@
   </StackPane>
   <GridPane HBox.hgrow="ALWAYS">
     <columnConstraints>
-      <ColumnConstraints hgrow="SOMETIMES" minWidth="10" prefWidth="150" />
+      <ColumnConstraints hgrow="ALWAYS" />
     </columnConstraints>
     <VBox alignment="CENTER_LEFT" minHeight="64" spacing="4" GridPane.columnIndex="0">
       <padding>
@@ -25,7 +25,7 @@
         <Label fx:id="name" text="\$first" styleClass="cell_big_label" />
         <Label fx:id="starredIndicator" text="" styleClass="starred-indicator" />
       </HBox>
-      <FlowPane fx:id="tags" />
+      <FlowPane fx:id="tags" prefWrapLength="40" />
     </VBox>
   </GridPane>
 </HBox>

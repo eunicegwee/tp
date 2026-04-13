@@ -14,7 +14,7 @@ public class ClearCommand extends Command {
     public static final String MESSAGE_SUCCESS = "Address book has been cleared!";
     public static final String MESSAGE_CONFIRM_CLEAR =
             "Are you sure you want to clear the entire address book?\n"
-            + "Type 'yes' to confirm. Any other input will be taken as no.";
+            + "Type 'yes' to confirm or 'no' to cancel.";
 
 
     @Override
