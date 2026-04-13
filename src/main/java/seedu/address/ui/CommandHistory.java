@@ -10,7 +10,6 @@ import java.util.List;
  * using up/down arrow keys. Stores up to {@code MAX_HISTORY_SIZE} commands.
  */
 public class CommandHistory {
-
     public static final int MAX_HISTORY_SIZE = 64;
 
     private final List<String> history = new ArrayList<>();

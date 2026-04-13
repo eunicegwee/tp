@@ -58,10 +58,12 @@ public class LogicManager implements Logic {
 
         if (pendingConfirmation != null) {
             if (trimmedInput.equals("yes")) {
+                logger.info("User confirmed pending command.");
                 Supplier<CommandResult> action = pendingConfirmation;
                 pendingConfirmation = null;
                 commandResult = action.get();
             } else if (trimmedInput.equals("no")) {
+                logger.info("User cancelled pending command.");
                 pendingConfirmation = null;
                 commandResult = new CommandResult(MESSAGE_COMMAND_CANCELLED);
             } else {
@@ -72,6 +74,7 @@ public class LogicManager implements Logic {
             commandResult = command.execute(model);
 
             if (commandResult.isAwaitingConfirmation()) {
+                logger.info("Command is awaiting user confirmation.");
                 pendingConfirmation = commandResult.getConfirmationAction();
             }
         }

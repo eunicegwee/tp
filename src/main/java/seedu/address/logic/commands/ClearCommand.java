@@ -2,6 +2,9 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
+import java.util.logging.Logger;
+
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.AddressBook;
 import seedu.address.model.Model;
 
@@ -9,6 +12,7 @@ import seedu.address.model.Model;
  * Clears the address book.
  */
 public class ClearCommand extends Command {
+    private static final Logger logger = LogsCenter.getLogger(ClearCommand.class);
 
     public static final String COMMAND_WORD = ":clear";
     public static final String MESSAGE_SUCCESS = "Address book has been cleared!";
@@ -22,6 +26,7 @@ public class ClearCommand extends Command {
         requireNonNull(model);
         AddressBook savedBook = new AddressBook(model.getAddressBook());
         return new CommandResult(MESSAGE_CONFIRM_CLEAR, false, false, () -> {
+            logger.info("Clearing address book.");
             model.setAddressBook(new AddressBook());
             model.clearTagsRegistry();
             model.setUndoAction(() -> model.setAddressBook(savedBook));
