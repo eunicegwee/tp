@@ -10,7 +10,6 @@ import java.util.List;
  * using up/down arrow keys. Stores up to {@code MAX_HISTORY_SIZE} commands.
  */
 public class CommandHistory {
-
     public static final int MAX_HISTORY_SIZE = 64;
 
     private final List<String> history = new ArrayList<>();
@@ -31,6 +30,9 @@ public class CommandHistory {
         if (history.size() > MAX_HISTORY_SIZE) {
             history.remove(0);
         }
+        assert history.size() <= MAX_HISTORY_SIZE
+                : "history size should not exceed MAX_HISTORY_SIZE: "
+                + history.size() + " > " + MAX_HISTORY_SIZE;
         currentIndex = history.size();
     }
 
@@ -43,6 +45,7 @@ public class CommandHistory {
             return null;
         }
         currentIndex--;
+        assert currentIndex >= 0 : "currentIndex should never be negative";
         return history.get(currentIndex);
     }
 
@@ -56,6 +59,7 @@ public class CommandHistory {
             return null;
         }
         currentIndex++;
+        assert currentIndex <= history.size() : "currentIndex should not exceed history size";
         if (currentIndex == history.size()) {
             return "";
         }

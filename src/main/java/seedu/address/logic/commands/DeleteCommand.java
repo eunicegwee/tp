@@ -3,7 +3,9 @@ package seedu.address.logic.commands;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
+import java.util.logging.Logger;
 
+import seedu.address.commons.core.LogsCenter;
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -16,7 +18,6 @@ import seedu.address.model.person.Person;
  * The command first shows a preview of the person to delete and asks for confirmation.
  */
 public class DeleteCommand extends Command {
-
     public static final String COMMAND_WORD = ":delete";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD
@@ -30,6 +31,8 @@ public class DeleteCommand extends Command {
     public static final String MESSAGE_CONFIRM_DELETE =
             "Are you sure you want to delete this person?\n%1$s\n"
             + "Type 'yes' to confirm or 'no' to cancel.";
+
+    private static final Logger logger = LogsCenter.getLogger(DeleteCommand.class);
 
     private final Index targetIndex;
 
@@ -49,6 +52,7 @@ public class DeleteCommand extends Command {
         Person personToDelete = lastShownList.get(targetIndex.getZeroBased());
         String previewMessage = String.format(MESSAGE_CONFIRM_DELETE, Messages.format(personToDelete));
         return new CommandResult(previewMessage, false, false, () -> {
+            logger.info("Deleting person: " + personToDelete.getName());
             model.deletePerson(personToDelete);
             model.deleteTags(personToDelete);
             model.setUndoAction(() -> {

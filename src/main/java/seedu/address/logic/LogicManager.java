@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Path;
 import java.util.function.Supplier;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.collections.ObservableList;
@@ -58,10 +59,17 @@ public class LogicManager implements Logic {
 
         if (pendingConfirmation != null) {
             if (trimmedInput.equals("yes")) {
+                logger.info("User confirmed pending command.");
                 Supplier<CommandResult> action = pendingConfirmation;
                 pendingConfirmation = null;
-                commandResult = action.get();
+                try {
+                    commandResult = action.get();
+                } catch (RuntimeException e) {
+                    logger.log(Level.WARNING, "Unexpected error while executing confirmed command.", e);
+                    throw e;
+                }
             } else if (trimmedInput.equals("no")) {
+                logger.info("User cancelled pending command.");
                 pendingConfirmation = null;
                 commandResult = new CommandResult(MESSAGE_COMMAND_CANCELLED);
             } else {
@@ -72,6 +80,7 @@ public class LogicManager implements Logic {
             commandResult = command.execute(model);
 
             if (commandResult.isAwaitingConfirmation()) {
+                logger.info("Command is awaiting user confirmation.");
                 pendingConfirmation = commandResult.getConfirmationAction();
             }
         }
