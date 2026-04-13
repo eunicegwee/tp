@@ -366,6 +366,8 @@ Expected: The contact at the given index will have a star icon next to their nam
 
 To undo the last command that modified data, type `:undo`. This reverses the effect of the most recent mutating command (e.g., `:add`, `:delete`, `:edit`, `:clear`, `:note`, `:star`, `:unstar`).
 
+`:undo` guarantees that the details of each contact will be restored to their previous state. It does not guarantee restoring the order of contacts in the sidebar, and the contact list may be sorted differently after an undo.
+
 >Note: Only the most recent mutating command can be undone. You cannot undo more than once in a row, and non-mutating commands like `:list` or `:view` do not count as undoable actions.
 
 Format: `:undo`
