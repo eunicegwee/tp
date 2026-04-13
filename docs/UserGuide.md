@@ -2,7 +2,7 @@
 
 **0rb1t** is a desktop application designed for developers who prefer keyboard-driven workflows.
 
-- It brings a **Vim-inspired interface** to contact and task management, so you never have to reach for the mouse.
+- It brings a **Vim-inspired interface** to contact management, so you never have to reach for the mouse.
 - Built for developers who feel at home in Vim: 0rb1t lets you navigate, edit, and manage with the keybindings you already know.
 
 The app is **written in Object-Oriented Programming (OOP) fashion**, based on a ~6 KLoC codebase with solid user and developer documentation.
