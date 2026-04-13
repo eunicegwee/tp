@@ -687,12 +687,25 @@ Prerequisites: The app has been launched successfully at least once.
 Test case: Resize the window, move it to a different location, then close the app. Launch it again.  
 Expected: The most recent window size and location are retained.
 
+### Starring and unstarring contacts
+
+Prerequisites: There is at least one contact in the currently displayed list.
+
+Test case: `:star 1`  
+Expected: The first displayed contact is starred if it is not starred.
+
+Test case: `:unstar 1`  
+Expected: The first displayed contact is unstarred if it is starred.
+
+Test case: `:star 0`  
+Expected: No contact is starred. An error message is shown.
+
 ### Listing, filtering, and sorting contacts
 
 **Listing all contacts**
 
 Test case: `:list`  
-Expected: All contacts are shown in the default order.
+Expected: All contacts are shown.
 
 **Filtering by a single criterion**
 
@@ -720,7 +733,7 @@ Expected: Contacts are listed in ascending name order.
 Test case: `:list s/-p`  
 Expected: Contacts are ordered first by increasing length of the phone number, and then by lexicographical order in descending order.
 
-Test case: `:list s/* s/+n`  
+Test case: `:list s/* s/+n`\
 Expected: Starred contacts are pinned above non-starred contacts, and each group is ordered by name.
 
 **Invalid list command**
@@ -772,19 +785,6 @@ Expected: No contact is edited. An error message is shown.
 Test case: `:tags`  
 Expected: All tags currently in use are shown once each in alphabetical order.
 
-### Starring and unstarring contacts
-
-Prerequisites: There is at least one contact in the currently displayed list.
-
-Test case: `:star 1`  
-Expected: The first displayed contact is starred if it is not starred.
-
-Test case: `:unstar 1`  
-Expected: The first displayed contact is unstarred if it is starred.
-
-Test case: `:star 0`  
-Expected: No contact is starred. An error message is shown.
-
 ### Deleting a contact
 
 Prerequisites: List all contacts using `:list`. There are multiple contacts in the displayed list.
@@ -792,14 +792,14 @@ Prerequisites: List all contacts using `:list`. There are multiple contacts in t
 Test case: `:delete 1`  
 Expected: A preview of the first displayed contact is shown in the result box and the app asks for confirmation.
 
-Test case: After `:delete 1`, enter `yes`.  
-Expected: The contact is deleted from the list.
-
 Test case: After `:delete 1`, enter `no`.  
 Expected: The deletion is cancelled.
 
 Test case: After `:delete 1`, enter any other input, such as `maybe`.  
 Expected: The contact is not deleted. The confirmation remains pending and a reminder is shown.
+
+Test case: After `:delete 1`, enter `yes`.  
+Expected: The contact is deleted from the list.
 
 Test case: `:delete 0`  
 Expected: No contact is deleted. An error message is shown.
@@ -811,14 +811,14 @@ Prerequisites: There is at least one contact in the address book.
 Test case: `:clear`  
 Expected: A confirmation prompt is shown.
 
-Test case: After `:clear`, enter `yes`.  
-Expected: All contacts are removed.
-
 Test case: After `:clear`, enter `no`.  
 Expected: The clear action is cancelled.
 
 Test case: After `:clear`, enter any other input, such as `maybe`.  
 Expected: The address book is not cleared. The confirmation remains pending and a reminder is shown.
+
+Test case: After `:clear`, enter `yes`.  
+Expected: All contacts are removed.
 
 ### Undoing the last action
 
