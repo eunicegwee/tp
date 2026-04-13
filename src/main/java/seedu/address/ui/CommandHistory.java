@@ -26,9 +26,6 @@ public class CommandHistory {
      */
     public void add(String command) {
         requireNonNull(command);
-        if (command.isBlank()) {
-            return;
-        }
         history.add(command);
         if (history.size() > MAX_HISTORY_SIZE) {
             history.remove(0);
