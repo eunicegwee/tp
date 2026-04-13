@@ -57,7 +57,7 @@ Follow these steps to get 0rb1t running on your computer:
 5. **Run the application** using the following command:
 
 ```
-java -jar 0rb1t.jar
+java -jar [CS2103T-T15-4][0rb1t].jar
 ```
 A GUI similar to the below should appear in a few seconds. Note how the app contains some sample data.
 
@@ -134,7 +134,7 @@ So, when adding a tag `Friend`, it will be added/stored as `friend`. Same for `F
   Example: `n/NAME [t/TAG]` can be used as `n/John Doe t/friend` or `n/John Doe`.
 - Items followed by `...` can be used multiple times (including zero times).
   Example: `[t/TAG]...` can be used as no tags, `t/friend`, or `t/friend t/family`.
-- Parameters can appear in any order unless otherwise stated.
+- Parameters other than `INDEX` can appear in any order unless otherwise stated.
   Example: if a command accepts `n/NAME p/PHONE`, then `p/PHONE n/NAME` is also accepted.
 - For commands that take additional parameters (such as `:add`, `:edit` etc.), 
   the field prefixes (such as `n/`, `p/`, etc.) are case-sensitive and must be in lowercase.
@@ -163,7 +163,7 @@ To find help content for using this application, type `:help`.
 
 Format: `:help`
 
-Expected: 0rb1t will open a separate help window, showing the link to the User Guide of 0rb1t.
+Expected: 0rb1t will open a separate help window, showing a copyable link to the User Guide of 0rb1t.
 
 ### Adding Contacts
 
@@ -194,7 +194,7 @@ Expected: The new contact will be added to 0rb1t, and it can be viewed in the ma
 To add a note to a contact, type `:note` followed by the index of the contact and the note you wish to add.
 
 Notes uses an adaptation of the append-only model, meaning each new note is added to the end of the existing list.
-Other than `:undo`, which will revert the most recently added note, notes cannot be modified or removed individually.
+Other than `:undo`, which will revert the most recently added note if it is the latest mutating command, notes cannot be modified or removed individually.
 Only by deleting the contact will all notes be deleted.
 
 Notes follow these constraints:
@@ -286,7 +286,7 @@ Examples:
 
 `:edit 3 dt/`
 
-Expected: 0rb1t will show the updated details of the contact, regardless of whether the edit was successful or not.
+Expected: 0rb1t will show the updated details of the contact in the results box, regardless of whether the edit was successful or not.
 
 ### Exiting 0rb1t
 
@@ -330,8 +330,12 @@ Expected: 0rb1t will display all the tags that have been added to 0rb1t.
 
 ### Sorting Contacts
 
-To sort contacts by specific fields, type `:list s/` followed by `+` or `-` for ascending or descending order, then the `FIELD` prefix (`n` for name, `p` for phone).
-Typing `s/*` ensures starred contacts are always at the top. Contacts are always sorted in lexicographical order, based on the field given.
+To sort contacts by specific fields, type `:list s/` followed by `+` or `-` for ascending or descending order, then the `FIELD` parameter. Supported `FIELD`s are: 
+
+- `n` for name, sorted lexicographically.
+- `p` for phone, sorted by length first, then lexicographically.
+
+Typing `s/*` ensures starred contacts are always at the top.
 
 Format: `:list [s/+FIELD]... [s/-FIELD]... [s/*]...`
 
@@ -402,7 +406,7 @@ All data in 0rb1t is saved to the hard disk automatically after any command that
 All data is saved automatically as a JSON file [JAR file directory]/data/addressbook.json.
 Advanced users are welcome to update data directly by editing that data file.
 
-Caution: If your changes to the data file make its format invalid, 0rb1t will discard all data and start with an empty data file at the next run. Hence, it is recommended to save a backup of the file before editing it.
+Caution: If your changes to the data file make its format invalid, 0rb1t will discard all data and start with an empty data file at the next run, only after a successful command. Hence, it is recommended to save a backup of the file before editing it.
 Furthermore, certain edits can cause 0rb1t to behave in unexpected ways (e.g., if a value entered is outside the acceptable range). Therefore, edit the data file only if you are confident that you can update it correctly.
 
 ---
@@ -457,7 +461,7 @@ The following enhancements are planned for future releases:
 | Add Note       | `:note INDEX NOTE`                                                                                                                                             | Adds a note to the contact.                           | `:note 1 This is an important contact.`                                                                                              |
 | Clear          | `:clear` + `yes`                                                                                                                                               | Clears all contacts.                                  | `:clear`<br/> _Are you sure you want to clear the entire address book? Type 'yes' to confirm or 'no' to cancel._ <br/>`yes`          |
 | Delete         | `:delete INDEX` + `yes`                                                                                                                                        | Deletes a contact.                                    | `:delete 2`<br/> _Are you sure you want to delete this person?\<Contact details>Type 'yes' to confirm or 'no' to cancel._ <br/>`yes` |
-| Edit           | `:edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [dt/]`<br/><br/>`:edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [dt/TAG]...` | Edits a contact’s details.                            | `:edit 2`<br/>`:edit 5 p/13572468 t/school t/friend`<br/>`:edit 3 dt/`                                                               |
+| Edit           | `:edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [dt/]`<br/><br/>`:edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]... [dt/TAG]...` | Edits a contact’s details.                            | `:edit 5 p/13572468 t/school t/friend`<br/>`:edit 3 dt/`                                                                             |
 | Exit           | `:exit`                                                                                                                                                        | Exits 0rb1t.                                          | `:exit`                                                                                                                              |
 | List Contacts  | `:list [n/NAME]... [p/PHONE]... [e/EMAIL]... [a/ADDRESS]... [t/TAG]... [s/SORT]...`                                                                            | Lists all contacts.                                   | `:list`<br/>`:list t/friends t/colleagues`                                                                                           |
 | List Tags      | `:tags`                                                                                                                                                        | Lists all tags used.                                  | `:tags`                                                                                                                              |

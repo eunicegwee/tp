@@ -138,7 +138,7 @@ The main entry point is `LogicManager`. When the UI submits a command string, `L
 5. returns a `CommandResult` to the UI
 
 Unlike the original AB3 flow, command parsing in 0rb1t is fully colon-based. All commands must begin with `:`,
-for example `:add`, `:list`, or `:delete`.
+for example `:add`, `:list`, or `:delete`. `yes` and `no` are not commands, and hence do not begin with `:`.
 
 `AddressBookParser` performs the first-stage split between command word and arguments, validates that the command
 starts with `:`, and dispatches to a command-specific parser where needed.
@@ -634,7 +634,7 @@ For all use cases below, the **System** is 0rb1t and the **Actor** is the user, 
 
 - 3c. The edited contact would have the same name as an existing contact.
 
-  - 3c1. 0rb1t displays an error message if a contact with an existing name match (case-sensitive) is added.
+  - 3c1. 0rb1t shows an error message.
 
     Use case ends.
 
@@ -731,7 +731,7 @@ Test case: `:list s/+n`
 Expected: Contacts are listed in ascending name order.
 
 Test case: `:list s/-p`  
-Expected: Contacts are ordered first by increasing length of the phone number, and then by lexicographical order in descending order.
+Expected: Contacts are ordered first by decreasing length of the phone number, and then by lexicographical order in descending order.
 
 Test case: `:list s/* s/+n`\
 Expected: Starred contacts are pinned above non-starred contacts, and each group is ordered by name.
@@ -849,6 +849,19 @@ Prerequisites: Close the app and manually corrupt the address book data file con
 
 Test case: Launch the app again.  
 Expected: The app starts without crashing and falls back to an empty address book if the data cannot be loaded.
+
+## **Appendix: Planned Enhancements**
+
+### Post-`:add` selection under active sorting
+
+Current implementation detail: When a contact is added, the UI fallback path selects the last visible item in the displayed list. Because the displayed list is a `SortedList`, this can select a different
+contact from the one that was just added when sorting is active.
+
+Planned enhancement:
+
+- update the post-`:add` flow to select the newly added `Person` by identity instead of selecting by list position
+- update this Developer Guide's UI-selection description and related manual-testing notes to match the implemented
+  behavior
 
 ## **Appendix: Effort**
 
